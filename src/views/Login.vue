@@ -6,7 +6,7 @@
                 <el-col :offset="16" :span="5">
                     <div class="login-content">
                         <div class="login-title">登陆</div>
-                        <el-tabs v-model="loginWay" class="login-detail" stretch>
+                        <el-tabs v-model="loginWay" class="login-detail" @tab-click="updateLoginWay" stretch>
                             <el-tab-pane label="密码登陆" name="password">
                                 <el-form :model="loginInfo" status-icon ref="loginInfo">
                                     <el-form-item prop="userName">
@@ -39,8 +39,8 @@
                                         </el-input>
                                     </el-form-item>
                                     <el-form-item prop="verificationCode">
-                                        <el-input type="text" v-model="loginInfo.verificationCode" show-password
-                                            placeholder="请输入六位数字身份器动态验证码">
+                                        <el-input type="text" v-model="loginInfo.verificationCode" maxlength="6"
+                                                  placeholder="请输入六位数字身份器动态验证码">
                                         </el-input>
                                     </el-form-item>
                                     <el-checkbox class="remember-me" v-model="loginInfo.rememberMe">记住我，12小时内免登陆</el-checkbox>
@@ -75,6 +75,15 @@
                     rememberMe: false,
                 },
             };
+        },
+        methods: {
+            updateLoginWay() {
+                this.loginInfo = {
+                    userName: '',
+                    password: '',
+                    verificationCode: '',
+                };
+            },
         },
     };
 </script>
