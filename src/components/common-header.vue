@@ -1,6 +1,6 @@
 <template>
     <div id="header">
-        <img class="logo" src="../assets/header/logo.png">
+        <img class="logo" src="../assets/header/logo.png" alt="Teleport">
     </div>
 </template>
 
@@ -16,5 +16,9 @@
 <style scoped>
     #header{
         padding: 15px;
+    }
+
+    #header img{
+        color: #fff;
     }
 </style>

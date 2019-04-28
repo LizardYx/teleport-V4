@@ -7,7 +7,7 @@
                 <div class="login-title">登陆</div>
                 <el-tabs v-model="loginWay" class="login-detail" @tab-click="updateLoginWay" stretch>
                     <el-tab-pane label="密码登陆" name="password">
-                        <el-form :model="loginInfo" status-icon ref="loginInfo">
+                        <el-form :model="loginInfo" status-icon :rules="rules" ref="loginInfo">
                             <el-form-item prop="userName">
                                 <el-input type="text" v-model="loginInfo.userName" placeholder="请输入用户名">
                                 </el-input>
@@ -63,6 +63,20 @@
         name: 'Login',
         components: { CommonHeader },
         data() {
+            let validateUserName = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请输入用户名'))
+                }else {
+                    callback();
+                }
+            };
+            let validatePassword = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请输入密码'))
+                }else {
+                    callback();
+                }
+            };
             return {
                 loginWay: 'password',
                 loginInfo: {
@@ -70,6 +84,14 @@
                     password: '',
                     verificationCode: '',
                     rememberMe: false,
+                },
+                rules: {
+                    userName: [
+                        {validator: validateUserName, trigger: 'blur'}
+                    ],
+                    password:[
+                        {validator: validatePassword, trigger: 'blur'}
+                    ],
                 },
             };
         },

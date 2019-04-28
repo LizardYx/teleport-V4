@@ -4,8 +4,11 @@ import 'element-ui/lib/theme-chalk/index.css';
 import App from './App.vue';
 import router from './router';
 import store from './store';
+import {asyncGet, asyncPost} from '../conifg/axios';
 
 Vue.config.productionTip = false;
+Vue.prototype.$get = asyncGet;
+Vue.prototype.$post = asyncPost;
 Vue.use(ElementUI);
 
 new Vue({
