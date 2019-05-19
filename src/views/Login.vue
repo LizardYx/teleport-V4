@@ -49,19 +49,22 @@
                         </el-form>
                     </el-tab-pane>
                     <router-link class="forgot-password" :to="{name: 'Login'}">忘记密码</router-link>
-                    <router-link class="authenticator" :to="{name: 'Login'}">绑定身份验证器</router-link>
+                    <router-link v-if="loginWay === 'authentication'" class="authenticator" :to="{name: 'bind-authenticator'}">绑定身份验证器</router-link>
                 </el-tabs>
             </div>
         </div>
+        <copyRight></copyRight>
     </div>
 </template>
 
 <script>
-    import CommonHeader from '../components/common-header.vue';
+    import CommonHeader from '../components/common-header';
+    import copyRight from '../components/copyRight';
+    import {setup} from '../../public/login/swirl';
 
     export default {
         name: 'Login',
-        components: { CommonHeader },
+        components: { CommonHeader, copyRight },
         data() {
             let validateUserName = (rule, value, callback) => {
                 if (value === '') {
@@ -104,6 +107,9 @@
                 };
             },
         },
+        mounted() {
+            setup();
+        }
     };
 </script>
 
@@ -111,10 +117,6 @@
     #login{
         position: relative;
         height: 100vh;
-    }
-
-    #login #header{
-        position: fixed;
     }
 
     #login .login-block{
@@ -132,14 +134,13 @@
         font-size: 24px;
         font-weight: bold;
         text-align: center;
-        color: #303133;
         margin-bottom: 20px;
     }
 
     #login .login-content{
         width: 340px;
         padding: 15px;
-        background: #fff;
+        background: #ffffffe8;
     }
 
     #login .login-detail{

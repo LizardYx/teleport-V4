@@ -1,6 +1,8 @@
 <template>
     <div id="header">
-        <img class="logo" src="../assets/header/logo.png" alt="Teleport">
+        <router-link :to="{name: 'Login'}">
+            <img class="logo" src="../assets/header/logo.png" alt="Teleport">
+        </router-link>
     </div>
 </template>
 
@@ -15,6 +17,7 @@
 
 <style scoped>
     #header{
+        position: fixed;
         padding: 15px;
     }
 

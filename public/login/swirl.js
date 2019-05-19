@@ -206,3 +206,5 @@ function draw() {
 
 window.addEventListener('load', setup);
 window.addEventListener('resize', resize);
+
+export {setup};

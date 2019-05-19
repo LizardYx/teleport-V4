@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Login from './views/Login.vue';
+import bindAuthenticator from './views/bind-authenticator.vue';
 
 Vue.use(Router);
 
@@ -12,6 +13,11 @@ export default new Router({
             path: '/',
             name: 'Login',
             component: Login,
+        },
+        {
+            path: '/bind-authenticator',
+            name: 'bind-authenticator',
+            component: bindAuthenticator,
         },
         // {
         //   path: '/about',
