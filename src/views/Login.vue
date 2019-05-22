@@ -44,7 +44,7 @@
                             </el-form-item>
                             <el-checkbox class="remember-me" v-model="loginInfo.rememberMe">记住我，12小时内免登陆</el-checkbox>
                             <el-form-item>
-                                <el-button type="primary" class="login-btn">登陆</el-button>
+                                <el-button type="primary" class="login-btn" @click="login">登陆</el-button>
                             </el-form-item>
                         </el-form>
                     </el-tab-pane>
@@ -61,6 +61,7 @@
     import CommonHeader from '../components/common-header';
     import copyRight from '../components/copyRight';
     import {setup} from '../../public/login/swirl';
+    import {api_login} from "../../conifg/api";
 
     export default {
         name: 'Login',
@@ -106,6 +107,12 @@
                     verificationCode: '',
                 };
             },
+            login() {
+                api_login(this.loginInfo)
+                    .then(response => {
+                        alert('登录成功');
+                    })
+            }
         },
         mounted() {
             setup();
