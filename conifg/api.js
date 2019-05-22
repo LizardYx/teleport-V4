@@ -11,4 +11,4 @@ import {asyncGet, asyncPost} from './axios'
  * @param rememberMe {blur} [记住我]
  * @returns {Promise}
  */
-export const api_login = (params) => asyncPost('api/v3/login', params);
+export const api_login = (params) => asyncPost('teleport/api/v3/login', params);
