@@ -20,7 +20,7 @@
                         ，请及时通知系统管理员处理！
                     </div>
                     <div class="server-date">
-                        <label>TELEPORT服务器时间：{{serverDate}}</label>
+                        <label>TELEPORT服务器时间：{{serverDate | dateFormat}}</label>
                     </div>
                 </div>
             </div>
@@ -49,6 +49,7 @@
     import CommonHeader from '../components/common-header.vue';
     import copyRight from '../components/copyRight';
     import {setup} from '../../public/login/swirl';
+    import {formatTimeToStr} from '../../conifg/common';
 
     export default {
         name: 'bindAuthenticator',
@@ -65,7 +66,8 @@
                 }
             };
             return {
-                serverDate: new Date(),
+                timer: '',
+                serverDate: 0,
                 authentication: {
                     userName: '',
                     password: ''
@@ -80,11 +82,30 @@
                 }
             }
         },
-        methods: {
+        filters: {
+            dateFormat: function (time) {
+                let date = new Date(time);
 
+                return formatTimeToStr(date, 'yyyy-MM-dd hh:mm:ss');
+            }
+        },
+        methods: {
+            initServerDate() {
+                this.serverDate = (new Date()).getTime() + 1000;
+                this.timer = setInterval(this.updateServerDate, 1000);
+            },
+            updateServerDate() {
+                this.serverDate += 1000;
+            }
         },
         mounted() {
-            setup();
+            setup(); //初始化背景canvas
+            this.initServerDate();
+        },
+        beforeDestroy() {
+            if (this.timer) {
+                clearInterval(this.timer);
+            }
         }
     };
 </script>
