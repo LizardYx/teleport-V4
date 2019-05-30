@@ -3,29 +3,29 @@
         <div id="bgCanvas"></div>
         <common-header></common-header>
         <div id="authenticator-content">
-            <div class="title">绑定身份验证器</div>
-            <div>
-                <div class="title">第一步：安装身份验证器</div>
+            <div class="title pad-ver">绑定身份验证器</div>
+            <div class="pad-ver">
+                <div class="title mar-btm">第一步：安装身份验证器</div>
                 <div class="content">
                     请在你的手机上安装身份验证器App。
                     <a href="">点击此处获取安装方式</a>
                 </div>
             </div>
-            <div>
-                <div class="title">第二步：检查服务器时间</div>
+            <div class="pad-ver">
+                <div class="title mar-btm">第二步：检查服务器时间</div>
                 <div class="content">
                     <div class="clearfix">
                         请注意检查您的手机时间与teleport服务器时间是否同步，如果
                         <span class="el-alert--warning">两者时间偏差超过两分钟则无法绑定</span>
                         ，请及时通知系统管理员处理！
                     </div>
-                    <div class="server-date">
-                        <label>TELEPORT服务器时间：{{serverDate | dateFormat}}</label>
+                    <div class="server-date mar-top">
+                        <label class="bg-color-main">TELEPORT服务器时间：{{serverDate | dateFormat}}</label>
                     </div>
                 </div>
             </div>
-            <div>
-                <div class="title">第三步：认证并绑定</div>
+            <div class="pad-ver">
+                <div class="title mar-btm">第三步：认证并绑定</div>
                 <div class="content">
                     <el-form :model="authentication" status-icon :rules="validate" id="auth-form">
                         <el-form-item prop="userName">
@@ -53,7 +53,7 @@
 
     export default {
         name: 'bindAuthenticator',
-        components: { CommonHeader, copyRight },
+        components: {CommonHeader, copyRight},
         data() {
             let validateUserName = (rule, value, callback) => {
                 if (!value) {
@@ -103,9 +103,7 @@
             this.initServerDate();
         },
         beforeDestroy() {
-            if (this.timer) {
-                clearInterval(this.timer);
-            }
+            !!this.timer ? clearInterval(this.timer) : '';
         }
     };
 </script>
@@ -114,16 +112,6 @@
     #bindAuthenticator{
         position: relative;
         height: 100vh;
-    }
-
-    #bindAuthenticator .clearfix:after{
-        display: table;
-        content: " ";
-        clear: both;
-    }
-
-    #bindAuthenticator a{
-        color: #409EFF;
     }
 
     #bindAuthenticator #authenticator-content{
@@ -145,8 +133,6 @@
     }
 
     #bindAuthenticator #authenticator-content > div{
-        padding-top: 15px;
-        padding-bottom: 15px;
         border-bottom: 1px dashed #C0C4CC;
     }
 
@@ -157,7 +143,6 @@
 
     #bindAuthenticator #authenticator-content > div > .title{
         font-size: 20px;
-        margin-bottom: 15px;
     }
 
     #bindAuthenticator #authenticator-content > div > .content{
@@ -166,7 +151,6 @@
     }
 
     #bindAuthenticator .server-date{
-        margin-top: 15px;
         height: 28px;
     }
 
@@ -174,7 +158,6 @@
         position: relative;
         top: 4px;
         padding: 6px 12px;
-        background-color: #409EFF;
         border-radius: 5px;
     }
 

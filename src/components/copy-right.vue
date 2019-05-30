@@ -26,8 +26,4 @@
         text-align: center;
         color: #606266;
     }
-
-    #copyRight a{
-        color: #409EFF;
-    }
 </style>

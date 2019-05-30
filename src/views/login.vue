@@ -3,8 +3,8 @@
         <div id="bgCanvas"></div>
         <common-header></common-header>
         <div class="login-block">
-            <div class="login-content">
-                <div class="login-title">登陆</div>
+            <div class="login-content pad-all">
+                <div class="login-title text-center">登陆</div>
                 <el-tabs v-model="loginWay" class="login-detail" @tab-click="updateLoginWay" stretch>
                     <el-tab-pane label="密码登陆" name="password">
                         <el-form :model="loginInfo" status-icon :rules="rules" ref="loginInfo">
@@ -48,8 +48,12 @@
                             </el-form-item>
                         </el-form>
                     </el-tab-pane>
-                    <router-link class="forgot-password" :to="{name: 'Login'}">忘记密码</router-link>
-                    <router-link v-if="loginWay === 'authentication'" class="authenticator" :to="{name: 'bind-authenticator'}">绑定身份验证器</router-link>
+                    <router-link class="forgot-password mar-rgt color-main" :to="{name: 'Login'}">
+                        忘记密码
+                    </router-link>
+                    <router-link v-if="loginWay === 'authentication'" class="authenticator color-main" :to="{name: 'bind-authenticator'}">
+                        绑定身份验证器
+                    </router-link>
                 </el-tabs>
             </div>
         </div>
@@ -65,7 +69,7 @@
 
     export default {
         name: 'Login',
-        components: { CommonHeader, copyRight },
+        components: {CommonHeader, copyRight},
         data() {
             let validateUserName = (rule, value, callback) => {
                 if (value === '') {
@@ -140,13 +144,11 @@
     #login .login-block .login-title{
         font-size: 24px;
         font-weight: bold;
-        text-align: center;
         margin-bottom: 20px;
     }
 
     #login .login-content{
         width: 340px;
-        padding: 15px;
         background: #ffffffe8;
     }
 
@@ -160,11 +162,5 @@
 
     #login .login-detail .login-btn{
         width: 100%;
-    }
-
-    #login .forgot-password,
-    #login .authenticator{
-        color: #409EFF;
-        margin-right: 15px;
     }
 </style>
