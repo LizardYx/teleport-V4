@@ -47,9 +47,9 @@
 
 <script>
     import CommonHeader from '../components/common-header.vue';
-    import copyRight from '../components/copyRight';
-    import {setup} from '../../public/login/swirl';
-    import {formatTimeToStr} from '../../conifg/common';
+    import copyRight from '../components/copy-right';
+    import {setup} from '../../public/lib/bg-canvas/swirl';
+    import {formatTimeToStr} from '../assets/filter/date-format';
 
     export default {
         name: 'bindAuthenticator',

@@ -13,8 +13,8 @@ export default new Router({
     routes: [
         {
             path: '/',
-            name: 'Login',
-            component: lazyLoadView('Login'),
+            name: 'login',
+            component: lazyLoadView('login'),
         },
         {
             path: '/bind-authenticator',

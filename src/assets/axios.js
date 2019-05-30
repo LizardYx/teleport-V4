@@ -1,10 +1,10 @@
-import {baseUrl,} from "./env";
+import {publicPath,} from "../../vue.config";
 import axios from 'axios';
 import QS from 'qs';
-import store from "../src/store";
-import router from "../src/router";
+import store from "../store";
+import router from "../router";
 axios.defaults.timeout = 10000; //设置请求时间
-axios.defaults.baseURL = baseUrl; //设置默认接口地址
+axios.defaults.baseURL = publicPath; //设置默认接口地址
 axios.defaults.headers['Content-Type'] = "application/x-www-form-urlencoded;charset=UTF-8";
 
 /**

@@ -59,9 +59,9 @@
 
 <script>
     import CommonHeader from '../components/common-header';
-    import copyRight from '../components/copyRight';
-    import {setup} from '../../public/login/swirl';
-    import {api_login} from "../../conifg/api";
+    import copyRight from '../components/copy-right';
+    import {setup} from '../../public/lib/bg-canvas/swirl';
+    import {api_login} from "../assets/api";
 
     export default {
         name: 'Login',

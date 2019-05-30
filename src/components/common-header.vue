@@ -1,7 +1,7 @@
 <template>
     <div id="header">
-        <router-link :to="{name: 'Login'}">
-            <img class="logo" src="../assets/header/logo.png" alt="Teleport">
+        <router-link :to="{name: 'login'}">
+            <img class="logo" src="../assets/img/logo.png" alt="Teleport">
         </router-link>
     </div>
 </template>

@@ -8,7 +8,7 @@
 
 <script>
     export default {
-        name: 'copyRight',
+        name: 'copy-right',
         data() {
             return {}
         }
