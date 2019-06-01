@@ -52,8 +52,8 @@
 </template>
 
 <script>
-    import CommonHeader from 'src/components/common-header';
-    import copyRight from 'src/components/copy-right';
+    import CommonHeader from '../../components/common-header';
+    import copyRight from '../../components/copy-right';
 
     export default {
         name: "main",
