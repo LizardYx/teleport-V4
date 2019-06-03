@@ -23,7 +23,7 @@
                             </el-form-item>
                             <el-checkbox class="remember-me" v-model="loginInfo.rememberMe">记住我，12小时内免登陆</el-checkbox>
                             <el-form-item>
-                                <el-button type="primary" class="login-btn">登陆</el-button>
+                                <el-button type="primary" class="login-btn" @click="login">登陆</el-button>
                             </el-form-item>
                         </el-form>
                     </el-tab-pane>
@@ -48,7 +48,7 @@
                             </el-form-item>
                         </el-form>
                     </el-tab-pane>
-                    <router-link class="forgot-password mar-rgt color-main" :to="{name: 'Login'}">
+                    <router-link class="forgot-password mar-rgt color-main" :to="{name: 'login'}">
                         忘记密码
                     </router-link>
                     <router-link v-if="loginWay === 'authentication'" class="authenticator color-main" :to="{name: 'bind-authenticator'}">
@@ -68,7 +68,7 @@
     import {api_login} from "../assets/api";
 
     export default {
-        name: 'Login',
+        name: 'login',
         components: {CommonHeader, copyRight},
         data() {
             let validateUserName = (rule, value, callback) => {
@@ -112,10 +112,11 @@
                 };
             },
             login() {
-                api_login(this.loginInfo)
-                    .then(response => {
-                        alert('登录成功');
-                    })
+                this.$router.push({name: 'main'});
+                // api_login(this.loginInfo)
+                //     .then(response => {
+                //         alert('登录成功');
+                //     })
             }
         },
         mounted() {
