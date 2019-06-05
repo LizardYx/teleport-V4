@@ -18,7 +18,6 @@
 <style scoped>
     #header{
         position: fixed;
-        padding: 15px;
     }
 
     #header img{

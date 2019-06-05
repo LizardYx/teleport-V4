@@ -112,7 +112,7 @@
                 };
             },
             login() {
-                this.$router.push({name: 'main'});
+                this.$router.push({name: 'modules-main'});
                 // api_login(this.loginInfo)
                 //     .then(response => {
                 //         alert('登录成功');

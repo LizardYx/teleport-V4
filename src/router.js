@@ -22,8 +22,8 @@ export default new Router({
             component: lazyLoadView('bind-authenticator'),
         },
         {
-            path: '/main',
-            name: 'main',
+            path: '/modules-main',
+            name: 'modules-main',
             component: lazyLoadView('modules/main'),
         }
     ],
