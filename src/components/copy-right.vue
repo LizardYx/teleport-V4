@@ -16,8 +16,6 @@
 </script>
 
 <style lang="scss" scoped>
-    .global-css {@import "../assets/global";}
-
     #copyRight{
         position: fixed;
         bottom: 0;

@@ -126,8 +126,6 @@
 </script>
 
 <style lang="scss" scoped>
-    .global-css {@import "../assets/global";}
-
     #login{
         position: relative;
         height: 100vh;

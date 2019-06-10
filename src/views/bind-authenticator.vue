@@ -109,8 +109,6 @@
 </script>
 
 <style lang="scss" scoped>
-    .global-css {@import "../assets/global";}
-
     #bindAuthenticator{
         position: relative;
         height: 100vh;
