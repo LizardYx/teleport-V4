@@ -5,10 +5,13 @@
 </template>
 
 <style lang="scss">
+    .global-css {@import "./assets/global";}
+
     #app {
         font-family: 'Avenir', Helvetica, Arial, sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         min-width: 1264px;
+        font-size: $basic-size;
     }
 </style>

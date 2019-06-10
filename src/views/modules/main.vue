@@ -108,13 +108,14 @@
     }
 </script>
 
-<style scoped>
-    #modulesMain > .content{
-        height: 100vh;
-        overflow-y: hidden;
-    }
-
-    #modulesMain #nav{
-        overflow-y: auto;
+<style lang="scss" scoped>
+    #modulesMain{
+        > .content{
+            height: 100vh;
+            overflow-y: hidden;
+        }
+        #nav{
+            overflow-y: auto;
+        }
     }
 </style>

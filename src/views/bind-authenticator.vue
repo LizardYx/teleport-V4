@@ -108,60 +108,53 @@
     };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+    .global-css {@import "../assets/global";}
+
     #bindAuthenticator{
         position: relative;
         height: 100vh;
-    }
-
-    #bindAuthenticator #authenticator-content{
-        position: absolute;
-        width: 900px;
-        height: 484px;
-        margin: auto;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        padding: 30px;
-        background: #ffffffe8;
-    }
-
-    #bindAuthenticator #authenticator-content > .title{
-        font-size: 24px;
-        padding-top: 0;
-    }
-
-    #bindAuthenticator #authenticator-content > div{
-        border-bottom: 1px dashed #C0C4CC;
-    }
-
-    #bindAuthenticator #authenticator-content > div:last-child{
-        border: none;
-        padding-bottom: 0;
-    }
-
-    #bindAuthenticator #authenticator-content > div > .title{
-        font-size: 20px;
-    }
-
-    #bindAuthenticator #authenticator-content > div > .content{
-        padding: 0 6px;
-        font-size: 14px;
-    }
-
-    #bindAuthenticator .server-date{
-        height: 28px;
-    }
-
-    #bindAuthenticator .server-date > label{
-        position: relative;
-        top: 4px;
-        padding: 6px 12px;
-        border-radius: 5px;
-    }
-
-    #bindAuthenticator #auth-form{
-        width: 400px;
+        #authenticator-content{
+            position: absolute;
+            width: 900px;
+            height: 492px;
+            margin: auto;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            padding: 30px;
+            background: #ffffffe8;
+            > div{
+                border-bottom: 1px dashed #C0C4CC;
+                &:last-child{
+                    border: none;
+                    padding-bottom: 0;
+                }
+                > .title{
+                    font-size: $basic-size + 8px;
+                }
+                > .content{
+                    padding: 0 6px;
+                    font-size: $basic-size + 2px;
+                    .server-date{
+                        height: 28px;
+                        > label{
+                            position: relative;
+                            top: 4px;
+                            padding: 6px 12px;
+                            border-radius: 5px;
+                        }
+                    }
+                    > #auth-form{
+                        width: 400px;
+                    }
+                }
+            }
+            > .title{
+                font-size: 2 * $basic-size;
+                padding-top: 0;
+            }
+        }
     }
 </style>
