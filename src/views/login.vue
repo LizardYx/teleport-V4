@@ -61,7 +61,9 @@
                 </el-tabs>
             </div>
         </div>
-        <copyRight></copyRight>
+        <div class="footer">
+            <copyRight></copyRight>
+        </div>
     </div>
 </template>
 
@@ -133,6 +135,9 @@
     #login{
         position: relative;
         height: 100vh;
+        #header{
+            position: fixed;
+        }
         .login-block{
             position: absolute;
             width: 370px;
@@ -155,6 +160,11 @@
                     }
                 }
             }
+        }
+        .footer{
+            position: fixed;
+            bottom: 0;
+            width: 100%;
         }
     }
 </style>

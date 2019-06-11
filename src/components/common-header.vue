@@ -17,7 +17,6 @@
 
 <style lang="scss" scoped>
     #header{
-        position: fixed;
         img{
             color: #fff;
         }

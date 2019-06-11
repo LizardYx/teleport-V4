@@ -10,7 +10,8 @@
                         <el-radio-button :label="false">展开</el-radio-button>
                         <el-radio-button :label="true">收起</el-radio-button>
                     </el-radio-group>
-                    <el-menu class="bord-no" default-active="1-1" @open="handleOpen" @close="handleClose" :collapse="isCollapse">
+                    <el-menu class="bord-no" default-active="1-1" unique-opened="true" @open="handleOpen"
+                             @close="handleClose" :collapse="isCollapse">
                         <el-submenu index="1">
                             <template slot="title">
                                 <i class="el-icon-location"></i>
@@ -36,47 +37,13 @@
                             <i class="el-icon-setting"></i>
                             <span slot="title">导航三</span>
                         </el-menu-item>
-                        <el-submenu index="4">
-                            <template slot="title">
-                                <i class="el-icon-location"></i>
-                                <span slot="title">导航一</span>
-                            </template>
-                            <el-menu-item-group>
-                                <el-menu-item index="4-1">选项1</el-menu-item>
-                                <el-menu-item index="4-2">选项2</el-menu-item>
-                            </el-menu-item-group>
-                            <el-menu-item-group>
-                                <el-menu-item index="4-3">选项3</el-menu-item>
-                            </el-menu-item-group>
-                            <el-submenu index="4-4">
-                                <span slot="title">选项4</span>
-                                <el-menu-item index="4-4-1">选项1</el-menu-item>
-                            </el-submenu>
-                        </el-submenu>
-                        <el-submenu index="5">
-                            <template slot="title">
-                                <i class="el-icon-location"></i>
-                                <span slot="title">导航一</span>
-                            </template>
-                            <el-menu-item-group>
-                                <el-menu-item index="5-1">选项1</el-menu-item>
-                                <el-menu-item index="5-2">选项2</el-menu-item>
-                            </el-menu-item-group>
-                            <el-menu-item-group>
-                                <el-menu-item index="5-3">选项3</el-menu-item>
-                            </el-menu-item-group>
-                            <el-submenu index="5-4">
-                                <span slot="title">选项4</span>
-                                <el-menu-item index="5-4-1">选项1</el-menu-item>
-                            </el-submenu>
-                        </el-submenu>
                     </el-menu>
                 </el-aside>
                 <el-container>
-                    <el-main>
+                    <el-main class="mainContent">
                         <router-view></router-view>
                     </el-main>
-                    <el-footer>
+                    <el-footer height="40px">
                         <copyRight></copyRight>
                     </el-footer>
                 </el-container>
@@ -116,6 +83,10 @@
         }
         #nav{
             overflow-y: auto;
+            height: 100%;
+        }
+        .mainContent{
+            height: 100%;
         }
     }
 </style>

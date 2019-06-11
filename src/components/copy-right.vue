@@ -17,11 +17,8 @@
 
 <style lang="scss" scoped>
     #copyRight{
-        position: fixed;
-        bottom: 0;
         height: 40px;
         line-height: 40px;
-        width: 100%;
         font-size: $basic-size;
         text-align: center;
         color: $text-basic;

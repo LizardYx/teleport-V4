@@ -41,7 +41,9 @@
                 </div>
             </div>
         </div>
-        <copyRight></copyRight>
+        <div class="footer">
+            <copyRight></copyRight>
+        </div>
     </div>
 </template>
 
@@ -153,6 +155,11 @@
                 font-size: 2 * $basic-size;
                 padding-top: 0;
             }
+        }
+        .footer{
+            position: fixed;
+            bottom: 0;
+            width: 100%;
         }
     }
 </style>
