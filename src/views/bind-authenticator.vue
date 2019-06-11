@@ -16,7 +16,7 @@
                 <div class="content">
                     <div class="clearfix">
                         请注意检查您的手机时间与teleport服务器时间是否同步，如果
-                        <span class="el-alert--warning">两者时间偏差超过两分钟则无法绑定</span>
+                        <span class="color-warning">两者时间偏差超过两分钟则无法绑定</span>
                         ，请及时通知系统管理员处理！
                     </div>
                     <div class="server-date mar-top">

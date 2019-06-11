@@ -48,7 +48,7 @@
                             </el-form-item>
                         </el-form>
                     </el-tab-pane>
-                    <router-link class="forgot-password mar-rgt color-main" :to="{name: 'Login'}">
+                    <router-link class="forgot-password mar-rgt color-main" :to="{name: 'login'}">
                         忘记密码
                     </router-link>
                     <router-link v-if="loginWay === 'authentication'" class="authenticator color-main" :to="{name: 'bind-authenticator'}">
