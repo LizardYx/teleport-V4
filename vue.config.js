@@ -16,7 +16,7 @@ module.exports = {
         'style-resources-loader': {
             preProcessor: 'scss',
             patterns: [
-                'C:\\Users\\Administrator\\Desktop\\teleport-V4\\src\\assets\\global.scss'
+                path.resolve(__dirname, "./src/assets/global.scss")
             ]
         }
     }

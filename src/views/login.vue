@@ -21,7 +21,9 @@
                                     <template slot="append">.com</template>
                                 </el-input>
                             </el-form-item>
-                            <el-checkbox class="remember-me mar-btm" v-model="loginInfo.rememberMe">记住我，12小时内免登陆</el-checkbox>
+                            <el-checkbox class="remember-me mar-btm" v-model="loginInfo.rememberMe">
+                                记住我，12小时内免登陆
+                            </el-checkbox>
                             <el-form-item>
                                 <el-button type="primary" class="login-btn" @click="login">登陆</el-button>
                             </el-form-item>
@@ -42,7 +44,9 @@
                                           placeholder="请输入六位数字身份器动态验证码">
                                 </el-input>
                             </el-form-item>
-                            <el-checkbox class="remember-me" v-model="loginInfo.rememberMe">记住我，12小时内免登陆</el-checkbox>
+                            <el-checkbox class="remember-me mar-btm" v-model="loginInfo.rememberMe">
+                                记住我，12小时内免登陆
+                            </el-checkbox>
                             <el-form-item>
                                 <el-button type="primary" class="login-btn" @click="login">登陆</el-button>
                             </el-form-item>
