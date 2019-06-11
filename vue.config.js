@@ -13,10 +13,10 @@ module.exports = {
         }
     },
     pluginOptions: {
-        "style-resources-loader": {
-            preProcessor: "sass",
+        'style-resources-loader': {
+            preProcessor: 'scss',
             patterns: [
-                path.resolve(__dirname, "./src/assets/global.scss")
+                'C:\\Users\\Administrator\\Desktop\\teleport-V4\\src\\assets\\global.scss'
             ]
         }
     }
