@@ -7,7 +7,7 @@ module.exports = {
         loaderOptions: {
             sass: {
                 data: `
-                    @import "@/assets/global.scss";
+                    @import "@/assets/css/variables.scss";
                 `
             }
         }
@@ -16,7 +16,7 @@ module.exports = {
         'style-resources-loader': {
             preProcessor: 'scss',
             patterns: [
-                path.resolve(__dirname, "./src/assets/global.scss")
+                path.resolve(__dirname, "@/assets/css/variables.scss")
             ]
         }
     }
