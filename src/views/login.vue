@@ -4,8 +4,8 @@
         <common-header></common-header>
         <div class="login-block">
             <div class="login-content pad-all">
-                <div class="login-title text-center">登陆</div>
-                <el-tabs v-model="loginWay" class="login-detail" @tab-click="updateLoginWay" stretch>
+                <div class="login-title mar-btm text-center">登陆</div>
+                <el-tabs v-model="loginWay" class="login-detail pad-hor" @tab-click="updateLoginWay" stretch>
                     <el-tab-pane label="密码登陆" name="password">
                         <el-form :model="loginInfo" status-icon :rules="rules" ref="loginInfo">
                             <el-form-item prop="userName">
@@ -21,9 +21,9 @@
                                     <template slot="append">.com</template>
                                 </el-input>
                             </el-form-item>
-                            <el-checkbox class="remember-me" v-model="loginInfo.rememberMe">记住我，12小时内免登陆</el-checkbox>
+                            <el-checkbox class="remember-me mar-btm" v-model="loginInfo.rememberMe">记住我，12小时内免登陆</el-checkbox>
                             <el-form-item>
-                                <el-button type="primary" class="login-btn">登陆</el-button>
+                                <el-button type="primary" class="login-btn" @click="login">登陆</el-button>
                             </el-form-item>
                         </el-form>
                     </el-tab-pane>
@@ -68,7 +68,7 @@
     import {api_login} from "../assets/api";
 
     export default {
-        name: 'Login',
+        name: 'login',
         components: {CommonHeader, copyRight},
         data() {
             let validateUserName = (rule, value, callback) => {
@@ -112,10 +112,11 @@
                 };
             },
             login() {
-                api_login(this.loginInfo)
-                    .then(response => {
-                        alert('登录成功');
-                    })
+                this.$router.push({name: 'modules-main'});
+                // api_login(this.loginInfo)
+                //     .then(response => {
+                //         alert('登录成功');
+                //     })
             }
         },
         mounted() {
@@ -124,43 +125,32 @@
     };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
     #login{
         position: relative;
         height: 100vh;
-    }
-
-    #login .login-block{
-        position: absolute;
-        width: 370px;
-        height: 400px;
-        margin: auto;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-    }
-
-    #login .login-block .login-title{
-        font-size: 24px;
-        font-weight: bold;
-        margin-bottom: 20px;
-    }
-
-    #login .login-content{
-        width: 340px;
-        background: #ffffffe8;
-    }
-
-    #login .login-detail{
-        padding: 0 20px;
-    }
-
-    #login .login-detail .remember-me{
-        margin-bottom: 10px;
-    }
-
-    #login .login-detail .login-btn{
-        width: 100%;
+        .login-block{
+            position: absolute;
+            width: 370px;
+            height: 430px;
+            margin: auto;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            > .login-content{
+                width: 340px;
+                background: #ffffffe8;
+                > .login-title{
+                    font-size: 2 * $basic-size;
+                    font-weight: bold;
+                }
+                > .login-detail{
+                    .login-btn{
+                        width: 100%;
+                    }
+                }
+            }
+        }
     }
 </style>

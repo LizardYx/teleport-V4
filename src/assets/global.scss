@@ -1,0 +1,105 @@
+$basic-margin: 15px;
+$basic-padding: $basic-margin;
+$basic-border: 1px solid #DCDFE6;
+$basic-size: 12px;
+$color-main: #409EFF;
+$color-info: #909399;
+$color-success: #67C23A;
+$color-warning: #E6A23C;
+$color-danger: #F56C6C;
+$text-main: #303133;
+$text-basic: #606266;
+
+.mar-all{
+  margin: $basic-margin;
+}
+.mar-no{
+  margin: 0;
+}
+.mar-lft{
+  margin-left: $basic-margin;
+}
+.mar-rgt{
+  margin-right: $basic-margin;
+}
+.mar-top{
+  margin-top: $basic-margin;
+}
+.mar-btm{
+  margin-bottom: $basic-margin;
+}
+.mar-hor{
+  margin-left: $basic-margin;
+  margin-right: $basic-margin;
+}
+.mar-ver{
+  margin-top: $basic-margin;
+  margin-bottom: $basic-margin;
+}
+.pad-all{
+  padding: $basic-margin;
+}
+.pad-no{
+  padding: 0;
+}
+.pad-lft{
+  padding-left: $basic-padding;
+}
+.pad-rgt{
+  padding-right: $basic-padding;
+}
+.pad-top{
+  padding-top: $basic-padding;
+}
+.pad-btm{
+  padding-bottom: $basic-padding;
+}
+.pad-hor{
+  padding-left: $basic-padding;
+  padding-right: $basic-padding;
+}
+.pad-ver{
+  padding-top: $basic-padding;
+  padding-bottom: $basic-padding;
+}
+.bord-all{
+  border: $basic-border;
+}
+.bord-no{
+  border: none;
+}
+.bord-lft{
+  border-left: $basic-border;
+}
+.bord-rgt{
+  border-right: $basic-border;
+}
+.bord-top{
+  border-top: $basic-border;
+}
+.bord-btm{
+  border-bottom: $basic-border;
+}
+.bord-hor{
+  border-left: $basic-border;
+  border-right: $basic-border;
+}
+.bord-ver{
+  border-top: $basic-border;
+  border-bottom: $basic-border;
+}
+.clearfix:after{
+  display: table;
+  content: " ";
+  clear: both;
+}
+.text-center{
+  text-align: center;
+}
+a,
+.color-main{
+  color: $color-main;
+}
+.bg-color-main{
+  background-color: $color-main;
+}

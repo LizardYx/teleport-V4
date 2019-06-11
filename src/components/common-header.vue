@@ -15,13 +15,11 @@
     };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
     #header{
         position: fixed;
-        padding: 15px;
-    }
-
-    #header img{
-        color: #fff;
+        img{
+            color: #fff;
+        }
     }
 </style>
