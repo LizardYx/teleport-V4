@@ -15,13 +15,11 @@ export default new Router({
             path: '/',
             name: 'login',
             component: lazyLoadView('login'),
-        },
-        {
+        },{
             path: '/bind-authenticator',
             name: 'bind-authenticator',
             component: lazyLoadView('bind-authenticator'),
-        },
-        {
+        },{
             path: '/modules-main',
             name: 'modules-main',
             component: lazyLoadView('modules/main'),

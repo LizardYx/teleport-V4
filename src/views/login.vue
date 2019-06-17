@@ -118,11 +118,16 @@
                 };
             },
             login() {
-                this.$router.push({name: 'modules-main'});
-                // api_login(this.loginInfo)
-                //     .then(response => {
-                //         alert('登录成功');
-                //     })
+                api_login(this.loginInfo)
+                    .then(() => {
+                        this.$router.push({name: 'modules-main'});
+                    }, (error) => {
+                        this.$notify({
+                            type: 'warning',
+                            message: error.msg,
+                            duration: 3000
+                        });
+                    })
             }
         },
         mounted() {

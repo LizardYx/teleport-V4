@@ -33,7 +33,11 @@ axios.interceptors.response.use(
     response => {
         // 如果返回的状态码为200，说明接口请求成功，可以正常拿到数据
         if (response.status === 200) {
-            return Promise.resolve(response);
+            if (response.data.code !== 1) {
+                return Promise.reject(response);
+            }else {
+                return Promise.resolve(response);
+            }
         }else {
             return Promise.reject(response);
         }

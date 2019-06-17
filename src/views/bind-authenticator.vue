@@ -52,6 +52,7 @@
     import copyRight from '../components/copy-right';
     import {setup} from '../../public/lib/bg-canvas/swirl';
     import {formatTimeToStr} from '../assets/filter/date-format';
+    import {api_serverTime} from "../assets/api";
 
     export default {
         name: 'bindAuthenticator',
@@ -93,8 +94,11 @@
         },
         methods: {
             initServerDate() {
-                this.serverDate = (new Date()).getTime() + 1000;
-                this.timer = setInterval(this.updateServerDate, 1000);
+                api_serverTime()
+                    .then(response => {
+                        this.serverDate = response.rows.time;
+                        this.timer = setInterval(this.updateServerDate, 1000);
+                    })
             },
             updateServerDate() {
                 this.serverDate += 1000;
@@ -102,7 +106,7 @@
         },
         mounted() {
             setup(); //初始化背景canvas
-            this.initServerDate();
+            this.initServerDate(); //初始化服务器时间
         },
         beforeDestroy() {
             !!this.timer ? clearInterval(this.timer) : '';

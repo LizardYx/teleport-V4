@@ -27,5 +27,8 @@ module.exports = {
                 path.resolve(__dirname, "@/assets/css/variables.scss")
             ]
         }
+    },
+    devServer: {
+        proxy: "http://127.0.0.1:801"
     }
 };

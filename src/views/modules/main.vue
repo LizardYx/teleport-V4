@@ -10,7 +10,7 @@
                         <el-radio-button :label="false">展开</el-radio-button>
                         <el-radio-button :label="true">收起</el-radio-button>
                     </el-radio-group>
-                    <el-menu class="bord-no" default-active="1-1" unique-opened="true" @open="handleOpen"
+                    <el-menu class="bord-no" default-active="1-1" :unique-opened="true" @open="handleOpen"
                              @close="handleClose" :collapse="isCollapse">
                         <el-submenu index="1">
                             <template slot="title">
