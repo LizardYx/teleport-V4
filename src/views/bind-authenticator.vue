@@ -118,6 +118,9 @@
     #bindAuthenticator{
         position: relative;
         height: 100vh;
+        #header{
+            position: fixed;
+        }
         #authenticator-content{
             position: absolute;
             width: 900px;
