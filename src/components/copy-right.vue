@@ -8,26 +8,19 @@
 
 <script>
     export default {
-        name: 'copyRight',
+        name: 'copy-right',
         data() {
             return {}
         }
     };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
     #copyRight{
-        position: fixed;
-        bottom: 0;
         height: 40px;
         line-height: 40px;
-        width: 100%;
-        font-size: 12px;
+        font-size: $basic-size;
         text-align: center;
-        color: #606266;
-    }
-
-    #copyRight a{
-        color: #409EFF;
+        color: $text-basic;
     }
 </style>

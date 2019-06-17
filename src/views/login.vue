@@ -3,9 +3,9 @@
         <div id="bgCanvas"></div>
         <common-header></common-header>
         <div class="login-block">
-            <div class="login-content">
-                <div class="login-title">登陆</div>
-                <el-tabs v-model="loginWay" class="login-detail" @tab-click="updateLoginWay" stretch>
+            <div class="login-content pad-all">
+                <div class="login-title mar-btm text-center">登陆</div>
+                <el-tabs v-model="loginWay" class="login-detail pad-hor" @tab-click="updateLoginWay" stretch>
                     <el-tab-pane label="密码登陆" name="password">
                         <el-form :model="loginInfo" status-icon :rules="rules" ref="loginInfo">
                             <el-form-item prop="userName">
@@ -21,9 +21,11 @@
                                     <template slot="append">.com</template>
                                 </el-input>
                             </el-form-item>
-                            <el-checkbox class="remember-me" v-model="loginInfo.rememberMe">记住我，12小时内免登陆</el-checkbox>
+                            <el-checkbox class="remember-me mar-btm" v-model="loginInfo.rememberMe">
+                                记住我，12小时内免登陆
+                            </el-checkbox>
                             <el-form-item>
-                                <el-button type="primary" class="login-btn">登陆</el-button>
+                                <el-button type="primary" class="login-btn" @click="login">登陆</el-button>
                             </el-form-item>
                         </el-form>
                     </el-tab-pane>
@@ -42,30 +44,38 @@
                                           placeholder="请输入六位数字身份器动态验证码">
                                 </el-input>
                             </el-form-item>
-                            <el-checkbox class="remember-me" v-model="loginInfo.rememberMe">记住我，12小时内免登陆</el-checkbox>
+                            <el-checkbox class="remember-me mar-btm" v-model="loginInfo.rememberMe">
+                                记住我，12小时内免登陆
+                            </el-checkbox>
                             <el-form-item>
                                 <el-button type="primary" class="login-btn" @click="login">登陆</el-button>
                             </el-form-item>
                         </el-form>
                     </el-tab-pane>
-                    <router-link class="forgot-password" :to="{name: 'Login'}">忘记密码</router-link>
-                    <router-link v-if="loginWay === 'authentication'" class="authenticator" :to="{name: 'bind-authenticator'}">绑定身份验证器</router-link>
+                    <router-link class="forgot-password mar-rgt color-main" :to="{name: 'login'}">
+                        忘记密码
+                    </router-link>
+                    <router-link v-if="loginWay === 'authentication'" class="authenticator color-main" :to="{name: 'bind-authenticator'}">
+                        绑定身份验证器
+                    </router-link>
                 </el-tabs>
             </div>
         </div>
-        <copyRight></copyRight>
+        <div class="footer">
+            <copyRight></copyRight>
+        </div>
     </div>
 </template>
 
 <script>
     import CommonHeader from '../components/common-header';
-    import copyRight from '../components/copyRight';
-    import {setup} from '../../public/login/swirl';
-    import {api_login} from "../../conifg/api";
+    import copyRight from '../components/copy-right';
+    import {setup} from '../../public/lib/bg-canvas/swirl';
+    import {api_login} from "../assets/api";
 
     export default {
-        name: 'Login',
-        components: { CommonHeader, copyRight },
+        name: 'login',
+        components: {CommonHeader, copyRight},
         data() {
             let validateUserName = (rule, value, callback) => {
                 if (value === '') {
@@ -109,8 +119,14 @@
             },
             login() {
                 api_login(this.loginInfo)
-                    .then(response => {
-                        alert('登录成功');
+                    .then(() => {
+                        this.$router.push({name: 'modules-main'});
+                    }, (error) => {
+                        this.$notify({
+                            type: 'warning',
+                            message: error.msg,
+                            duration: 3000
+                        });
                     })
             }
         },
@@ -120,51 +136,40 @@
     };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
     #login{
         position: relative;
         height: 100vh;
-    }
-
-    #login .login-block{
-        position: absolute;
-        width: 370px;
-        height: 400px;
-        margin: auto;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-    }
-
-    #login .login-block .login-title{
-        font-size: 24px;
-        font-weight: bold;
-        text-align: center;
-        margin-bottom: 20px;
-    }
-
-    #login .login-content{
-        width: 340px;
-        padding: 15px;
-        background: #ffffffe8;
-    }
-
-    #login .login-detail{
-        padding: 0 20px;
-    }
-
-    #login .login-detail .remember-me{
-        margin-bottom: 10px;
-    }
-
-    #login .login-detail .login-btn{
-        width: 100%;
-    }
-
-    #login .forgot-password,
-    #login .authenticator{
-        color: #409EFF;
-        margin-right: 15px;
+        #header{
+            position: fixed;
+        }
+        .login-block{
+            position: absolute;
+            width: 370px;
+            height: 430px;
+            margin: auto;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            > .login-content{
+                width: 340px;
+                background: #ffffffe8;
+                > .login-title{
+                    font-size: 2 * $basic-size;
+                    font-weight: bold;
+                }
+                > .login-detail{
+                    .login-btn{
+                        width: 100%;
+                    }
+                }
+            }
+        }
+        .footer{
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
     }
 </style>

@@ -1,7 +1,7 @@
 <template>
     <div id="header">
-        <router-link :to="{name: 'Login'}">
-            <img class="logo" src="../assets/header/logo.png" alt="Teleport">
+        <router-link :to="{name: 'login'}">
+            <img class="logo" src="../assets/img/logo.png" alt="Teleport">
         </router-link>
     </div>
 </template>
@@ -15,13 +15,10 @@
     };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
     #header{
-        position: fixed;
-        padding: 15px;
-    }
-
-    #header img{
-        color: #fff;
+        img{
+            color: #fff;
+        }
     }
 </style>

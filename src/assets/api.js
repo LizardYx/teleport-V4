@@ -12,3 +12,5 @@ import {asyncGet, asyncPost} from './axios'
  * @returns {Promise}
  */
 export const api_login = (params) => asyncPost('teleport/api/v3/login', params);
+
+export const api_serverTime = () => asyncGet('teleport/api/v3/serverTime', {});

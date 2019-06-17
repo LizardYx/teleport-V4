@@ -1,9 +1,11 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Login from './views/Login.vue';
-import bindAuthenticator from './views/bind-authenticator.vue';
 
 Vue.use(Router);
+
+function lazyLoadView(viewAddress) {
+    return () => import(/* webpackChunkName: "view-request" */ `./views/${viewAddress}.vue`);
+}
 
 export default new Router({
     mode: 'history',
@@ -11,21 +13,16 @@ export default new Router({
     routes: [
         {
             path: '/',
-            name: 'Login',
-            component: Login,
-        },
-        {
+            name: 'login',
+            component: lazyLoadView('login'),
+        },{
             path: '/bind-authenticator',
             name: 'bind-authenticator',
-            component: bindAuthenticator,
-        },
-        // {
-        //   path: '/about',
-        //   name: 'about',
-        //   // route level code-splitting
-        //   // this generates a separate chunk (about.[hash].js) for this route
-        //   // which is lazy-loaded when the route is visited.
-        //   component: () => import(/* webpackChunkName: "about" */ './views/About.vue'),
-        // },
+            component: lazyLoadView('bind-authenticator'),
+        },{
+            path: '/modules-main',
+            name: 'modules-main',
+            component: lazyLoadView('modules/main'),
+        }
     ],
 });

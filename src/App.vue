@@ -10,5 +10,6 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         min-width: 1264px;
+        font-size: $basic-size;
     }
 </style>

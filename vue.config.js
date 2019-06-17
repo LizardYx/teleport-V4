@@ -1,17 +1,34 @@
+const path = require("path");
 module.exports = {
-    devServer: {
-        host: 'localhost', //主机名字
-        port: 8080, //端口号
-        open: false, //使用npm run serve后，是否自动打开浏览器页面
-        proxy: { //配置跨域，请求后端接口
-            '/api': {
-                target: '', //接口地址，例如http://10.0.0.100:8080
-                ws: false, //是否启用websocket
-                changeOrigin: false, //是否开启代理
-                pathRewrite: {
-                    '^api': '/', //如组件需调用接口http://10.0.0.100:8080/user/info, 可直接写成/api/user/info
-                }
+    // 部署应用包时的基本 URL
+    publicPath: process.env.NODE_ENV === 'production' ? '/' : '/',
+    // 当运行 vue-cli-service build 时构建文件的目录
+    outputDir: 'dist',
+    // 生成的静态资源文件名中是否包含 hash
+    filenameHashing: true,
+    // 生产环境的 source map
+    productionSourceMap: true,
+    // 如果你构建后的文件是部署在 CDN 上的，启用该选项可以提供额外的安全性
+    integrity: false,
+    // css相关配置
+    css: {
+        loaderOptions: {
+            sass: {
+                data: `
+                    @import "@/assets/css/variables.scss";
+                `
             }
         }
+    },
+    pluginOptions: {
+        'style-resources-loader': {
+            preProcessor: 'scss',
+            patterns: [
+                path.resolve(__dirname, "@/assets/css/variables.scss")
+            ]
+        }
+    },
+    devServer: {
+        proxy: "http://127.0.0.1:801"
     }
-}
+};
