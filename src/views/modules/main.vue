@@ -10,32 +10,68 @@
                         <el-radio-button :label="false">展开</el-radio-button>
                         <el-radio-button :label="true">收起</el-radio-button>
                     </el-radio-group>
-                    <el-menu class="bord-no" default-active="1-1" :unique-opened="true" @open="handleOpen"
+                    <el-menu class="bord-no" default-active="1" :unique-opened="true" @open="handleOpen"
                              @close="handleClose" :collapse="isCollapse">
-                        <el-submenu index="1">
+                        <el-menu-item index="1">
+                            <i class="el-icon-menu"></i>
+                            <span slot="title">总览</span>
+                        </el-menu-item>
+                        <el-submenu index="2">
                             <template slot="title">
                                 <i class="el-icon-location"></i>
-                                <span slot="title">导航一</span>
+                                <span slot="title">资产</span>
                             </template>
                             <el-menu-item-group>
-                                <el-menu-item index="1-1">选项1</el-menu-item>
-                                <el-menu-item index="1-2">选项2</el-menu-item>
+                                <el-menu-item index="2-1">主机及账号</el-menu-item>
+                                <el-menu-item index="2-2">主机分组管理</el-menu-item>
+                                <el-menu-item index="2-3">账号分组管理</el-menu-item>
                             </el-menu-item-group>
-                            <el-menu-item-group>
-                                <el-menu-item index="1-3">选项3</el-menu-item>
-                            </el-menu-item-group>
-                            <el-submenu index="1-4">
-                                <span slot="title">选项4</span>
-                                <el-menu-item index="1-4-1">选项1</el-menu-item>
-                            </el-submenu>
                         </el-submenu>
-                        <el-menu-item index="2">
-                            <i class="el-icon-menu"></i>
-                            <span slot="title">导航二</span>
-                        </el-menu-item>
-                        <el-menu-item index="3">
+                        <el-submenu index="3">
+                            <template slot="title">
+                                <i class="el-icon-location"></i>
+                                <span slot="title">用户</span>
+                            </template>
+                            <el-menu-item-group>
+                                <el-menu-item index="3-1">用户管理</el-menu-item>
+                                <el-menu-item index="3-2">用户分组管理</el-menu-item>
+                            </el-menu-item-group>
+                        </el-submenu>
+                        <el-submenu index="4">
+                            <template slot="title">
+                                <i class="el-icon-location"></i>
+                                <span slot="title">运维</span>
+                            </template>
+                            <el-menu-item-group>
+                                <el-menu-item index="4-1">运维授权</el-menu-item>
+                                <el-menu-item index="4-2">主机运维</el-menu-item>
+                                <el-menu-item index="4-3">在线会话</el-menu-item>
+                            </el-menu-item-group>
+                        </el-submenu>
+                        <el-submenu index="5">
+                            <template slot="title">
+                                <i class="el-icon-location"></i>
+                                <span slot="title">审计</span>
+                            </template>
+                            <el-menu-item-group>
+                                <el-menu-item index="5-1">审计授权</el-menu-item>
+                                <el-menu-item index="5-2">会话审计</el-menu-item>
+                            </el-menu-item-group>
+                        </el-submenu>
+                        <el-submenu index="6">
+                            <template slot="title">
+                                <i class="el-icon-location"></i>
+                                <span slot="title">系统</span>
+                            </template>
+                            <el-menu-item-group>
+                                <el-menu-item index="6-1">系统日志</el-menu-item>
+                                <el-menu-item index="6-2">角色管理</el-menu-item>
+                                <el-menu-item index="6-2">系统设置</el-menu-item>
+                            </el-menu-item-group>
+                        </el-submenu>
+                        <el-menu-item index="7">
                             <i class="el-icon-setting"></i>
-                            <span slot="title">导航三</span>
+                            <span slot="title">助手设置</span>
                         </el-menu-item>
                     </el-menu>
                 </el-aside>
