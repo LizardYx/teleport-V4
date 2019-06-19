@@ -71,6 +71,7 @@
     import CommonHeader from '../components/common-header';
     import copyRight from '../components/copy-right';
     import {setup} from '../../public/lib/bg-canvas/swirl';
+    import {asyncPost} from '../assets/axios'
     import {api} from "../assets/api";
 
     export default {
@@ -118,7 +119,15 @@
                 };
             },
             login() {
-                api.login(this.loginInfo)
+                /**
+                 * 登录
+                 * @param userName {string} [用户名]
+                 * @param password {int} [密码]
+                 * @param verificationCode {int} [验证码,6]
+                 * @param rememberMe {blur} [记住我]
+                 * @returns {Promise}
+                 */
+                asyncPost(api.login, this.loginInfo)
                     .then(() => {
                         this.$router.push({name: 'modules-main'});
                     }, (error) => {
