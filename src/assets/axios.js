@@ -105,10 +105,10 @@ export function asyncGet(url, params){
     return new Promise((resolve, reject) => {
         axios.get(url, {params: params})
             .then(response => {
-                resolve(response.data);
+                resolve(response);
             })
             .catch(error => {
-                reject(error.data)
+                reject(error)
             })
     })
 }
@@ -124,10 +124,10 @@ export function asyncPost(url, params){
     return new Promise((resolve, reject) => {
         axios.post(url, QS.stringify(params))
             .then(response => {
-                resolve(response.data);
+                resolve(response);
             })
             .catch(error => {
-                reject(error.data)
+                reject(error)
             })
     })
 }
