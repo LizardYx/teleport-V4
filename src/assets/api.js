@@ -11,6 +11,15 @@ import {asyncGet, asyncPost} from './axios'
  * @param rememberMe {blur} [记住我]
  * @returns {Promise}
  */
-export const api_login = (params) => asyncPost('teleport/api/v3/login', params);
+const login = (params) => asyncPost('teleport/api/v3/login', params);
 
-export const api_serverTime = () => asyncGet('teleport/api/v3/serverTime', {});
+const serverTime = () => asyncGet('teleport/api/v3/serverTime', {});
+
+const api = {
+    login: login,
+    serverTime: serverTime
+};
+
+export {
+    api
+}

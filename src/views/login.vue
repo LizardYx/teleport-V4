@@ -71,7 +71,7 @@
     import CommonHeader from '../components/common-header';
     import copyRight from '../components/copy-right';
     import {setup} from '../../public/lib/bg-canvas/swirl';
-    import {api_login} from "../assets/api";
+    import {api} from "../assets/api";
 
     export default {
         name: 'login',
@@ -118,7 +118,7 @@
                 };
             },
             login() {
-                api_login(this.loginInfo)
+                api.login(this.loginInfo)
                     .then(() => {
                         this.$router.push({name: 'modules-main'});
                     }, (error) => {

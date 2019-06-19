@@ -52,7 +52,7 @@
     import copyRight from '../components/copy-right';
     import {setup} from '../../public/lib/bg-canvas/swirl';
     import {formatTimeToStr} from '../assets/filter/date-format';
-    import {api_serverTime} from "../assets/api";
+    import {api} from "../assets/api";
 
     export default {
         name: 'bindAuthenticator',
@@ -94,7 +94,7 @@
         },
         methods: {
             initServerDate() {
-                api_serverTime()
+                api.serverTime()
                     .then(response => {
                         this.serverDate = response.rows.time;
                         this.timer = setInterval(this.updateServerDate, 1000);
