@@ -17,7 +17,8 @@
                                 </el-input>
                             </el-form-item>
                             <el-form-item prop="verificationCode">
-                                <el-input type="text" v-model="loginInfo.verificationCode" placeholder="请输入验证码">
+                                <el-input type="text" v-model="loginInfo.verificationCode" @keyup.enter.native="login"
+                                          placeholder="请输入验证码">
                                     <template slot="append">.com</template>
                                 </el-input>
                             </el-form-item>
@@ -41,7 +42,7 @@
                             </el-form-item>
                             <el-form-item prop="verificationCode">
                                 <el-input type="text" v-model="loginInfo.verificationCode" maxlength="6"
-                                          placeholder="请输入六位数字身份器动态验证码">
+                                          @keyup.enter.native="login" placeholder="请输入六位数字身份器动态验证码">
                                 </el-input>
                             </el-form-item>
                             <el-checkbox class="remember-me mar-btm" v-model="loginInfo.rememberMe">

@@ -86,7 +86,7 @@ axios.interceptors.response.use(
                 default:
                     this.$notify({
                         type: 'warning',
-                        message: error.response.data.message,
+                        message: error.response.data.msg,
                         duration: 2000
                     });
             }

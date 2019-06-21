@@ -8,7 +8,7 @@
                 <div class="title mar-btm">第一步：安装身份验证器</div>
                 <div class="content">
                     请在你的手机上安装身份验证器App。
-                    <a href="">点击此处获取安装方式</a>
+                    <a @click="dialogVisible = true">点击此处获取安装方式</a>
                 </div>
             </div>
             <div class="pad-ver">
@@ -44,6 +44,13 @@
         <div class="footer">
             <copyRight></copyRight>
         </div>
+        <el-dialog title="安装方式" :visible.sync="dialogVisible" :close-on-click-modal="false">
+            <span>安装方式内容</span>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">取消</el-button>
+                <el-button type="primary" @click="dialogVisible = false">确定</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -72,6 +79,7 @@
             return {
                 timer: '',
                 serverDate: 0,
+                dialogVisible: false,
                 authentication: {
                     userName: '',
                     password: ''
