@@ -2,7 +2,7 @@
     <div id="bindAuthenticator">
         <div id="bgCanvas"></div>
         <common-header></common-header>
-        <div id="authenticator-content">
+        <div id="oath-content">
             <div class="title pad-ver">绑定身份验证器</div>
             <div class="pad-ver">
                 <div class="title mar-btm">第一步：安装身份验证器</div>
@@ -44,8 +44,48 @@
         <div class="footer">
             <copyRight></copyRight>
         </div>
-        <el-dialog title="安装方式" :visible.sync="dialogVisible" :close-on-click-modal="false">
-            <span>安装方式内容</span>
+        <el-dialog title="身份验证器" :visible.sync="dialogVisible" :close-on-click-modal="false">
+            <div class="oath-info">
+                <el-row>
+                    <el-col :span="12" class="oath-way">
+                        <div class="mini-program mar-btm">
+                            <div class="title">微信小程序</div>
+                            <div class="content pad-lft">
+                                <div>
+                                    <span class="color-main">二次验证码</span>
+                                    <label class="label-tag">推荐</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="google-oath mar-btm">
+                            <div class="title">谷歌身份验证器</div>
+                            <div class="content pad-lft">
+                                <div>
+                                    <span class="color-main">IOS（Apple Store）</span>
+                                </div>
+                                <div>
+                                    <span class="color-main">Android（百度手机助手）</span>
+                                </div>
+                                <div>
+                                    <span class="color-main">Android（Google Play）</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="security-token mar-btm">
+                            <div class="title">小米安全令牌</div>
+                            <div class="content pad-lft">
+                                <div>
+                                    <span class="color-main">IOS（Apple Store）</span>
+                                </div>
+                                <div>
+                                    <span class="color-main">Android（小米应用商店）</span>
+                                </div>
+                            </div>
+                        </div>
+                    </el-col>
+                    <el-col :span="12"></el-col>
+                </el-row>
+            </div>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取消</el-button>
                 <el-button type="primary" @click="dialogVisible = false">确定</el-button>
@@ -130,7 +170,7 @@
         #header{
             position: fixed;
         }
-        #authenticator-content{
+        #oath-content{
             position: absolute;
             width: 900px;
             height: 492px;
@@ -176,6 +216,24 @@
             position: fixed;
             bottom: 0;
             width: 100%;
+        }
+        .oath-info{
+            > div{
+                .title{
+                    margin-bottom: 10px;
+                }
+                .content{
+                    > div{
+                        margin-bottom: 5px;
+                        span.color-main{
+                            cursor: pointer;
+                        }
+                        .label-tag{
+                            margin-left: 5px;
+                        }
+                    }
+                }
+            }
         }
     }
 </style>

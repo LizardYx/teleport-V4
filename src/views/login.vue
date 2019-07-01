@@ -42,7 +42,7 @@
                             </el-form-item>
                             <el-form-item prop="verificationCode">
                                 <el-input type="text" v-model="loginInfo.verificationCode" maxlength="6"
-                                          @keyup.enter.native="login" placeholder="请输入六位数字身份器动态验证码">
+                                          @keyup.enter.native="login" placeholder="请输入6位数字身份验证器动态验证码">
                                 </el-input>
                             </el-form-item>
                             <el-checkbox class="remember-me mar-btm" v-model="loginInfo.rememberMe">
@@ -56,7 +56,7 @@
                     <router-link class="forgot-password mar-rgt color-main" :to="{name: 'login'}">
                         忘记密码
                     </router-link>
-                    <router-link v-if="loginWay === 'authentication'" class="authenticator color-main" :to="{name: 'bind-authenticator'}">
+                    <router-link v-if="loginWay === 'authentication'" class="authenticator color-main" :to="{name: 'bind-oath'}">
                         绑定身份验证器
                     </router-link>
                 </el-tabs>
