@@ -52,7 +52,9 @@
                             <div class="title">微信小程序</div>
                             <div class="content pad-lft">
                                 <div>
-                                    <span class="color-main">二次验证码</span>
+                                    <span class="color-main" @click="updateSelectedOathWay(1)">
+                                        二次验证码
+                                    </span>
                                     <label class="label-tag">推荐</label>
                                 </div>
                             </div>
@@ -61,13 +63,19 @@
                             <div class="title">谷歌身份验证器</div>
                             <div class="content pad-lft">
                                 <div>
-                                    <span class="color-main">IOS（Apple Store）</span>
+                                    <span class="color-main" @click="updateSelectedOathWay(2)">
+                                        IOS（Apple Store）
+                                    </span>
                                 </div>
                                 <div>
-                                    <span class="color-main">Android（百度手机助手）</span>
+                                    <span class="color-main" @click="updateSelectedOathWay(3)">
+                                        Android（百度手机助手）
+                                    </span>
                                 </div>
                                 <div>
-                                    <span class="color-main">Android（Google Play）</span>
+                                    <span class="color-main" @click="updateSelectedOathWay(4)">
+                                        Android（Google Play）
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -75,15 +83,29 @@
                             <div class="title">小米安全令牌</div>
                             <div class="content pad-lft">
                                 <div>
-                                    <span class="color-main">IOS（Apple Store）</span>
+                                    <span class="color-main" @click="updateSelectedOathWay(5)">
+                                        IOS（Apple Store）
+                                    </span>
                                 </div>
                                 <div>
-                                    <span class="color-main">Android（小米应用商店）</span>
+                                    <span class="color-main" @click="updateSelectedOathWay(6)">
+                                        Android（小米应用商店）
+                                    </span>
                                 </div>
                             </div>
                         </div>
                     </el-col>
-                    <el-col :span="12"></el-col>
+                    <el-col :span="12" class="text-center">
+                        <div v-if="!!selectedBindOathId" class="title color-main">
+                            {{getOathDetailValue('title')}}
+                        </div>
+                        <div>
+                            <img :src="selectedBindOathImaUrl" alt="Teleport">
+                        </div>
+                        <div v-if="!!selectedBindOathId">
+                            {{getOathDetailValue('description')}}
+                        </div>
+                    </el-col>
                 </el-row>
             </div>
             <div slot="footer" class="dialog-footer">
@@ -120,6 +142,45 @@
                 timer: '',
                 serverDate: 0,
                 dialogVisible: false,
+                selectedBindOathId: 0,
+                selectedBindOathImaUrl: require('../assets/img/bind-oath/select-app.png'),
+                oathDetailInfoList: [{
+                    id: 1,
+                    title: '微信·小程序',
+                    icon: '',
+                    imgName: 'wechat.png',
+                    description: '适用于IOS/Android，在微信小程序中搜索“二次验证码”即可'
+                },{
+                    id: 2,
+                    title: '谷歌身份验证器',
+                    icon: '',
+                    imgName: 'google-appStore.png',
+                    description: '适用于IOS，从Apple Store安装'
+                },{
+                    id: 3,
+                    title: '谷歌身份验证器',
+                    icon: '',
+                    imgName: 'google-baidu.png',
+                    description: '适用于Android，从百度手机助手安装'
+                },{
+                    id: 4,
+                    title: '谷歌身份验证器',
+                    icon: '',
+                    imgName: 'google-googlePlay.png',
+                    description: '适用于Android，从Google Play安装'
+                },{
+                    id: 5,
+                    title: '小米安全令牌',
+                    icon: '',
+                    imgName: 'xiaomi-appStore.png',
+                    description: '适用于IOS，从Apple Store安装'
+                },{
+                    id: 6,
+                    title: '小米安全令牌',
+                    icon: '',
+                    imgName: 'xiaomi-xiaomiStore.png',
+                    description: '适用于Android，从小米应用商店安装'
+                }],
                 authentication: {
                     userName: '',
                     password: ''
@@ -151,6 +212,27 @@
             },
             updateServerDate() {
                 this.serverDate += 1000;
+            },
+            updateSelectedOathWay(id) {
+                if (id) {
+                    this.selectedBindOathId = id;
+                    this.selectedBindOathImaUrl = require(`../assets/img/bind-oath/${this.getOathDetailValue('imgName')}`)
+                }
+            },
+            getOathDetailValue(keyName) {
+                let keyValue = '';
+
+                if (keyName && !!this.selectedBindOathId) {
+                    for (let index = 0; index < this.oathDetailInfoList.length; index++) {
+                        let oathDetailInfoObj = this.oathDetailInfoList[index];
+
+                        if (oathDetailInfoObj.id === this.selectedBindOathId) {
+                            keyValue = oathDetailInfoObj[keyName];
+                            break;
+                        }
+                    }
+                }
+                return keyValue;
             }
         },
         mounted() {
