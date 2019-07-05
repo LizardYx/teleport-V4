@@ -17,6 +17,12 @@ let server = http.createServer(function (request, response) {
         if (request.url === `${commonUrl}/serverTime`) {
             data.rows.time = (new Date()).getTime();
         }
+        if (request.url === `${commonUrl}/bind-oath`) {
+            data.rows.secret_key = 'T5NUVIZTGTCMMNLKAZ64DGLRDU';
+        }
+        if (request.url === `${commonUrl}/bind-oath-qrcode`) {
+            data.rows.QRCode = '';
+        }
         response.writeHead(statusCode, {'Content-Type': 'text/html'});
         //参数序列化
         response.end(JSON.stringify(data));
@@ -42,6 +48,15 @@ let server = http.createServer(function (request, response) {
                         code: -1,
                         rows: {},
                         msg: '验证码错误，请重新输入'
+                    };
+                }
+            }
+            if (request.url === `${commonUrl}/verify-user`) {
+                if (params.userName !== 'admin' || params.password !== '1234asd') {
+                    data = {
+                        code: -1,
+                        rows: {},
+                        msg: '用户名或密码错误，请重新输入'
                     };
                 }
             }
