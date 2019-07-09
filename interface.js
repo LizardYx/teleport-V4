@@ -60,6 +60,22 @@ let server = http.createServer(function (request, response) {
                     };
                 }
             }
+            if (request.url === `${commonUrl}/user/do-bind-oath`) {
+                if (params.userName !== 'admin' || params.password !== '1234asd') {
+                    data = {
+                        code: -1,
+                        rows: {},
+                        msg: '用户名或密码错误，请重新输入'
+                    };
+                }
+                if (params['oath_code'] !== '123456') {
+                    data = {
+                        code: -1,
+                        rows: {},
+                        msg: '动态验证码错误，请重新输入'
+                    };
+                }
+            }
             response.writeHead(statusCode, {'Content-Type': 'text/html'});
             response.end(JSON.stringify(data));
         });

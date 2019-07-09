@@ -117,7 +117,8 @@
                 <el-button type="primary" @click="bindWayDialog.visible = false">确定</el-button>
             </div>
         </el-dialog>
-        <el-dialog id="bindOathDialog" title="绑定身份验证器" :visible.sync="bindOathDialog.visible" :close-on-click-modal="false">
+        <el-dialog id="bindOathDialog" title="绑定身份验证器" :visible.sync="bindOathDialog.visible"
+                   :close-on-click-modal="false">
             <div>
                 <div>请在手机上打开身份验证器，点击增加账号按钮，然后选择“扫描条形码”并扫描下面的二维码来完成账号绑定。</div>
                 <div class="text-center pad-ver">
@@ -132,7 +133,7 @@
                     <div class="pad-btm">然后请在下面的动态验证码输入框中输入身份验证器提供的6位数字：</div>
                     <el-row>
                         <el-col :span="8">
-                            <el-input type="text" v-model="bindOathDialog.verificationCode" placeholder="请输入动态验证码" maxlength="6">
+                            <el-input v-model="bindOathDialog.verificationCode" placeholder="请输入动态验证码" maxlength="6">
                             </el-input>
                         </el-col>
                     </el-row>
@@ -304,11 +305,49 @@
                         });
                     })
             },
-            confirmBindOath() {
-                this.$confirm('确认绑定该身份验证器？', '绑定身份验证器', {
+            validateBindOath() {
+                let passValidate = this.bindOathDialog.verificationCode.length === 6;
 
-                })
-                this.bindOathDialog.visible = false
+                if (!passValidate) {
+                    this.$notify({
+                        type: 'warning',
+                        message: '请输入六位动态验证码',
+                        duration: 2000
+                    });
+                }
+                return passValidate;
+            },
+            confirmBindOath() {
+                if (this.validateBindOath()) {
+                    this.$confirm('确认绑定该身份验证器？')
+                        .then(() => {
+                            done();
+                            this.bindOathToUser();
+                        })
+                        .catch(() => {});
+                }
+            },
+            bindOathToUser() {
+                let params = {
+                    userName: this.authentication.userName,
+                    password: this.authentication.password,
+                    oath_code: this.bindOathDialog.verificationCode
+                };
+
+                asyncPost(api.bindOathToUser, params)
+                    .then(() => {
+                        this.$notify({
+                            type: 'success',
+                            message: '绑定身份验证器成功',
+                            duration: 3000
+                        });
+                    }, (error) => {
+                        this.$notify({
+                            type: 'warning',
+                            message: error.msg,
+                            duration: 3000
+                        });
+                    })
             }
         },
         mounted() {
