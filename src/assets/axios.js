@@ -62,7 +62,7 @@ axios.interceptors.response.use(
                     this.$notify({
                         type: 'warning',
                         message: '登录过期，请重新登录',
-                        duration: 2000
+                        duration: 5000
                     });
                     localStorage.removeItem('token');
                     store.commit('loginSuccess', null);
@@ -79,7 +79,7 @@ axios.interceptors.response.use(
                 case 404:
                     this.$notify.error({
                         message: '网络请求不存在',
-                        duration: 2000
+                        duration: 5000
                     });
                     break;
                 // 其他错误，直接抛出错误提示
@@ -87,7 +87,7 @@ axios.interceptors.response.use(
                     this.$notify({
                         type: 'warning',
                         message: error.response.data.msg,
-                        duration: 2000
+                        duration: 5000
                     });
             }
         }

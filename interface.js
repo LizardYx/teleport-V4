@@ -17,10 +17,10 @@ let server = http.createServer(function (request, response) {
         if (request.url === `${commonUrl}/serverTime`) {
             data.rows.time = (new Date()).getTime();
         }
-        if (request.url === `${commonUrl}/bind-oath`) {
+        if (request.url === `${commonUrl}/user/bind-oath`) {
             data.rows.secret_key = 'T5NUVIZTGTCMMNLKAZ64DGLRDU';
         }
-        if (request.url === `${commonUrl}/bind-oath-qrcode`) {
+        if (request.url === `${commonUrl}/user/bind-oath-qrcode`) {
             data.rows.QRCode = '';
         }
         response.writeHead(statusCode, {'Content-Type': 'text/html'});
@@ -60,7 +60,7 @@ let server = http.createServer(function (request, response) {
                     };
                 }
             }
-            if (request.url === `${commonUrl}/user/do-bind-oath`) {
+            if (request.url === `${commonUrl}/user/bind-oath`) {
                 if (params.userName !== 'admin' || params.password !== '1234asd') {
                     data = {
                         code: -1,

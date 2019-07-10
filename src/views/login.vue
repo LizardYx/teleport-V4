@@ -139,7 +139,7 @@
                         this.$notify({
                             type: 'warning',
                             message: error.msg,
-                            duration: 3000
+                            duration: 5000
                         });
                     })
             }

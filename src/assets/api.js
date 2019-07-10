@@ -7,7 +7,6 @@ export const api = {
     login: `${baseUrl}/login`, //登录
     verifyUser: `${baseUrl}/verify-user`, //验证用户名密码
     serverTime: `${baseUrl}/serverTime`, //服务器事时间
-    bindOath: `${baseUrl}/bind-oath`, //绑定身份验证器信息
-    bindOathQRCode: `${baseUrl}/bind-oath-qrcode`, //绑定身份验证器二维码
-    bindOathToUser: `${baseUrl}/user/do-bind-oath`, //绑定身份验证器
+    bindOath: `${baseUrl}/user/bind-oath`, //绑定身份验证器
+    bindOathQRCode: `${baseUrl}/user/bind-oath-qrcode`, //绑定身份验证器二维码
 };

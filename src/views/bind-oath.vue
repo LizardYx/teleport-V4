@@ -281,7 +281,7 @@
                         this.$notify({
                             type: 'warning',
                             message: error.msg,
-                            duration: 3000
+                            duration: 5000
                         });
                     })
             },
@@ -301,7 +301,7 @@
                         this.$notify({
                             type: 'warning',
                             message: error.msg,
-                            duration: 3000
+                            duration: 5000
                         });
                     })
             },
@@ -312,7 +312,7 @@
                     this.$notify({
                         type: 'warning',
                         message: '请输入六位动态验证码',
-                        duration: 2000
+                        duration: 5000
                     });
                 }
                 return passValidate;
@@ -321,8 +321,8 @@
                 if (this.validateBindOath()) {
                     this.$confirm('确认绑定该身份验证器？')
                         .then(() => {
-                            done();
                             this.bindOathToUser();
+                            this.bindOathDialog.visible = false;
                         })
                         .catch(() => {});
                 }
@@ -334,18 +334,19 @@
                     oath_code: this.bindOathDialog.verificationCode
                 };
 
-                asyncPost(api.bindOathToUser, params)
+                asyncPost(api.bindOath, params)
                     .then(() => {
                         this.$notify({
                             type: 'success',
                             message: '绑定身份验证器成功',
-                            duration: 3000
+                            duration: 5000
                         });
+                        this.$router.push({name: 'login'});
                     }, (error) => {
                         this.$notify({
                             type: 'warning',
                             message: error.msg,
-                            duration: 3000
+                            duration: 5000
                         });
                     })
             }
