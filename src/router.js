@@ -9,9 +9,10 @@ function lazyLoadView(viewAddress) {
 }
 
 function initCommonVuex() {
-    store.commit('common/updateLogin', localStorage.getItem('isLogin'));
+    //localStorage中值的类型为string，需要转换后赋值给vuex
+    store.commit('common/updateLogin', localStorage.getItem('isLogin') === 'true');
     store.commit('common/updateToken', localStorage.getItem('token'));
-    store.commit('common/updateUserInfo', localStorage.getItem('userInfo'));
+    // store.commit('common/updateUserInfo', JSON.parse(localStorage.getItem('userInfo')));
 }
 
 const router = new Router({

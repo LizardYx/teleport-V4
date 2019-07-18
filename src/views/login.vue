@@ -101,9 +101,9 @@
             return {
                 loginWay: 'password',
                 loginInfo: {
-                    userName: '',
-                    password: '',
-                    verificationCode: '',
+                    userName: 'admin',
+                    password: '1234asd',
+                    verificationCode: '123456',
                     rememberMe: false,
                 },
                 rules: {

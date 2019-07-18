@@ -397,7 +397,7 @@
                             position: relative;
                             top: 4px;
                             padding: 6px 12px;
-                            border-radius: 5px;
+                            border-radius: $radius-middle;
                         }
                     }
                     > #auth-form{

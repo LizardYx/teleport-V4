@@ -6,10 +6,6 @@
             </el-header>
             <el-container>
                 <el-aside id="nav" class="bord-rgt" width="auto">
-                    <el-radio-group v-model="isCollapse" class="mar-btm">
-                        <el-radio-button :label="false">展开</el-radio-button>
-                        <el-radio-button :label="true">收起</el-radio-button>
-                    </el-radio-group>
                     <el-menu class="bord-no" default-active="1" :unique-opened="true" @open="handleOpen"
                              @close="handleClose" :collapse="isCollapse">
                         <el-menu-item index="1">
