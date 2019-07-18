@@ -91,13 +91,19 @@
 <script>
     import CommonHeader from '../../components/common-header';
     import copyRight from '../../components/copy-right';
+    import store from "../../store/store";
 
     export default {
         name: "modulesMain",
         components: {CommonHeader, copyRight},
         data() {
             return {
-                isCollapse: false
+
+            }
+        },
+        computed: {
+            isCollapse: function () {
+                return store.state.common.isCollapse;
             }
         },
         methods: {

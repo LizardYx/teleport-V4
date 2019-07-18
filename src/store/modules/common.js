@@ -3,7 +3,8 @@ const common = {
     state: {
         isLogin: false,
         token: '',
-        userInfo: {}
+        userInfo: {},
+        isCollapse: false
     },
     mutations: {
         updateLogin(state, newStatus){
@@ -24,6 +25,9 @@ const common = {
         updateUserInfo(state, newUserInfo){
             state.userInfo = newUserInfo;
             localStorage.setItem('userInfo', newUserInfo);
+        },
+        updateCollapse(state, newCollapse) {
+            state.isCollapse = newCollapse;
         }
     },
     actions: {
@@ -36,6 +40,9 @@ const common = {
         updateUserInfo(context, payload) {
             context.commit('updateUserInfo', payload);
         },
+        updateCollapse(context, payload) {
+            context.commit('updateCollapse', payload);
+        }
     },
     getters: {
 

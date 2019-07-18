@@ -14,8 +14,3 @@ new Vue({
     store,
     render: h => h(App),
 }).$mount('#app');
-
-// init common vuex
-store.commit('common/updateLogin', localStorage.getItem('isLogin'));
-store.commit('common/updateToken', localStorage.getItem('token'));
-store.commit('common/updateUserInfo', localStorage.getItem('userInfo'));
