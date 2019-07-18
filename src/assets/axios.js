@@ -1,7 +1,7 @@
 import {publicPath,} from "../../vue.config";
 import axios from 'axios';
 import QS from 'qs';
-import store from "../store";
+import store from "../store/store";
 import router from "../router";
 axios.defaults.timeout = 10000; //设置请求时间
 axios.defaults.baseURL = publicPath; //设置默认接口地址
@@ -16,7 +16,8 @@ axios.defaults.headers['Content-Type'] = "application/x-www-form-urlencoded;char
  */
 axios.interceptors.request.use(
     config => {
-        const token = store.state.token;
+        const token = store.state.common.token;
+
         token && (config.headers.Authorization = token);
         return config;
     },
@@ -31,6 +32,7 @@ axios.interceptors.request.use(
  */
 axios.interceptors.response.use(
     response => {
+        // store.commit('common/updateToken', response.token);
         // 如果返回的状态码为200，说明接口请求成功，可以正常拿到数据
         if (response.status === 200) {
             if (response.data.code !== 1) {
@@ -43,12 +45,13 @@ axios.interceptors.response.use(
         }
     },
     error => {
+        // store.commit('common/updateToken', response.token);
         if (error.response.status) {
             switch (error.response.status) {
                 // 401：未登录
                 // 跳转登录页面，并携带当前页面路径。重新登录成功后返回当前页面
                 case 401:
-                    store.commit('updateLoginState', false);
+                    store.commit('common/updateLogin', false);
                     router.replace({
                         path: "/",
                         query: {
@@ -66,7 +69,7 @@ axios.interceptors.response.use(
                         duration: 5000
                     });
                     localStorage.removeItem('token');
-                    store.commit('updateLoginState', false);
+                    store.commit('common/updateLogin', false);
                     setTimeout(() => {
                         router.replace({
                             path: "/",
@@ -109,7 +112,7 @@ export function asyncGet(url, params){
                 resolve(response.data);
             })
             .catch(error => {
-                reject(error.data)
+                reject(error.data);
             })
     })
 }
@@ -128,7 +131,7 @@ export function asyncPost(url, params){
                 resolve(response.data);
             })
             .catch(error => {
-                reject(error.data)
+                reject(error.data);
             })
     })
 }

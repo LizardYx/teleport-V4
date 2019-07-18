@@ -78,6 +78,7 @@
     import {setup} from '../../public/lib/bg-canvas/swirl';
     import {asyncPost} from '../assets/axios'
     import {api} from "../assets/api";
+    import store from "../store/store";
 
     export default {
         name: 'login',
@@ -115,6 +116,11 @@
                 },
             };
         },
+        // computed: {
+        //     token: function () {
+        //         return store.state.common.token;
+        //     }
+        // },
         methods: {
             updateLoginWay() {
                 this.loginInfo = {
@@ -124,17 +130,9 @@
                 };
             },
             login() {
-                /**
-                 * 登录
-                 * @param userName {string} [用户名]
-                 * @param password {int} [密码]
-                 * @param verificationCode {int} [验证码,6]
-                 * @param rememberMe {blur} [记住我]
-                 * @returns {Promise}
-                 */
                 asyncPost(api.login, this.loginInfo)
                     .then(() => {
-                        store.commit('updateLoginState', true);
+                        store.commit('common/updateLogin', true);
                         this.$router.push({name: 'modules-main'});
                     }, (error) => {
                         this.$notify({
