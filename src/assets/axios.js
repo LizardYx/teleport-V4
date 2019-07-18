@@ -48,6 +48,7 @@ axios.interceptors.response.use(
                 // 401：未登录
                 // 跳转登录页面，并携带当前页面路径。重新登录成功后返回当前页面
                 case 401:
+                    store.commit('updateLoginState', false);
                     router.replace({
                         path: "/",
                         query: {
@@ -65,7 +66,7 @@ axios.interceptors.response.use(
                         duration: 5000
                     });
                     localStorage.removeItem('token');
-                    store.commit('loginSuccess', null);
+                    store.commit('updateLoginState', false);
                     setTimeout(() => {
                         router.replace({
                             path: "/",

@@ -134,6 +134,7 @@
                  */
                 asyncPost(api.login, this.loginInfo)
                     .then(() => {
+                        store.commit('updateLoginState', true);
                         this.$router.push({name: 'modules-main'});
                     }, (error) => {
                         this.$notify({

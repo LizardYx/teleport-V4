@@ -1,6 +1,6 @@
 <template>
     <div id="header">
-        <router-link :to="{name: 'login'}">
+        <router-link :to="{name: this.$store.state.isLogin ? 'modules-main' : 'login'}">
             <img class="logo" src="../assets/img/logo.png" alt="Teleport">
         </router-link>
     </div>
@@ -12,6 +12,9 @@
         data() {
             return {};
         },
+        methods() {
+
+        }
     };
 </script>
 
