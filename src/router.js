@@ -40,6 +40,13 @@ const router = new Router({
                 needLogin: true
             },
             component: lazyLoadView('modules/main'),
+        },{
+            path: '/system-overview',
+            name: 'system-overview',
+            meta: {
+                needLogin: true
+            },
+            component: lazyLoadView('modules/system-overview'),
         }
     ],
 });

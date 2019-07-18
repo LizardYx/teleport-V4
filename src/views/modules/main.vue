@@ -1,16 +1,16 @@
 <template>
     <div id="modulesMain">
         <el-container class="content">
-            <el-header class="bord-btm">
+            <el-header class="bord-btm pad-no">
                 <common-header></common-header>
             </el-header>
             <el-container>
                 <el-aside id="nav" class="bord-rgt" width="auto">
-                    <el-menu class="bord-no" default-active="1" :unique-opened="true" @open="handleOpen"
-                             @close="handleClose" :collapse="isCollapse">
+                    <el-menu class="bord-no" default-active="1" :unique-opened="true" @open="handleOpen" @close="handleClose"
+                             :collapse="isCollapse" background-color="#606266" text-color="#c3c3c3" active-text-color="#fff">
                         <el-menu-item index="1">
                             <i class="el-icon-menu"></i>
-                            <span slot="title">总览</span>
+                            <span slot="title">系统总览</span>
                         </el-menu-item>
                         <el-submenu index="2">
                             <template slot="title">
@@ -121,7 +121,7 @@
         }
         #nav{
             overflow-y: auto;
-            height: 100%;
+            background-color: #606266;
         }
         .mainContent{
             height: 100%;

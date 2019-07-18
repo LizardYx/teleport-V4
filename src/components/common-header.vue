@@ -1,11 +1,13 @@
 <template>
-    <div id="header">
-        <router-link :to="{name: isLogin ? 'modules-main' : 'login'}">
-            <img class="logo" src="../assets/img/logo.png" alt="Teleport">
+    <div id="header" class="pad-hor" v-bind:class="{'has-login': isLogin}">
+        <router-link class="logo" :to="{name: isLogin ? 'modules-main' : 'login'}">
+            <img src="../assets/img/logo.png" alt="Teleport">
         </router-link>
-        <i v-if="isLogin" class="collapse-icon" v-bind:class="{'el-icon-s-unfold': isCollapse, 'el-icon-s-fold': !isCollapse}"
-           @click="updateCollapse">
-        </i>
+        <div class="header-right">
+            <i v-if="isLogin" class="collapse-icon" v-bind:class="{'el-icon-s-unfold': isCollapse, 'el-icon-s-fold': !isCollapse}"
+               @click="updateCollapse">
+            </i>
+        </div>
     </div>
 </template>
 
@@ -37,12 +39,31 @@
 
 <style lang="scss" scoped>
     #header{
-        img{
-            color: #fff;
+        background-color: $text-basic;
+        height: 60px;
+        .logo{
+            float: left;
+            img{
+                color: #fff;
+            }
         }
-        .collapse-icon{
-            font-size: 30px;
-            color: $text-basic;
+        .header-right{
+            margin-left: 215px;
+            height: 100%;
+            .collapse-icon{
+                font-size: 30px;
+                color: #fff;
+                margin-top: 15px;
+                cursor: pointer;
+            }
+        }
+    }
+    .has-login{
+        .logo{
+            img{
+                height: 50px;
+                padding: 5px 0;
+            }
         }
     }
 </style>
