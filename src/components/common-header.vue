@@ -1,5 +1,5 @@
 <template>
-    <div id="header" class="pad-hor" v-bind:class="{'has-login': isLogin}">
+    <div id="header" class="pad-hor" v-bind:class="{'has-login basic-box-shadow': isLogin}">
         <router-link class="logo" :to="{name: isLogin ? 'modules-main' : 'login'}">
             <img src="../assets/img/logo.png" alt="Teleport">
         </router-link>
@@ -39,7 +39,6 @@
 
 <style lang="scss" scoped>
     #header{
-        background-color: $text-basic;
         height: 60px;
         .logo{
             float: left;
@@ -52,7 +51,7 @@
             height: 100%;
             .collapse-icon{
                 font-size: 30px;
-                color: #fff;
+                color: #66696F;
                 margin-top: 15px;
                 cursor: pointer;
             }

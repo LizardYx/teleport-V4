@@ -6,9 +6,9 @@
             </el-header>
             <el-container>
                 <el-aside id="nav" class="bord-rgt" width="auto">
-                    <el-menu class="bord-no" default-active="1" :unique-opened="true" @open="handleOpen" @close="handleClose"
-                             :collapse="isCollapse" background-color="#606266" text-color="#c3c3c3" active-text-color="#fff">
-                        <el-menu-item index="1">
+                    <el-menu class="bord-no" :default-active="this.$router.path" router :unique-opened="true" :collapse="isCollapse"
+                             background-color="#66696F" text-color="#c3c3c3" active-text-color="#fff">
+                        <el-menu-item index="/modules-main/system-overview">
                             <i class="el-icon-menu"></i>
                             <span slot="title">系统总览</span>
                         </el-menu-item>
@@ -62,7 +62,7 @@
                             <el-menu-item-group>
                                 <el-menu-item index="6-1">系统日志</el-menu-item>
                                 <el-menu-item index="6-2">角色管理</el-menu-item>
-                                <el-menu-item index="6-2">系统设置</el-menu-item>
+                                <el-menu-item index="6-3">系统设置</el-menu-item>
                             </el-menu-item-group>
                         </el-submenu>
                         <el-menu-item index="7">
@@ -103,12 +103,7 @@
             }
         },
         methods: {
-            handleOpen(key, keyPath) {
-                console.log(key, keyPath);
-            },
-            handleClose(key, keyPath) {
-                console.log(key, keyPath);
-            }
+
         }
     }
 </script>
@@ -121,9 +116,10 @@
         }
         #nav{
             overflow-y: auto;
-            background-color: #606266;
+            background-color: #66696F;
         }
         .mainContent{
+            background-color: #ecf0f5;
             height: 100%;
         }
     }
