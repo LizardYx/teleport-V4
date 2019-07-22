@@ -6,7 +6,7 @@
             </el-header>
             <el-container>
                 <el-aside id="nav" class="bord-rgt" width="auto">
-                    <el-menu class="bord-no" :default-active="this.$router.path" router :unique-opened="true" :collapse="isCollapse"
+                    <el-menu class="bord-no" :default-active="$route.path" router :unique-opened="true" :collapse="isCollapse"
                              background-color="#66696F" text-color="#c3c3c3" active-text-color="#fff">
                         <el-menu-item index="/modules-main/system-overview">
                             <i class="el-icon-menu"></i>
@@ -108,7 +108,7 @@
     }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
     #modulesMain{
         > .content{
             height: 100vh;
@@ -121,6 +121,16 @@
         .mainContent{
             background-color: #ecf0f5;
             height: 100%;
+            #pageTitle{
+                font-size: 20px;
+                padding: 15px 0 30px;
+            }
+            #pageContent{
+                background-color: #fff;
+            }
+        }
+        #copyRight{
+            background-color: #ecf0f5;
         }
     }
 </style>

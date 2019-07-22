@@ -1,6 +1,6 @@
 <template>
     <div id="header" class="pad-hor" v-bind:class="{'has-login basic-box-shadow': isLogin}">
-        <router-link class="logo" :to="{name: isLogin ? 'modules-main' : 'login'}">
+        <router-link class="logo" :to="{path: isLogin ? '/modules-main' : '/'}">
             <img src="../assets/img/logo.png" alt="Teleport">
         </router-link>
         <div class="header-right">
@@ -17,9 +17,7 @@
     export default {
         name: 'common-header',
         data() {
-            return {
-
-            };
+            return {};
         },
         computed: {
             isLogin: function () {

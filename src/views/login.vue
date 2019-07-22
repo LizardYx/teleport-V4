@@ -133,7 +133,7 @@
                 asyncPost(api.login, this.loginInfo)
                     .then(() => {
                         store.commit('common/updateLogin', true);
-                        this.$router.push({name: 'modules-main'});
+                        this.$router.push('/modules-main/system-overview');
                     }, (error) => {
                         this.$notify({
                             type: 'warning',
