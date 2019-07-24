@@ -76,6 +76,7 @@
     import CommonHeader from '../components/common-header';
     import copyRight from '../components/copy-right';
     import {setup} from '../../public/lib/bg-canvas/swirl';
+    import {noise} from '../../public/lib/bg-canvas/noise.min';
     import {asyncPost} from '../assets/axios'
     import {api} from "../assets/api";
     import store from "../store/store";
@@ -144,6 +145,7 @@
             }
         },
         mounted() {
+            noise();
             setup();
         }
     };

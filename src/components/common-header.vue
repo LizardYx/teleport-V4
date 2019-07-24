@@ -1,6 +1,6 @@
 <template>
     <div id="header" class="pad-hor" v-bind:class="{'has-login basic-box-shadow': isLogin}">
-        <router-link class="logo" :to="{path: isLogin ? '/modules-main' : '/'}">
+        <router-link class="logo" :to="{path: isLogin ? '/modules-main/system-overview' : '/'}">
             <img src="../assets/img/logo.png" alt="Teleport">
         </router-link>
         <div class="header-right">

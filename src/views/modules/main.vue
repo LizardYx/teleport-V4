@@ -119,7 +119,7 @@
             background-color: #66696F;
         }
         .mainContent{
-            background-color: #ecf0f5;
+            background-color: #ecf0f566;
             height: 100%;
             #pageTitle{
                 font-size: 20px;
@@ -129,8 +129,8 @@
                 background-color: #fff;
             }
         }
-        #copyRight{
-            background-color: #ecf0f5;
+        footer{
+            background-color: #ecf0f566;
         }
     }
 </style>

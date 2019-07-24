@@ -150,7 +150,7 @@
 <script>
     import CommonHeader from '../components/common-header.vue';
     import copyRight from '../components/copy-right';
-    import {setup} from '../../public/lib/bg-canvas/swirl';
+    // import {setup} from '../../public/lib/bg-canvas/swirl';
     import {formatTimeToStr} from '../assets/filter/date-format';
     import {asyncGet, asyncPost} from '../assets/axios'
     import {api} from "../assets/api";
@@ -352,7 +352,7 @@
             }
         },
         mounted() {
-            setup(); //初始化背景canvas
+            // setup(); //初始化背景canvas
             this.initServerDate(); //初始化服务器时间
         },
         beforeDestroy() {
