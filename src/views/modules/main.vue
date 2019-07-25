@@ -119,7 +119,7 @@
             background-color: #66696F;
         }
         .mainContent{
-            background-color: #ecf0f566;
+            background-color: #d1d4d85e;
             height: 100%;
             #pageTitle{
                 font-size: 20px;
@@ -130,7 +130,7 @@
             }
         }
         footer{
-            background-color: #ecf0f566;
+            background-color: #d1d4d85e;
         }
     }
 </style>
