@@ -42,10 +42,18 @@ const router = new Router({
             component: lazyLoadView('modules/main'),
             children: [{
                 path: 'system-overview',
+                name: 'system-overview',
                 meta: {
                     needLogin: true
                 },
                 component: lazyLoadView('modules/system-overview'),
+            },{
+                path: 'asset/mainframe',
+                name: 'asset/mainframe',
+                meta: {
+                    needLogin: true
+                },
+                component: lazyLoadView('modules/asset/mainframe'),
             }],
         },
     ],

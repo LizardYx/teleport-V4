@@ -3,23 +3,23 @@
         <el-breadcrumb id="pageTitle" separator-class="el-icon-arrow-right">
             <el-breadcrumb-item>系统总览</el-breadcrumb-item>
         </el-breadcrumb>
-        <!--<div class="user-basic-info">-->
-            <!--<el-row :gutter="15">-->
-                <!--<el-col :span="8">-->
-                    <!--<div class="user-block">-->
-                        <!--<div class="user-header">-->
-                            <!--<div class="name">-->
-                                <!--叶欣（）-->
-                            <!--</div>-->
-                        <!--</div>-->
-                        <!--<div class="user-content"></div>-->
-                    <!--</div>-->
-                <!--</el-col>-->
-                <!--<el-col :span="16">-->
-                    <!--<div></div>-->
-                <!--</el-col>-->
-            <!--</el-row>-->
-        <!--</div>-->
+<!--        <div class="user-basic-info">-->
+<!--            <el-row :gutter="15">-->
+<!--                <el-col :span="8">-->
+<!--                    <div class="user-block">-->
+<!--                        <div class="user-header">-->
+<!--                            <div class="name">-->
+<!--                                叶欣（）-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="user-content"></div>-->
+<!--                    </div>-->
+<!--                </el-col>-->
+<!--                <el-col :span="16">-->
+<!--                    <div></div>-->
+<!--                </el-col>-->
+<!--            </el-row>-->
+<!--        </div>-->
         <div class="serve-basic-info">
             <el-row :gutter="15">
                 <el-col :span="8">

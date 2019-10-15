@@ -12,13 +12,15 @@
                             <i class="el-icon-menu"></i>
                             <span slot="title">系统总览</span>
                         </el-menu-item>
-                        <el-submenu index="2">
+                        <el-submenu>
                             <template slot="title">
                                 <i class="el-icon-location"></i>
                                 <span slot="title">资产</span>
                             </template>
                             <el-menu-item-group>
-                                <el-menu-item index="2-1">主机及账号</el-menu-item>
+                                <el-menu-item index="/modules-main/asset/mainframe">
+                                    主机及账号
+                                </el-menu-item>
                                 <el-menu-item index="2-2">主机分组管理</el-menu-item>
                                 <el-menu-item index="2-3">账号分组管理</el-menu-item>
                             </el-menu-item-group>
