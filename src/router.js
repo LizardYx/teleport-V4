@@ -49,7 +49,7 @@ const router = new Router({
                 component: lazyLoadView('modules/system-overview'),
             },{
                 path: 'asset/mainframe',
-                name: 'asset/mainframe',
+                name: 'mainframe',
                 meta: {
                     needLogin: true
                 },
@@ -58,6 +58,14 @@ const router = new Router({
         },
     ],
 });
+
+/**
+ * 重写路由的push方法。用于解决二次点击当前路由时console log报错
+ */
+const routerPush = Router.prototype.push;
+Router.prototype.push = function push(location) {
+    return routerPush.call(this, location).catch(error=> error)
+};
 
 //路由守卫，权限验证
 router.beforeEach((to, from, next) =>{

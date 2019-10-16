@@ -109,3 +109,28 @@ a{
 .basic-box-shadow{
   box-shadow: 0 2px 4px rgba(0, 0, 0, .12);
 }
+
+// page content basic css
+.page-content{
+  background-color: #fff;
+  padding: 15px 20px;
+}
+
+.page-content .tool-bar .search input{
+  width: 50%;
+  min-width: 150px;
+  float: right;
+  transition: width 0.5s;
+  -moz-transition: width 0.5s; /* Firefox 4 */
+  -webkit-transition: width 0.5s; /* Safari 和 Chrome */
+  -o-transition: width 0.5s; /* Opera */
+}
+
+.page-content .tool-bar .search input:focus{
+  width: 100%;
+  transition: width 0.5s;
+  -moz-transition: width 0.5s; /* Firefox 4 */
+  -webkit-transition: width 0.5s; /* Safari 和 Chrome */
+  -o-transition: width 0.5s; /* Opera */
+}
+// page content basic css end
