@@ -123,12 +123,39 @@
         .mainContent{
             background-color: #d1d4d85e;
             height: 100%;
-            #pageTitle{
-                font-size: 20px;
-                padding: 15px 0 30px;
-            }
-            #pageContent{
-                background-color: #fff;
+            padding-bottom: 0;
+            overflow-y: hidden;
+            > div{
+                height: 100%;
+                #pageTitle{
+                    font-size: 20px;
+                    padding: 15px 0 30px;
+                }
+                #pageContent{
+                    background-color: #fff;
+                    padding: 15px 20px;
+                    .tool-bar{
+                        margin-bottom: 30px;
+                        .search{
+                            input{
+                                width: 50%;
+                                min-width: 150px;
+                                float: right;
+                                transition: width 0.5s;
+                                -moz-transition: width 0.5s; /* Firefox 4 */
+                                -webkit-transition: width 0.5s; /* Safari 和 Chrome */
+                                -o-transition: width 0.5s; /* Opera */
+                            }
+                            input:focus{
+                                width: 100%;
+                                transition: width 0.5s;
+                                -moz-transition: width 0.5s; /* Firefox 4 */
+                                -webkit-transition: width 0.5s; /* Safari 和 Chrome */
+                                -o-transition: width 0.5s; /* Opera */
+                            }
+                        }
+                    }
+                }
             }
         }
         footer{
