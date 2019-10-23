@@ -32,18 +32,20 @@
                     </el-button>
                 </el-col>
                 <el-col :span="6">
-                    <el-input prefix-icon="el-icon-search" size="mini" v-model="searchValue"
+                    <el-input :class="{'search': true, 'searching': !!searchValue}" prefix-icon="el-icon-search" size="mini" v-model="searchValue"
                               placeholder="搜索：主机IP/名称/描述/资产编号" maxlength="50">
                     </el-input>
                 </el-col>
             </el-row>
-            <el-table :data="tableData" border>
-                <el-table-column prop="name" label="主机名称"></el-table-column>
+            <el-table :data="tableData" border @selection-change="updateSelected">
+                <el-table-column type="selection">
+                </el-table-column>
+                <el-table-column prop="name" sortable label="主机名称"></el-table-column>
                 <el-table-column prop="ip" label="IP地址"></el-table-column>
-                <el-table-column prop="os_type" label="操作系统"></el-table-column>
-                <el-table-column prop="cid" label="资产编号"></el-table-column>
+                <el-table-column prop="os_type" sortable label="操作系统"></el-table-column>
+                <el-table-column prop="cid" sortable label="资产编号"></el-table-column>
                 <el-table-column prop="acc_count" label="账号数"></el-table-column>
-                <el-table-column prop="state" label="状态"></el-table-column>
+                <el-table-column prop="state" sortable label="状态"></el-table-column>
                 <el-table-column label="操作"></el-table-column>
             </el-table>
         </div>
@@ -56,7 +58,9 @@
       data() {
           return {
               searchValue: '',
+              selectedIdList: [],
               tableData: [{
+                  _id: 1,
                   acc_count: 0,
                   cid: '111',
                   desc: 'this is for test',
@@ -70,23 +74,31 @@
                   state: 1,
                   type: 1,
               },{
+                  _id: 2,
                   acc_count: 0,
-                  cid: '111',
+                  cid: '1112',
                   desc: 'this is for test',
                   id: 1,
                   ip: "10.0.0.1",
-                  name: "test",
-                  os_type: 1,
+                  name: "test22",
+                  os_type: 2,
                   os_ver: "",
                   router_ip: "",
                   router_port: 0,
-                  state: 1,
+                  state: 2,
                   type: 1,
               }]
           }
       },
       methods: {
+          updateSelected(selectedItemList) {
+              let selectedIdList = [];
 
+              selectedItemList.forEach(function (selectedItemObj) {
+                  selectedIdList.push(selectedItemObj['_id']);
+              });
+              this.selectedIdList = selectedIdList;
+          }
       }
   };
 </script>

@@ -138,20 +138,19 @@
                         margin-bottom: 30px;
                         .search{
                             input{
+                                float: left;
                                 width: 50%;
-                                min-width: 150px;
-                                float: right;
+                                min-width: 225px;
                                 transition: width 0.5s;
-                                -moz-transition: width 0.5s; /* Firefox 4 */
-                                -webkit-transition: width 0.5s; /* Safari 和 Chrome */
-                                -o-transition: width 0.5s; /* Opera */
                             }
                             input:focus{
                                 width: 100%;
                                 transition: width 0.5s;
-                                -moz-transition: width 0.5s; /* Firefox 4 */
-                                -webkit-transition: width 0.5s; /* Safari 和 Chrome */
-                                -o-transition: width 0.5s; /* Opera */
+                            }
+                        }
+                        .search.searching{
+                            input{
+                                width: 100%;
                             }
                         }
                     }
