@@ -23,6 +23,40 @@ let server = http.createServer(function (request, response) {
         if (request.url === `${commonUrl}/user/bind-oath-qrcode`) {
             data.rows.QRCode = '';
         }
+        if (request.url === `${commonUrl}/asset/get-hosts`) {
+            data.rows = {
+                data: [{
+                    _id: 1,
+                    acc_count: 0,
+                    cid: '111',
+                    desc: 'this is for test',
+                    id: 1,
+                    ip: "10.0.0.1",
+                    name: "test",
+                    os_type: 1,
+                    os_ver: "",
+                    router_ip: "",
+                    router_port: 0,
+                    state: 1,
+                    type: 1,
+                },{
+                    _id: 2,
+                    acc_count: 0,
+                    cid: '1112',
+                    desc: 'this is for test',
+                    id: 1,
+                    ip: "10.0.0.1",
+                    name: "test22",
+                    os_type: 2,
+                    os_ver: "",
+                    router_ip: "",
+                    router_port: 0,
+                    state: 2,
+                    type: 1,
+                }],
+                count: 2
+            }
+        }
         response.writeHead(statusCode, {'Content-Type': 'text/html'});
         //参数序列化
         response.end(JSON.stringify(data));

@@ -87,10 +87,13 @@
 </template>
 
 <script>
+    import Vue from 'vue';
     import CommonHeader from '../../components/common-header';
     import copyRight from '../../components/copy-right';
     import store from "../../store/store";
+    import {common} from "../../assets/common";
 
+    Vue.prototype.common = common;
     export default {
         name: "modulesMain",
         components: {CommonHeader, copyRight},
@@ -139,18 +142,8 @@
                         .search{
                             input{
                                 float: left;
-                                width: 50%;
                                 min-width: 225px;
                                 transition: width 0.5s;
-                            }
-                            input:focus{
-                                width: 100%;
-                                transition: width 0.5s;
-                            }
-                        }
-                        .search.searching{
-                            input{
-                                width: 100%;
                             }
                         }
                     }
