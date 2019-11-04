@@ -26,7 +26,7 @@
                         <i class="el-icon-delete"></i>
                         删除
                     </el-button>
-                    <el-button size="mini" type="primary">
+                    <el-button size="mini" type="primary" @click="getHostList">
                         <i class="el-icon-refresh"></i>
                         刷新列表
                     </el-button>
@@ -37,20 +37,33 @@
                     </el-input>
                 </el-col>
             </el-row>
-            <el-table :data="tableData" border @selection-change="updateSelected" @sort-change="updateFilter">
-                <el-table-column type="selection">
-                </el-table-column>
-                <el-table-column prop="name" sortable="custom" label="主机名称"></el-table-column>
-                <el-table-column prop="ip" label="IP地址"></el-table-column>
-                <el-table-column prop="os_type" sortable="custom" label="操作系统"></el-table-column>
-                <el-table-column prop="cid" sortable="custom" label="资产编号"></el-table-column>
-                <el-table-column prop="acc_count" label="账号数"></el-table-column>
-                <el-table-column prop="state" sortable="custom" label="状态"></el-table-column>
-                <el-table-column label="操作">
-                    <a class="mar-rgt">禁用</a>
-                    <a class="mar-rgt">解禁</a>
-                </el-table-column>
-            </el-table>
+            <div class="mar-btm">
+                <el-table :data="tableData" border @selection-change="updateSelected" @sort-change="updateFilter">
+                    <el-table-column type="selection">
+                    </el-table-column>
+                    <el-table-column prop="name" sortable="custom" label="主机名称"></el-table-column>
+                    <el-table-column prop="ip" label="IP地址"></el-table-column>
+                    <el-table-column prop="os_type" sortable="custom" label="操作系统"></el-table-column>
+                    <el-table-column prop="cid" sortable="custom" label="资产编号"></el-table-column>
+                    <el-table-column prop="acc_count" label="账号数"></el-table-column>
+                    <el-table-column prop="state" sortable="custom" label="状态"></el-table-column>
+                    <el-table-column label="操作">
+                        <a class="mar-rgt">禁用</a>
+                        <a class="mar-rgt">解禁</a>
+                    </el-table-column>
+                </el-table>
+            </div>
+            <div class="block clearfix pagination">
+                <el-pagination
+                    @size-change="pageSizeChange"
+                    @current-change="changeCurrentPage"
+                    :current-page="filter.pageNation.pageNo"
+                    :page-sizes="filter.pageNation.pageList"
+                    :page-size="filter.pageNation.pageSize"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="filter.pageNation.totalItem" background>
+                </el-pagination>
+            </div>
         </div>
     </div>
 </template>
@@ -78,6 +91,12 @@
         methods: {
             initPageInfo() {
                 this.getHostList();
+            },
+            updateFilter(column) {
+                this.filter.sort = {
+                    name: column.prop,
+                    order: column.order
+                };
             },
             getHostList() {
                 let params = {
@@ -115,11 +134,14 @@
                 });
                 this.selectedIdList = selectedIdList;
             },
-            updateFilter(column) {
-                this.filter.sort = {
-                    name: column.prop,
-                    order: column.order
-                };
+            pageSizeChange(newPageSize) {
+                this.filter.pageNation.pageSize = newPageSize;
+                this.filter.pageNation.pageNo = 1;
+                this.getHostList();
+            },
+            changeCurrentPage(newPageNo) {
+                this.filter.pageNation.pageNo = newPageNo;
+                this.getHostList();
             }
         },
         created() {

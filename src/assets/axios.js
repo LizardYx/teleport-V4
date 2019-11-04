@@ -3,10 +3,12 @@ import axios from 'axios';
 import QS from 'qs';
 import store from "../store/store";
 import router from "../router";
+import { Loading } from 'element-ui';
 axios.defaults.timeout = 10000; //设置请求时间
 axios.defaults.baseURL = publicPath; //设置默认接口地址
 axios.defaults.headers['Content-Type'] = "application/x-www-form-urlencoded;charset=UTF-8";
 
+let loadingUI;
 /**
  * 请求拦截器
  * @returns {Promise}
@@ -18,6 +20,11 @@ axios.interceptors.request.use(
     config => {
         const token = store.state.common.token;
 
+        // 加载loading动画
+        loadingUI = Loading.service({
+            fullscreen: true, //设置全屏加载loading动画
+            background: 'rgba(121, 121, 121, 0.4)'
+        });
         token && (config.headers.Authorization = token);
         return config;
     },
@@ -32,6 +39,7 @@ axios.interceptors.request.use(
  */
 axios.interceptors.response.use(
     response => {
+        loadingUI.close(); //关闭loading
         // store.commit('common/updateToken', response.token);
         // 如果返回的状态码为200，说明接口请求成功，可以正常拿到数据
         if (response.status === 200) {
@@ -45,6 +53,7 @@ axios.interceptors.response.use(
         }
     },
     error => {
+        loadingUI.close(); //关闭loading
         // store.commit('common/updateToken', response.token);
         if (error.response.status) {
             switch (error.response.status) {

@@ -147,6 +147,11 @@
                             }
                         }
                     }
+                    .pagination{
+                        .el-pagination{
+                            float: right;
+                        }
+                    }
                 }
             }
         }
