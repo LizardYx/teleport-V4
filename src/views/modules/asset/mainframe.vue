@@ -32,8 +32,9 @@
                     </el-button>
                 </el-col>
                 <el-col :span="6">
-                    <el-input :class="{'search': true, 'searching': !!filter.searchValue}" prefix-icon="el-icon-search" size="mini" v-model="filter.searchValue"
-                              placeholder="搜索：主机IP/名称/描述/资产编号" maxlength="50">
+                    <el-input :class="{'search': true, 'searching': !!filter.searchValue}" prefix-icon="el-icon-search"
+                              size="mini" v-model="filter.searchValue" placeholder="搜索：主机IP/名称/描述/资产编号"
+                              maxlength="50">
                     </el-input>
                 </el-col>
             </el-row>
@@ -41,13 +42,22 @@
                 <el-table :data="tableData" border @selection-change="updateSelected" @sort-change="updateFilter">
                     <el-table-column type="selection">
                     </el-table-column>
-                    <el-table-column prop="name" sortable="custom" label="主机名称"></el-table-column>
-                    <el-table-column prop="ip" label="IP地址"></el-table-column>
-                    <el-table-column prop="os_type" sortable="custom" label="操作系统"></el-table-column>
-                    <el-table-column prop="cid" sortable="custom" label="资产编号"></el-table-column>
-                    <el-table-column prop="acc_count" label="账号数"></el-table-column>
-                    <el-table-column prop="state" sortable="custom" label="状态"></el-table-column>
-                    <el-table-column label="操作">
+                    <el-table-column header-align="center" prop="name" sortable="custom" label="主机名称">
+                    </el-table-column>
+                    <el-table-column header-align="center" prop="ip" label="IP地址"></el-table-column>
+                    <el-table-column header-align="center" prop="os_type" sortable="custom" label="操作系统">
+                    </el-table-column>
+                    <el-table-column header-align="center" prop="cid" sortable="custom" label="资产编号">
+                    </el-table-column>
+                    <el-table-column header-align="center" prop="acc_count" label="账号数"></el-table-column>
+                    <el-table-column sortable="custom" label="状态" align="center">
+                        <template slot-scope="scope">
+                            <el-tag effect="dark" v-text="getHostsStatusInfo(scope.row.state).name"
+                                    :type="getHostsStatusInfo(scope.row.state).css">
+                            </el-tag>
+                        </template>
+                    </el-table-column>
+                    <el-table-column header-align="center" label="操作">
                         <a class="mar-rgt">禁用</a>
                         <a class="mar-rgt">解禁</a>
                     </el-table-column>
@@ -85,7 +95,8 @@
                     }
                 },
                 selectedIdList: [],
-                tableData: []
+                tableData: [],
+                hostsStatusList: this.common.statusList
             }
         },
         methods: {
@@ -142,6 +153,21 @@
             changeCurrentPage(newPageNo) {
                 this.filter.pageNation.pageNo = newPageNo;
                 this.getHostList();
+            },
+            getHostsStatusInfo(statusId) {
+                let statusInfo = '';
+
+                if (statusId) {
+                    for (let index = 0; index < this.hostsStatusList.length; index++) {
+                        let hostsStatusObj = this.hostsStatusList[index];
+
+                        if (hostsStatusObj.id === statusId) {
+                            statusInfo = hostsStatusObj;
+                            break;
+                        }
+                    }
+                }
+                return !!statusInfo ? statusInfo : '-';
             }
         },
         created() {
