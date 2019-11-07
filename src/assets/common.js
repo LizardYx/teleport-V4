@@ -2,6 +2,15 @@
  * 公用方法封装
  */
 export const common = {
+    osTypeList: [{
+        id: 1,
+        name: 'Windows',
+        icon: 'windows'
+    },{
+        id: 2,
+        name: 'Linux/Unix',
+        icon: 'linux'
+    }],
     statusList: [{
         id: 1,
         name: '正常',

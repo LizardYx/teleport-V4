@@ -92,6 +92,7 @@
     import copyRight from '../../components/copy-right';
     import store from "../../store/store";
     import {common} from "../../assets/common";
+    import '../../../public/lib/iconfont/iconfont.css'
 
     Vue.prototype.common = common;
     export default {

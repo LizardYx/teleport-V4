@@ -40,20 +40,25 @@
             </el-row>
             <div class="mar-btm">
                 <el-table :data="tableData" border @selection-change="updateSelected" @sort-change="updateFilter">
-                    <el-table-column type="selection">
+                    <el-table-column align="center" type="selection">
                     </el-table-column>
                     <el-table-column header-align="center" prop="name" sortable="custom" label="主机名称">
                     </el-table-column>
                     <el-table-column header-align="center" prop="ip" label="IP地址"></el-table-column>
                     <el-table-column header-align="center" prop="os_type" sortable="custom" label="操作系统">
+                        <template slot-scope="scope">
+                            <i v-bind:class="{'iconfont': true, 'windows': isWindows(scope['row']['os_type']),
+                            'linux': !isWindows(scope['row']['os_type'])}">
+                            </i>
+                        </template>
                     </el-table-column>
                     <el-table-column header-align="center" prop="cid" sortable="custom" label="资产编号">
                     </el-table-column>
                     <el-table-column header-align="center" prop="acc_count" label="账号数"></el-table-column>
                     <el-table-column sortable="custom" label="状态" align="center">
                         <template slot-scope="scope">
-                            <el-tag effect="dark" v-text="getHostsStatusInfo(scope.row.state).name"
-                                    :type="getHostsStatusInfo(scope.row.state).css">
+                            <el-tag effect="dark" v-text="getHostsStatusInfo(scope['row'].state).name"
+                                    :type="getHostsStatusInfo(scope['row'].state).css">
                             </el-tag>
                         </template>
                     </el-table-column>
@@ -96,7 +101,8 @@
                 },
                 selectedIdList: [],
                 tableData: [],
-                hostsStatusList: this.common.statusList
+                hostsStatusList: this.common.statusList,
+                osTypeList: this.common.osTypeList
             }
         },
         methods: {
@@ -168,6 +174,9 @@
                     }
                 }
                 return !!statusInfo ? statusInfo : '-';
+            },
+            isWindows(osTypeId) {
+                return osTypeId === this.osTypeList[0].id;
             }
         },
         created() {
