@@ -7,17 +7,65 @@
             <i v-if="isLogin" class="collapse-icon" v-bind:class="{'el-icon-s-unfold': isCollapse, 'el-icon-s-fold': !isCollapse}"
                @click="updateCollapse">
             </i>
+            <el-dropdown trigger="click" @command="updateLang">
+                <span>
+                    <i class="iconfont" :class="currentLang.iconName"></i>
+                    {{currentLang.name}}
+                    <i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <el-dropdown-menu solt="dropdown">
+                    <el-dropdown-item v-for="langObj in langList" :command="langObj.tag">
+                        <i  class="iconfont" :class="langObj.iconName"></i>
+                        {{langObj.name}}
+                    </el-dropdown-item>
+                </el-dropdown-menu>
+            </el-dropdown>
         </div>
     </div>
 </template>
 
 <script>
     import store from "../store/store";
+    import {common} from '../assets/common'
 
     export default {
         name: 'common-header',
         data() {
-            return {};
+            return {
+                langList: common.langList,
+                currentLang: common.langList[0]
+            };
+        },
+        methods: {
+            initLangInfo() {
+                let currentTag = !!localStorage.getItem('locale') ? localStorage.getItem('locale') : this.$i18n.locale;
+
+                for (let index = 0 ;index < common.langList.length; index++) {
+                    let langObj = common.langList[index];
+
+                    if (langObj.tag === currentTag) {
+                        this.currentLang = langObj;
+                        break;
+                    }
+                }
+            },
+            updateCollapse() {
+                store.commit('common/updateCollapse', !this.isCollapse);
+            },
+            updateLang(langTag) {
+                if (langTag !== this.currentLang.tag) {
+                    localStorage.setItem('locale', langTag);
+                    for (let index = 0 ;index < this.langList.length; index++) {
+                        let langObj = this.langList[index];
+
+                        if (langObj.tag === langTag) {
+                            this.currentLang = langObj;
+                            this.$i18n.locale = langTag;
+                            break;
+                        }
+                    }
+                }
+            }
         },
         computed: {
             isLogin: function () {
@@ -27,10 +75,8 @@
                 return store.state.common.isCollapse;
             }
         },
-        methods: {
-            updateCollapse() {
-                store.commit('common/updateCollapse', !this.isCollapse);
-            }
+        created() {
+            this.initLangInfo();
         }
     };
 </script>

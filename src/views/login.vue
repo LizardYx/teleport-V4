@@ -4,7 +4,7 @@
         <common-header></common-header>
         <div class="login-block">
             <div class="login-content pad-all">
-                <div class="login-title mar-btm text-center">登陆</div>
+                <div class="login-title mar-btm text-center">{{$t("i18n.登陆")}}</div>
                 <el-tabs v-model="loginWay" class="login-detail pad-hor" @tab-click="updateLoginWay" stretch>
                     <el-tab-pane label="密码登陆" name="password">
                         <el-form :model="loginInfo" status-icon :rules="rules" ref="loginInfo">

@@ -42,10 +42,16 @@
                 <el-table :data="tableData" border @selection-change="updateSelected" @sort-change="updateFilter">
                     <el-table-column align="center" type="selection">
                     </el-table-column>
-                    <el-table-column header-align="center" prop="name" sortable="custom" label="主机名称">
+                    <el-table-column header-align="center" sortable="custom" label="主机名称">
+                        <template slot-scope="scope">
+                            <el-popover placement="right" trigger="hover">
+                                <div v-html="getHostsRemarkInfo(scope['row'].desc)"></div>
+                                <span v-text="scope['row'].name" slot="reference"></span>
+                            </el-popover>
+                        </template>
                     </el-table-column>
                     <el-table-column header-align="center" prop="ip" label="IP地址"></el-table-column>
-                    <el-table-column header-align="center" prop="os_type" sortable="custom" label="操作系统">
+                    <el-table-column header-align="center" sortable="custom" label="操作系统">
                         <template slot-scope="scope">
                             <i v-bind:class="{'iconfont': true, 'windows': isWindows(scope['row']['os_type']),
                             'linux': !isWindows(scope['row']['os_type'])}">
@@ -68,16 +74,38 @@
                     </el-table-column>
                 </el-table>
             </div>
-            <div class="block clearfix pagination">
-                <el-pagination
-                    @size-change="pageSizeChange"
-                    @current-change="changeCurrentPage"
-                    :current-page="filter.pageNation.pageNo"
-                    :page-sizes="filter.pageNation.pageList"
-                    :page-size="filter.pageNation.pageSize"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="filter.pageNation.totalItem" background>
-                </el-pagination>
+            <div class="block clearfix">
+                <el-row>
+                    <el-col :span="12">
+                        <div class="notice">
+                            <label class="title box-block">温馨提示：</label>
+                            <div class="content">
+                                <p>
+                                    批量导入主机和账号需要上传.csv格式的文件，您可以下载
+                                    <a href="../../../download/teleport-example-asset.csv"
+                                       download="teleport-example-asset.csv">
+                                        资产信息文件模板
+                                    </a>
+                                    进行编辑。
+                                </p>
+                            </div>
+                        </div>
+                    </el-col>
+                    <el-col :span="12">
+                        <div class="pagination">
+                            <el-pagination
+                                @size-change="pageSizeChange"
+                                @current-change="changeCurrentPage"
+                                :pager-count='5'
+                                :current-page="filter.pageNation.pageNo"
+                                :page-sizes="filter.pageNation.pageList"
+                                :page-size="filter.pageNation.pageSize"
+                                layout="total, sizes, prev, pager, next"
+                                :total="filter.pageNation.totalItem" background>
+                            </el-pagination>
+                        </div>
+                    </el-col>
+                </el-row>
             </div>
         </div>
     </div>
@@ -159,6 +187,14 @@
             changeCurrentPage(newPageNo) {
                 this.filter.pageNation.pageNo = newPageNo;
                 this.getHostList();
+            },
+            getHostsRemarkInfo(desc) {
+                let content = '';
+
+                if (desc !== '') {
+                    content = desc.replace(/\r/g, '').replace(/\n/g, '<br/>');
+                }
+                return content;
             },
             getHostsStatusInfo(statusId) {
                 let statusInfo = '';

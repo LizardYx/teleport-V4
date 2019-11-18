@@ -43,7 +43,7 @@ let server = http.createServer(function (request, response) {
                     _id: 2,
                     acc_count: 0,
                     cid: '1112',
-                    desc: 'this is for test',
+                    desc: '1.备注    123123\n2备注说明\n\n4.备注',
                     id: 1,
                     ip: "10.0.0.1",
                     name: "test22",
@@ -54,7 +54,7 @@ let server = http.createServer(function (request, response) {
                     state: 2,
                     type: 1,
                 }],
-                count: 2
+                count: 2000
             }
         }
         response.writeHead(statusCode, {'Content-Type': 'text/html'});

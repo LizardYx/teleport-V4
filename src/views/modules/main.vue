@@ -144,8 +144,14 @@
                             input{
                                 float: left;
                                 min-width: 225px;
-                                transition: width 0.5s;
                             }
+                        }
+                    }
+                    .notice{
+                        .title{
+                            font-weight: 600;
+                            font-size: 16px;
+                            color: $color-warning;
                         }
                     }
                     .pagination{

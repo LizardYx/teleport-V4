@@ -1,7 +1,18 @@
 /**
  * 公用方法封装
  */
+import i18n from './lang/i18n'
+
 export const common = {
+    langList: [{
+        tag: 'zh_CN',
+        name: i18n.t('i18n.中文'),
+        iconName: 'zhongguo'
+    },{
+        tag: 'en_US',
+        name: i18n.t('i18n.英文'),
+        iconName: 'meiguo'
+    }],
     osTypeList: [{
         id: 1,
         name: 'Windows',
