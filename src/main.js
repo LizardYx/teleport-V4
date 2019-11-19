@@ -6,9 +6,12 @@ import i18n from './assets/lang/i18n'
 import App from './App.vue';
 import router from './router';
 import store from './store/store';
+import IconSvg from './components/icon-svg'
+import '../public/lib/iconfont/iconfont.js'
 
 Vue.config.productionTip = false;
 Vue.use(ElementUI);
+Vue.component('icon-svg', IconSvg);
 
 new Vue({
     i18n,

@@ -7,19 +7,23 @@
             <i v-if="isLogin" class="collapse-icon" v-bind:class="{'el-icon-s-unfold': isCollapse, 'el-icon-s-fold': !isCollapse}"
                @click="updateCollapse">
             </i>
-            <el-dropdown trigger="click" @command="updateLang">
-                <span>
-                    <i class="iconfont" :class="currentLang.iconName"></i>
-                    {{currentLang.name}}
-                    <i class="el-icon-arrow-down el-icon--right"></i>
-                </span>
-                <el-dropdown-menu solt="dropdown">
-                    <el-dropdown-item v-for="langObj in langList" :command="langObj.tag">
-                        <i  class="iconfont" :class="langObj.iconName"></i>
-                        {{langObj.name}}
-                    </el-dropdown-item>
-                </el-dropdown-menu>
-            </el-dropdown>
+            <div class="right">
+                <el-dropdown class="lang" trigger="click" @command="updateLang">
+                    <label>
+                        <icon-svg :icon-class="currentLang.iconName"></icon-svg>
+                        <span>
+                            {{currentLang.name}}
+                            <i class="el-icon-arrow-down el-icon--right"></i>
+                        </span>
+                    </label>
+                    <el-dropdown-menu solt="dropdown">
+                        <el-dropdown-item v-for="langObj in langList" :command="langObj.tag">
+                            <icon-svg :icon-class="langObj.iconName"></icon-svg>
+                            {{langObj.name}}
+                        </el-dropdown-item>
+                    </el-dropdown-menu>
+                </el-dropdown>
+            </div>
         </div>
     </div>
 </template>
@@ -98,6 +102,20 @@
                 color: #66696F;
                 margin-top: 15px;
                 cursor: pointer;
+            }
+            .right{
+                float: right;
+                margin-top: 16px;
+                label{
+                    svg{
+                        width: 2em;
+                        height: 2em;
+                    }
+                    span{
+                        position: relative;
+                        top: -6px;
+                    }
+                }
             }
         }
     }
