@@ -1,7 +1,7 @@
 <template>
     <div id="bindAuthenticator">
         <div id="bgCanvas"></div>
-        <common-header></common-header>
+        <NoPermissionHeader></NoPermissionHeader>
         <div id="oath-content">
             <div class="title pad-ver">绑定身份验证器</div>
             <div class="pad-ver">
@@ -148,7 +148,7 @@
 </template>
 
 <script>
-    import CommonHeader from '../components/common-header.vue';
+    import NoPermissionHeader from '../components/no-permission-header';
     import copyRight from '../components/copy-right';
     import {setup} from '../../public/lib/bg-canvas/swirl';
     import {formatTimeToStr} from '../assets/filter/date-format';
@@ -157,7 +157,7 @@
 
     export default {
         name: 'bindAuthenticator',
-        components: {CommonHeader, copyRight},
+        components: {NoPermissionHeader, copyRight},
         data() {
             let validateUserName = (rule, value, callback) => {
                 if (!value) {
@@ -367,6 +367,8 @@
         height: 100vh;
         #header{
             position: fixed;
+            width: 100%;
+            height: 60px;
         }
         #oath-content{
             position: absolute;

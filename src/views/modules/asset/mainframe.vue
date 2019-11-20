@@ -53,9 +53,8 @@
                     <el-table-column header-align="center" prop="ip" label="IP地址"></el-table-column>
                     <el-table-column header-align="center" sortable="custom" label="操作系统">
                         <template slot-scope="scope">
-                            <i v-bind:class="{'iconfont': true, 'windows': isWindows(scope['row']['os_type']),
-                            'linux': !isWindows(scope['row']['os_type'])}">
-                            </i>
+                            <icon-svg icon-class="windows" v-if="isWindows(scope['row']['os_type'])"></icon-svg>
+                            <icon-svg icon-class="linux" v-if="!isWindows(scope['row']['os_type'])"></icon-svg>
                         </template>
                     </el-table-column>
                     <el-table-column header-align="center" prop="cid" sortable="custom" label="资产编号">
