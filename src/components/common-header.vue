@@ -8,7 +8,21 @@
                @click="updateCollapse">
             </i>
             <div class="right">
-                <el-dropdown class="lang" trigger="click" @command="updateLang">
+                <el-dropdown class="user-info">
+                    <label>
+                        <span>{{$t('i18n.您好，')}}乌拉</span>
+                    </label>
+                    <el-dropdown-menu solt="dropdown">
+                        <el-dropdown-item class="mar-btm">
+                            <i class="el-icon-user-solid"></i>
+                            {{$t('i18n.个人信息')}}
+                        </el-dropdown-item>
+                        <el-button id="logOut" class="float-right mar-rgt" size="mini" type="primary" @click="logOut">
+                            {{$t('i18n.登出')}}
+                        </el-button>
+                    </el-dropdown-menu>
+                </el-dropdown>
+                <el-dropdown class="lang pad-hor" trigger="click" @command="updateLang">
                     <label>
                         <icon-svg :icon-class="currentLang.iconName"></icon-svg>
                         <span>
@@ -69,6 +83,10 @@
                         }
                     }
                 }
+            },
+            logOut() {
+                store.commit('common/updateLogin', false);
+                this.$router.push('/');
             }
         },
         computed: {
@@ -106,7 +124,13 @@
             .right{
                 float: right;
                 margin-top: 16px;
-                label{
+                .user-info{
+                    span{
+                        position: relative;
+                        top: -6px;
+                    }
+                }
+                .lang{
                     svg{
                         width: 2em;
                         height: 2em;

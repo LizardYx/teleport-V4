@@ -346,7 +346,10 @@
             }
         },
         mounted() {
-            setup(); //初始化背景canvas
+            //初始化背景canvas
+            setTimeout(function () {
+                setup();
+            }, 50);
             this.initServerDate(); //初始化服务器时间
         },
         beforeDestroy() {

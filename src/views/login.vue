@@ -141,7 +141,10 @@
             }
         },
         mounted() {
-            setup();
+            //如果没有延迟可能会出现swirl.js使用noise.min.js中的SimplexNoise时,SimplexNoise未定义
+            setTimeout(function () {
+                setup();
+            }, 50)
         }
     };
 </script>
