@@ -24,15 +24,15 @@ export const common = {
     }],
     statusList: [{
         id: 1,
-        name: '正常',
+        name: i18n.t('i18n.正常'),
         css: 'success'
     },{
         id: 2,
-        name: '禁用',
+        name: i18n.t('i18n.禁用'),
         css: 'info'
     },{
         id: 3,
-        name: '临时锁定',
+        name: i18n.t('i18n.临时锁定'),
         css: 'warning'
     }],
     initPageNation () {

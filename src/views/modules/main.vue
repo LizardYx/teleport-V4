@@ -10,66 +10,66 @@
                              background-color="#66696F" text-color="#c3c3c3" active-text-color="#fff">
                         <el-menu-item index="/modules-main/system-overview">
                             <i class="el-icon-menu"></i>
-                            <span slot="title">系统总览</span>
+                            <span slot="title" v-text="$t('i18n.导航页面.系统总览')"></span>
                         </el-menu-item>
                         <el-submenu index="/modules-main/asset">
                             <template slot="title">
                                 <i class="el-icon-location"></i>
-                                <span slot="title">资产</span>
+                                <span slot="title" v-text="$t('i18n.导航页面.资产')"></span>
                             </template>
                             <el-menu-item-group>
                                 <el-menu-item index="/modules-main/asset/mainframe">
-                                    主机管理
+                                    {{$t('i18n.导航页面.主机管理')}}
                                 </el-menu-item>
-                                <el-menu-item index="2-2">主机分组管理</el-menu-item>
-                                <el-menu-item index="2-3">账号分组管理</el-menu-item>
+                                <el-menu-item index="2-2">{{$t('i18n.导航页面.主机分组管理')}}</el-menu-item>
+                                <el-menu-item index="2-3">{{$t('i18n.导航页面.账号分组管理')}}</el-menu-item>
                             </el-menu-item-group>
                         </el-submenu>
                         <el-submenu index="3">
                             <template slot="title">
                                 <i class="el-icon-location"></i>
-                                <span slot="title">用户</span>
+                                <span slot="title" v-text="$t('i18n.导航页面.用户')"></span>
                             </template>
                             <el-menu-item-group>
-                                <el-menu-item index="3-1">用户管理</el-menu-item>
-                                <el-menu-item index="3-2">用户分组管理</el-menu-item>
+                                <el-menu-item index="3-1">{{$t('i18n.导航页面.用户管理')}}</el-menu-item>
+                                <el-menu-item index="3-2">{{$t('i18n.导航页面.用户分组管理')}}</el-menu-item>
                             </el-menu-item-group>
                         </el-submenu>
                         <el-submenu index="4">
                             <template slot="title">
                                 <i class="el-icon-location"></i>
-                                <span slot="title">运维</span>
+                                <span slot="title" v-text="$t('i18n.导航页面.运维')"></span>
                             </template>
                             <el-menu-item-group>
-                                <el-menu-item index="4-1">运维授权</el-menu-item>
-                                <el-menu-item index="4-2">主机运维</el-menu-item>
-                                <el-menu-item index="4-3">在线会话</el-menu-item>
+                                <el-menu-item index="4-1">{{$t('i18n.导航页面.运维授权')}}</el-menu-item>
+                                <el-menu-item index="4-2">{{$t('i18n.导航页面.主机运维')}}</el-menu-item>
+                                <el-menu-item index="4-3">{{$t('i18n.导航页面.在线会话')}}</el-menu-item>
                             </el-menu-item-group>
                         </el-submenu>
                         <el-submenu index="5">
                             <template slot="title">
                                 <i class="el-icon-location"></i>
-                                <span slot="title">审计</span>
+                                <span slot="title" v-text="$t('i18n.导航页面.审计')"></span>
                             </template>
                             <el-menu-item-group>
-                                <el-menu-item index="5-1">审计授权</el-menu-item>
-                                <el-menu-item index="5-2">会话审计</el-menu-item>
+                                <el-menu-item index="5-1">{{$t('i18n.导航页面.审计授权')}}</el-menu-item>
+                                <el-menu-item index="5-2">{{$t('i18n.导航页面.会话审计')}}</el-menu-item>
                             </el-menu-item-group>
                         </el-submenu>
                         <el-submenu index="6">
                             <template slot="title">
                                 <i class="el-icon-location"></i>
-                                <span slot="title">系统</span>
+                                <span slot="title" v-text="$t('i18n.导航页面.系统')"></span>
                             </template>
                             <el-menu-item-group>
-                                <el-menu-item index="6-1">系统日志</el-menu-item>
-                                <el-menu-item index="6-2">角色管理</el-menu-item>
-                                <el-menu-item index="6-3">系统设置</el-menu-item>
+                                <el-menu-item index="6-1">{{$t('i18n.导航页面.系统日志')}}</el-menu-item>
+                                <el-menu-item index="6-2">{{$t('i18n.导航页面.角色管理')}}</el-menu-item>
+                                <el-menu-item index="6-3">{{$t('i18n.导航页面.系统设置')}}</el-menu-item>
                             </el-menu-item-group>
                         </el-submenu>
                         <el-menu-item index="7">
                             <i class="el-icon-setting"></i>
-                            <span slot="title">助手设置</span>
+                            <span slot="title" v-text="$t('i18n.导航页面.助手设置')"></span>
                         </el-menu-item>
                     </el-menu>
                 </el-aside>

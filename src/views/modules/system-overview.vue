@@ -1,7 +1,7 @@
 <template>
     <div id="systemOverview">
         <el-breadcrumb id="pageTitle" separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item>系统总览</el-breadcrumb-item>
+            <el-breadcrumb-item v-text="$t('i18n.系统总览页面.系统总览')"></el-breadcrumb-item>
         </el-breadcrumb>
 <!--        <div class="user-basic-info">-->
 <!--            <el-row :gutter="15">-->
@@ -29,10 +29,10 @@
                             <div class="detail-info">
                                 <a>
                                     <span class="number">1</span>
-                                    <span class="unit">个</span>
+                                    <span class="unit" v-text="$t('i18n.系统总览页面.个')"></span>
                                 </a>
                             </div>
-                            <div>用户</div>
+                            <div v-text="$t('i18n.系统总览页面.用户')"></div>
                         </div>
                     </div>
                 </el-col>
@@ -43,10 +43,10 @@
                             <div class="detail-info">
                                 <a>
                                     <span class="number">1</span>
-                                    <span class="unit">台</span>
+                                    <span class="unit" v-text="$t('i18n.系统总览页面.台')"></span>
                                 </a>
                             </div>
-                            <div>主机</div>
+                            <div v-text="$t('i18n.系统总览页面.主机')"></div>
                         </div>
                     </div>
                 </el-col>
@@ -57,10 +57,10 @@
                             <div class="detail-info">
                                 <a>
                                     <span class="number">1</span>
-                                    <span class="unit">个</span>
+                                    <span class="unit" v-text="$t('i18n.系统总览页面.个')"></span>
                                 </a>
                             </div>
-                            <div>主机账号</div>
+                            <div v-text="$t('i18n.系统总览页面.主机账号')"></div>
                         </div>
                     </div>
                 </el-col>

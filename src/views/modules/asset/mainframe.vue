@@ -1,39 +1,39 @@
 <template>
     <div id="mainframe">
         <el-breadcrumb id="pageTitle" separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item>主机管理</el-breadcrumb-item>
+            <el-breadcrumb-item>{{$t('i18n.主机管理页面.主机管理')}}</el-breadcrumb-item>
         </el-breadcrumb>
         <div id="pageContent">
             <el-row :gutter="20" class="tool-bar">
                 <el-col :span="18">
                     <el-button size="mini" type="primary">
                         <i class="el-icon-circle-plus-outline"></i>
-                        添加主机
+                        {{$t('i18n.主机管理页面.添加主机')}}
                     </el-button>
                     <el-button size="mini" type="primary">
                         <i class="el-icon-circle-plus-outline"></i>
-                        导入主机和账号
+                        {{$t('i18n.主机管理页面.导入主机和账号')}}
                     </el-button>
                     <el-button size="mini" type="primary">
                         <i class="el-icon-remove"></i>
-                        禁用
+                        {{$t('i18n.主机管理页面.禁用')}}
                     </el-button>
                     <el-button size="mini" type="primary">
                         <i class="el-icon-success"></i>
-                        解禁
+                        {{$t('i18n.主机管理页面.解禁')}}
                     </el-button>
                     <el-button size="mini" type="primary">
                         <i class="el-icon-delete"></i>
-                        删除
+                        {{$t('i18n.主机管理页面.删除')}}
                     </el-button>
                     <el-button size="mini" type="primary" @click="getHostList">
                         <i class="el-icon-refresh"></i>
-                        刷新列表
+                        {{$t('i18n.主机管理页面.刷新列表')}}
                     </el-button>
                 </el-col>
                 <el-col :span="6">
                     <el-input :class="{'search': true, 'searching': !!filter.searchValue}" prefix-icon="el-icon-search"
-                              size="mini" v-model="filter.searchValue" placeholder="搜索：主机IP/名称/描述/资产编号"
+                              size="mini" v-model="filter.searchValue" :placeholder="$t('i18n.主机管理页面.搜索：主机IP/名称/描述/资产编号')"
                               maxlength="50">
                     </el-input>
                 </el-col>
@@ -42,7 +42,7 @@
                 <el-table :data="tableData" border @selection-change="updateSelected" @sort-change="updateFilter">
                     <el-table-column align="center" type="selection">
                     </el-table-column>
-                    <el-table-column header-align="center" sortable="custom" label="主机名称">
+                    <el-table-column header-align="center" sortable="custom" :label="$t('i18n.主机管理页面.主机名称')">
                         <template slot-scope="scope">
                             <el-popover placement="right" trigger="hover">
                                 <div v-html="getHostsRemarkInfo(scope['row'].desc)"></div>
@@ -50,26 +50,26 @@
                             </el-popover>
                         </template>
                     </el-table-column>
-                    <el-table-column header-align="center" prop="ip" label="IP地址"></el-table-column>
-                    <el-table-column header-align="center" sortable="custom" label="操作系统">
+                    <el-table-column header-align="center" prop="ip" :label="$t('i18n.主机管理页面.IP地址')"></el-table-column>
+                    <el-table-column header-align="center" sortable="custom" :label="$t('i18n.主机管理页面.操作系统')">
                         <template slot-scope="scope">
                             <icon-svg icon-class="windows" v-if="isWindows(scope['row']['os_type'])"></icon-svg>
                             <icon-svg icon-class="linux" v-if="!isWindows(scope['row']['os_type'])"></icon-svg>
                         </template>
                     </el-table-column>
-                    <el-table-column header-align="center" prop="cid" sortable="custom" label="资产编号">
+                    <el-table-column header-align="center" prop="cid" sortable="custom" :label="$t('i18n.主机管理页面.资产编号')">
                     </el-table-column>
-                    <el-table-column header-align="center" prop="acc_count" label="账号数"></el-table-column>
-                    <el-table-column sortable="custom" label="状态" align="center">
+                    <el-table-column header-align="center" prop="acc_count" :label="$t('i18n.主机管理页面.账号数')"></el-table-column>
+                    <el-table-column sortable="custom" :label="$t('i18n.主机管理页面.状态')" align="center">
                         <template slot-scope="scope">
                             <el-tag effect="dark" v-text="getHostsStatusInfo(scope['row'].state).name"
                                     :type="getHostsStatusInfo(scope['row'].state).css">
                             </el-tag>
                         </template>
                     </el-table-column>
-                    <el-table-column header-align="center" label="操作">
-                        <a class="mar-rgt">禁用</a>
-                        <a class="mar-rgt">解禁</a>
+                    <el-table-column header-align="center" :label="$t('i18n.主机管理页面.操作')">
+                        <a class="mar-rgt" v-text="$t('i18n.主机管理页面.禁用')"></a>
+                        <a class="mar-rgt" v-text="$t('i18n.主机管理页面.解禁')"></a>
                     </el-table-column>
                 </el-table>
             </div>
@@ -77,15 +77,15 @@
                 <el-row>
                     <el-col :span="12">
                         <div class="notice">
-                            <label class="title box-block">温馨提示：</label>
+                            <label class="title box-block" v-text="$t('i18n.主机管理页面.温馨提示：')"></label>
                             <div class="content">
                                 <p>
-                                    批量导入主机和账号需要上传.csv格式的文件，您可以下载
+                                    {{$t('i18n.主机管理页面.批量导入主机和账号需要上传.csv格式的文件，您可以下载')}}
                                     <a href="../../../download/teleport-example-asset.csv"
                                        download="teleport-example-asset.csv">
-                                        资产信息文件模板
+                                        {{$t('i18n.主机管理页面.资产信息文件模板')}}
                                     </a>
-                                    进行编辑。
+                                    {{$t('i18n.主机管理页面.进行编辑。')}}
                                 </p>
                             </div>
                         </div>

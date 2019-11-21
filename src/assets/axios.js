@@ -4,6 +4,7 @@ import QS from 'qs';
 import store from "../store/store";
 import router from "../router";
 import { Loading } from 'element-ui';
+import i18n from './lang/i18n'
 axios.defaults.timeout = 10000; //设置请求时间
 axios.defaults.baseURL = publicPath; //设置默认接口地址
 axios.defaults.headers['Content-Type'] = "application/x-www-form-urlencoded;charset=UTF-8";
@@ -74,7 +75,7 @@ axios.interceptors.response.use(
                 case 403:
                     this.$notify({
                         type: 'warning',
-                        message: '登录过期，请重新登录',
+                        message: i18n.t('i18n.登录过期，请重新登录'),
                         duration: 5000
                     });
                     localStorage.removeItem('token');
@@ -91,7 +92,7 @@ axios.interceptors.response.use(
                 // 404：请求不存在
                 case 404:
                     this.$notify.error({
-                        message: '网络请求不存在',
+                        message: i18n.t('i18n.网络请求不存在'),
                         duration: 5000
                     });
                     break;
