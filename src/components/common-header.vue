@@ -1,43 +1,43 @@
 <template>
-    <div id="header" class="pad-hor" v-bind:class="{'has-login basic-box-shadow': isLogin}">
-        <router-link class="logo" :to="{path: isLogin ? '/modules-main/system-overview' : '/'}">
-            <img src="../assets/img/logo.png" alt="Teleport">
-        </router-link>
-        <div class="header-right">
+    <div id="header" class="pad-hor">
+        <div class="header-left">
+            <router-link class="logo" :to="{path: isLogin ? '/modules-main/system-overview' : '/'}">
+                <img src="../assets/img/logo.png" alt="Teleport">
+            </router-link>
+            <el-dropdown class="lang pad-rgt" trigger="click" @command="updateLang">
+                <label>
+                    <icon-svg :icon-class="currentLang.iconName"></icon-svg>
+                    <span>
+                        {{currentLang.name}}
+                        <i class="el-icon-arrow-down el-icon--right"></i>
+                    </span>
+                </label>
+                <el-dropdown-menu solt="dropdown">
+                    <el-dropdown-item v-for="langObj in langList" :command="langObj.tag">
+                        <icon-svg :icon-class="langObj.iconName"></icon-svg>
+                        {{langObj.name}}
+                    </el-dropdown-item>
+                </el-dropdown-menu>
+            </el-dropdown>
             <i v-if="isLogin" class="collapse-icon" v-bind:class="{'el-icon-s-unfold': isCollapse, 'el-icon-s-fold': !isCollapse}"
                @click="updateCollapse">
             </i>
-            <div class="right">
-                <el-dropdown class="user-info">
-                    <label>
-                        <span>{{$t('i18n.您好，')}}乌拉</span>
-                    </label>
-                    <el-dropdown-menu solt="dropdown">
-                        <el-dropdown-item class="mar-btm">
-                            <i class="el-icon-user-solid"></i>
-                            {{$t('i18n.个人信息')}}
-                        </el-dropdown-item>
-                        <el-button id="logOut" class="float-right mar-rgt" size="mini" type="primary" @click="logOut">
-                            {{$t('i18n.登出')}}
-                        </el-button>
-                    </el-dropdown-menu>
-                </el-dropdown>
-                <el-dropdown class="lang pad-hor" trigger="click" @command="updateLang">
-                    <label>
-                        <icon-svg :icon-class="currentLang.iconName"></icon-svg>
-                        <span>
-                            {{currentLang.name}}
-                            <i class="el-icon-arrow-down el-icon--right"></i>
-                        </span>
-                    </label>
-                    <el-dropdown-menu solt="dropdown">
-                        <el-dropdown-item v-for="langObj in langList" :command="langObj.tag">
-                            <icon-svg :icon-class="langObj.iconName"></icon-svg>
-                            {{langObj.name}}
-                        </el-dropdown-item>
-                    </el-dropdown-menu>
-                </el-dropdown>
-            </div>
+        </div>
+        <div class="header-right">
+            <el-dropdown class="user-info">
+                <label>
+                    <span>{{$t('i18n.您好，')}}乌拉</span>
+                </label>
+                <el-dropdown-menu solt="dropdown">
+                    <el-dropdown-item class="mar-btm">
+                        <i class="el-icon-user-solid"></i>
+                        {{$t('i18n.个人信息')}}
+                    </el-dropdown-item>
+                    <el-button id="logOut" class="float-right mar-rgt" size="mini" type="primary" @click="logOut">
+                        {{$t('i18n.登出')}}
+                    </el-button>
+                </el-dropdown-menu>
+            </el-dropdown>
         </div>
     </div>
 </template>
@@ -105,50 +105,28 @@
 
 <style lang="scss" scoped>
     #header{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         height: 60px;
-        .logo{
-            float: left;
+        .header-left{
             img{
                 color: #fff;
             }
-        }
-        .header-right{
-            margin-left: 215px;
-            height: 100%;
+            .lang{
+                position: relative;
+                top: -20px;
+            }
             .collapse-icon{
+                position: relative;
+                top: -15px;
                 font-size: 30px;
                 color: #66696F;
-                margin-top: 15px;
                 cursor: pointer;
             }
-            .right{
-                float: right;
-                margin-top: 16px;
-                .user-info{
-                    span{
-                        position: relative;
-                        top: -6px;
-                    }
-                }
-                .lang{
-                    svg{
-                        width: 2em;
-                        height: 2em;
-                    }
-                    span{
-                        position: relative;
-                        top: -6px;
-                    }
-                }
-            }
         }
-    }
-    .has-login{
-        .logo{
-            img{
-                height: 50px;
-                padding: 5px 0;
-            }
+        .header-right{
+
         }
     }
 </style>

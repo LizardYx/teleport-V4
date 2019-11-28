@@ -126,6 +126,7 @@ button:hover{
   box-shadow: 0 3px 15px rgba(0, 0, 0, 0.25);
 }
 
+button[aria-label='Close'],
 button[disabled='disabled']:hover{
   box-shadow: none;
 }

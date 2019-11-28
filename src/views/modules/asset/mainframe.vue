@@ -6,7 +6,7 @@
         <div id="pageContent">
             <el-row :gutter="20" class="tool-bar">
                 <el-col :span="18">
-                    <el-button size="mini" type="primary">
+                    <el-button size="mini" type="primary" @click="addHostsDialogVisible = true">
                         <i class="el-icon-circle-plus-outline"></i>
                         {{$t('i18n.主机管理页面.添加主机')}}
                     </el-button>
@@ -80,7 +80,7 @@
                             <label class="title box-block" v-text="$t('i18n.主机管理页面.温馨提示：')"></label>
                             <div class="content">
                                 <p>
-                                    {{$t('i18n.主机管理页面.批量导入主机和账号需要上传.csv格式的文件，您可以下载')}}
+                                    {{$t('i18n.主机管理页面.批量导入主机和账号需要上传csv格式的文件，您可以下载')}}
                                     <a href="../../../download/teleport-example-asset.csv"
                                        download="teleport-example-asset.csv">
                                         {{$t('i18n.主机管理页面.资产信息文件模板')}}
@@ -106,6 +106,32 @@
                     </el-col>
                 </el-row>
             </div>
+            <el-dialog :title="$t('i18n.主机管理页面.添加主机')" :visible.sync="addHostsDialogVisible" width="40%"
+                       :close-on-click-modal="false" :close-on-press-escape="false">
+                <el-form :model="addHostsDialog" status-icon :rules="addHostsDialog.rules" ref="addHostsDialog"
+                         size="medium" :hide-required-asterisk="true">
+                    <el-form-item prop="systemInfo" label="远程主机系统：" label-width="120px">
+                        <el-select v-model="addHostsDialog.systemInfo.name" placeholder="请选择远程主机系统">
+                            <el-option v-for="systemObj in addHostsDialog.systemList">
+                                <icon-svg :icon-class="systemObj.icon"></icon-svg>
+                                {{systemObj.name}}
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item prop="RemoteHostAddress" label="远程主机地址：" label-width="120px">
+                        <el-row>
+                            <el-col :span="12">
+                                <el-input v-model="addHostsDialog.RemoteHostAddress" placeholder="请输入远程主机IP地址">
+                                </el-input>
+                            </el-col>
+                        </el-row>
+                    </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="addHostsDialogVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="addHostsDialogVisible = false">确 定</el-button>
+                </div>
+            </el-dialog>
         </div>
     </div>
 </template>
@@ -123,13 +149,40 @@
                     searchValue: '',
                     sort: {
                         name: '',
-                        order: ''
+                        order: '',
                     }
                 },
                 selectedIdList: [],
                 tableData: [],
                 hostsStatusList: this.common.statusList,
-                osTypeList: this.common.osTypeList
+                osTypeList: this.common.osTypeList,
+                addHostsDialogVisible: false,
+                addHostsDialog: {
+                    systemInfo: {
+                        id: 0,
+                        name: '',
+                        icon: ''
+                    },
+                    RemoteHostAddress: '',
+                    connectedModal: {
+                        id: '',
+                        name: '',
+                    },
+                    RoutingHost: {
+                        Address: '',
+                        port: ''
+                    },
+                    name: '',
+                    assetNumber: '',
+                    remark: '',
+                    systemList: this.common.osTypeList,
+                    connectedModalList: this.common.connectedModalList,
+                    rules: {
+                        RemoteHostAddress: [{
+                            required: true, message: '请输入远程主机IP地址', trigger: 'blur'
+                        }]
+                    }
+                }
             }
         },
         methods: {

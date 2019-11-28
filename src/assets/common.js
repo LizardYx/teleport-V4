@@ -35,6 +35,13 @@ export const common = {
         name: i18n.t('i18n.临时锁定'),
         css: 'warning'
     }],
+    connectedModalList: [{
+        id: 1,
+        name: i18n.t('i18n.直接连接')
+    },{
+        id: 2,
+        name: i18n.t('i18n.端口映射')
+    }],
     initPageNation () {
         return {
             pageNation: {
