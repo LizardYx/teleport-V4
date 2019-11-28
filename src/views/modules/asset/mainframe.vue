@@ -109,27 +109,27 @@
             <el-dialog :title="$t('i18n.主机管理页面.添加主机')" :visible.sync="addHostsDialogVisible" width="40%"
                        :close-on-click-modal="false" :close-on-press-escape="false">
                 <el-form :model="addHostsDialog" status-icon :rules="addHostsDialog.rules" ref="addHostsDialog"
-                         size="medium" :hide-required-asterisk="true">
-                    <el-form-item prop="systemInfo" label="远程主机系统：" label-width="120px">
-                        <el-select v-model="addHostsDialog.systemInfo.name" placeholder="请选择远程主机系统">
+                         size="medium">
+                    <el-form-item prop="systemInfo.name" :label="$t('i18n.主机管理页面.远程主机系统')" label-width="120px">
+                        <el-select v-model="addHostsDialog.systemInfo.name" :placeholder="$t('i18n.主机管理页面.请选择远程主机系统')">
                             <el-option v-for="systemObj in addHostsDialog.systemList">
                                 <icon-svg :icon-class="systemObj.icon"></icon-svg>
                                 {{systemObj.name}}
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item prop="RemoteHostAddress" label="远程主机地址：" label-width="120px">
+                    <el-form-item prop="RemoteHostAddress" :label="$t('i18n.主机管理页面.远程主机地址')" label-width="120px">
                         <el-row>
                             <el-col :span="12">
-                                <el-input v-model="addHostsDialog.RemoteHostAddress" placeholder="请输入远程主机IP地址">
+                                <el-input v-model="addHostsDialog.RemoteHostAddress" :placeholder="$t('i18n.主机管理页面.请输入远程主机IP地址')">
                                 </el-input>
                             </el-col>
                         </el-row>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button @click="addHostsDialogVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="addHostsDialogVisible = false">确 定</el-button>
+                    <el-button @click="cancelAddHosts">{{$t('i18n.主机管理页面.取消')}}</el-button>
+                    <el-button type="primary" @click="addHostsDialogVisible = false">{{$t('i18n.主机管理页面.确定')}}</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -178,8 +178,11 @@
                     systemList: this.common.osTypeList,
                     connectedModalList: this.common.connectedModalList,
                     rules: {
+                        'systemInfo.name': [{
+                            required: true, message: this.$t('i18n.主机管理页面.请选择远程主机系统'), trigger: 'blur'
+                        }],
                         RemoteHostAddress: [{
-                            required: true, message: '请输入远程主机IP地址', trigger: 'blur'
+                            required: true, message: this.$t('i18n.主机管理页面.请输入远程主机IP地址'), trigger: 'blur'
                         }]
                     }
                 }
@@ -265,7 +268,12 @@
             },
             isWindows(osTypeId) {
                 return osTypeId === this.osTypeList[0].id;
-            }
+            },
+            cancelAddHosts() {
+                this.$refs['addHostsDialog'].resetFields();
+                this.addHostsDialogVisible = false;
+            },
+
         },
         created() {
             this.initPageInfo();
