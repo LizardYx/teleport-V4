@@ -6,7 +6,7 @@
         <div id="pageContent">
             <el-row :gutter="20" class="tool-bar">
                 <el-col :span="18">
-                    <el-button size="mini" type="primary" @click="addHostsDialogVisible = true">
+                    <el-button size="mini" type="primary" @click="initAddHostsDialog">
                         <i class="el-icon-circle-plus-outline"></i>
                         {{$t('i18n.主机管理页面.添加主机')}}
                     </el-button>
@@ -33,7 +33,7 @@
                 </el-col>
                 <el-col :span="6">
                     <el-input :class="{'search': true, 'searching': !!filter.searchValue}" prefix-icon="el-icon-search"
-                              size="mini" v-model="filter.searchValue" :placeholder="$t('i18n.主机管理页面.搜索：主机IP/名称/描述/资产编号')"
+                              size="mini" v-model="filter.searchValue" :placeholder="$t('i18n.主机管理页面.搜索：搜索：主机IP/名称/描述/资产编号')"
                               maxlength="50">
                     </el-input>
                 </el-col>
@@ -106,30 +106,128 @@
                     </el-col>
                 </el-row>
             </div>
-            <el-dialog :title="$t('i18n.主机管理页面.添加主机')" :visible.sync="addHostsDialogVisible" width="40%"
-                       :close-on-click-modal="false" :close-on-press-escape="false">
+            <el-dialog :title="$t('i18n.主机管理页面.添加主机')" :visible.sync="addHostsDialogVisible" width="768px"
+                       :close-on-click-modal="false" :close-on-press-escape="false" v-if="addHostsDialogVisible">
                 <el-form :model="addHostsDialog" status-icon :rules="addHostsDialog.rules" ref="addHostsDialog"
                          size="medium">
                     <el-form-item prop="systemInfo.name" :label="$t('i18n.主机管理页面.远程主机系统')" label-width="120px">
-                        <el-select v-model="addHostsDialog.systemInfo.name" :placeholder="$t('i18n.主机管理页面.请选择远程主机系统')">
-                            <el-option v-for="systemObj in addHostsDialog.systemList">
-                                <icon-svg :icon-class="systemObj.icon"></icon-svg>
-                                {{systemObj.name}}
-                            </el-option>
-                        </el-select>
+                        <el-dropdown trigger="click" @command="updateSystem">
+                            <el-button>
+                                <icon-svg v-if="addHostsDialog.systemInfo && addHostsDialog.systemInfo.icon"
+                                          :icon-class="addHostsDialog.systemInfo.icon">
+                                </icon-svg>
+                                {{addHostsDialog.systemInfo && addHostsDialog.systemInfo.name ?
+                                addHostsDialog.systemInfo.name : $t('i18n.主机管理页面.请选择远程主机系统')}}
+                                <i class="el-icon-arrow-down el-icon--right"></i>
+                            </el-button>
+                            <el-dropdown-menu solt="dropdown">
+                                <el-dropdown-item v-for="systemObj in addHostsDialog.systemList" :command="systemObj"
+                                                  v-bind:key="systemObj.id">
+                                    <icon-svg :icon-class="systemObj.icon"></icon-svg>
+                                    {{systemObj.name}}
+                                </el-dropdown-item>
+                            </el-dropdown-menu>
+                        </el-dropdown>
                     </el-form-item>
-                    <el-form-item prop="RemoteHostAddress" :label="$t('i18n.主机管理页面.远程主机地址')" label-width="120px">
-                        <el-row>
-                            <el-col :span="12">
+                    <el-row>
+                        <el-col :span="10">
+                            <el-form-item prop="RemoteHostAddress" :label="$t('i18n.主机管理页面.远程主机地址')" label-width="120px">
                                 <el-input v-model="addHostsDialog.RemoteHostAddress" :placeholder="$t('i18n.主机管理页面.请输入远程主机IP地址')">
                                 </el-input>
-                            </el-col>
-                        </el-row>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-form-item prop="connectedModal.name" :label="$t('i18n.主机管理页面.连接模式')" label-width="120px">
+                        <el-dropdown trigger="click" @command="updateConnectedModal">
+                            <el-button class="mar-rgt">
+                                {{addHostsDialog.connectedModal && addHostsDialog.connectedModal.name ?
+                                addHostsDialog.connectedModal.name : $t('i18n.主机管理页面.请选择连接模式')}}
+                                <i class="el-icon-arrow-down el-icon--right"></i>
+                            </el-button>
+                            <el-popover trigger="hover" placement="right">
+                                <div class="mar-btm">
+                                    <label class="text-semibold" v-text="$t('i18n.主机管理页面.直接连接')"></label>
+                                    <div v-text="$t('i18n.主机管理页面.远程主机可以由teleport直接连通')"></div>
+                                    <div>
+                                        <label v-text="$t('i18n.主机管理页面.操作端')"></label>
+                                        <icon-svg icon-class="rightarrow"></icon-svg>
+                                        <label v-text="$t('i18n.主机管理页面.teleport')"></label>
+                                        <icon-svg icon-class="rightarrow"></icon-svg>
+                                        <label v-text="$t('i18n.主机管理页面.远程主机')"></label>
+                                    </div>
+                                </div>
+                               <div>
+                                    <label class="text-semibold" v-text="$t('i18n.主机管理页面.端口映射')"></label>
+                                    <div v-text="$t('i18n.主机管理页面.teleport需要通过一台路由主机以端口映射的方式访问远程主机')">
+                                    </div>
+                                    <div>
+                                        <label v-text="$t('i18n.主机管理页面.操作端')"></label>
+                                        <icon-svg icon-class="rightarrow"></icon-svg>
+                                        <label v-text="$t('i18n.主机管理页面.teleport')"></label>
+                                        <icon-svg icon-class="rightarrow"></icon-svg>
+                                        <label v-text="$t('i18n.主机管理页面.路由主机')"></label>
+                                        <icon-svg icon-class="rightarrow"></icon-svg>
+                                        <label v-text="$t('i18n.主机管理页面.远程主机')"></label>
+                                    </div>
+                                </div>
+                                <i class="el-icon-question" slot="reference"></i>
+                            </el-popover>
+                            <el-dropdown-menu solt="dropdown">
+                                <el-dropdown-item v-for="connectedModalObj in addHostsDialog.connectedModalList"
+                                                  :command="connectedModalObj" v-bind:key="connectedModalObj.id"
+                                                  v-text="connectedModalObj.name">
+                                </el-dropdown-item>
+                            </el-dropdown-menu>
+                        </el-dropdown>
                     </el-form-item>
+                    <el-row>
+                        <el-col :span="10">
+                            <el-form-item prop="RoutingHost.Address" :label="$t('i18n.主机管理页面.路由主机地址')"
+                                          label-width="120px">
+                                <el-input v-model="addHostsDialog.RoutingHost.Address"
+                                          :placeholder="$t('i18n.主机管理页面.请输入路由主机IP地址')">
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item prop="RoutingHost.port" :label="$t('i18n.主机管理页面.映射端口')"
+                                          label-width="100px">
+                                <el-input v-model="addHostsDialog.RoutingHost.port"
+                                          :placeholder="$t('i18n.主机管理页面.请输入映射端口')">
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="13">
+                            <el-form-item :label="$t('i18n.主机管理页面.名称')" label-width="120px">
+                                <el-input v-model="addHostsDialog.name" :placeholder="$t('i18n.主机管理页面.请输入名称')">
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="13">
+                            <el-form-item :label="$t('i18n.主机管理页面.资产编号')" label-width="120px">
+                                <el-input v-model="addHostsDialog.assetNumber"
+                                          :placeholder="$t('i18n.主机管理页面.请输入资产编号')">
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="20">
+                            <el-form-item :label="$t('i18n.主机管理页面.备注')" label-width="120px">
+                                <el-input type="textarea" :rows="3" v-model="addHostsDialog.remark"
+                                          :placeholder="$t('i18n.主机管理页面.请输入备注')">
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="cancelAddHosts">{{$t('i18n.主机管理页面.取消')}}</el-button>
-                    <el-button type="primary" @click="addHostsDialogVisible = false">{{$t('i18n.主机管理页面.确定')}}</el-button>
+                    <el-button type="primary" @click="submitAddHosts">{{$t('i18n.主机管理页面.确定')}}</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -157,35 +255,7 @@
                 hostsStatusList: this.common.statusList,
                 osTypeList: this.common.osTypeList,
                 addHostsDialogVisible: false,
-                addHostsDialog: {
-                    systemInfo: {
-                        id: 0,
-                        name: '',
-                        icon: ''
-                    },
-                    RemoteHostAddress: '',
-                    connectedModal: {
-                        id: '',
-                        name: '',
-                    },
-                    RoutingHost: {
-                        Address: '',
-                        port: ''
-                    },
-                    name: '',
-                    assetNumber: '',
-                    remark: '',
-                    systemList: this.common.osTypeList,
-                    connectedModalList: this.common.connectedModalList,
-                    rules: {
-                        'systemInfo.name': [{
-                            required: true, message: this.$t('i18n.主机管理页面.请选择远程主机系统'), trigger: 'blur'
-                        }],
-                        RemoteHostAddress: [{
-                            required: true, message: this.$t('i18n.主机管理页面.请输入远程主机IP地址'), trigger: 'blur'
-                        }]
-                    }
-                }
+                addHostsDialog: {}
             }
         },
         methods: {
@@ -269,10 +339,81 @@
             isWindows(osTypeId) {
                 return osTypeId === this.osTypeList[0].id;
             },
+            initAddHostsDialog() {
+                this.addHostsDialogVisible = true;
+                this.addHostsDialog = {
+                    systemInfo: {
+                        id: 0,
+                        name: '',
+                        icon: ''
+                    },
+                    RemoteHostAddress: '',
+                    connectedModal: {
+                        id: '',
+                        name: '',
+                    },
+                    RoutingHost: {
+                        Address: '',
+                        port: ''
+                    },
+                    name: '',
+                    assetNumber: '',
+                    remark: '',
+                    systemList: this.common.osTypeList,
+                    connectedModalList: this.common.connectedModalList,
+                    rules: {
+                        'systemInfo.name': [{
+                            required: true, message: this.$t('i18n.主机管理页面.请选择远程主机系统'), trigger: 'blur'
+                        }],
+                        RemoteHostAddress: [{
+                            required: true, message: this.$t('i18n.主机管理页面.请输入远程主机IP地址'), trigger: 'blur'
+                        }],
+                        'connectedModal.name': [{
+                            required: true, message: this.$t('i18n.主机管理页面.请选择连接模式'), trigger: 'blur'
+                        }],
+                        'RoutingHost.Address': [{
+                            required: true, message: this.$t('i18n.主机管理页面.请输入路由主机IP地址'), trigger: 'blur'
+                        }],
+                        'RoutingHost.port': [{
+                            required: true, message: this.$t('i18n.主机管理页面.请输入映射端口'), trigger: 'blur'
+                        }]
+                    }
+                };
+                //init connect modal
+                this.updateConnectedModal(this.addHostsDialog.connectedModalList[0]);
+            },
+            updateSystem(newSystemObj) {
+                this.addHostsDialog.systemInfo = {
+                    id: newSystemObj.id,
+                    name: newSystemObj.name,
+                    icon: newSystemObj.icon
+                };
+            },
+            updateConnectedModal(newConnectedModal) {
+                this.addHostsDialog.connectedModal = {
+                    id: newConnectedModal.id,
+                    name: newConnectedModal.name,
+                };
+            },
             cancelAddHosts() {
                 this.$refs['addHostsDialog'].resetFields();
                 this.addHostsDialogVisible = false;
             },
+            submitAddHosts() {
+                this.$refs['addHostsDialog'].validate((passValidate) => {
+                    if (passValidate) {
+                        this.$notify({
+                            type: 'success',
+                            message: this.$t('i18n.主机管理页面.添加主机成功'),
+                            duration: 5000
+                        });
+                        this.addHostsDialogVisible = false;
+
+                    }else {
+                        return false;
+                    }
+                })
+            }
 
         },
         created() {
