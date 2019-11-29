@@ -4,6 +4,7 @@
 import i18n from './lang/i18n'
 
 export const common = {
+    uploadUrl: '',
     langList: [{
         tag: 'zh_CN',
         name: i18n.t('i18n.中文'),

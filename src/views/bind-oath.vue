@@ -119,7 +119,8 @@
                 </div>
                 <div class="pad-btm bord-btm">
                     <label class="color-warning" v-text="$t('i18n.绑定身份验证器页面.温馨提示：')"></label>
-                    {{$t('i18n.绑定身份验证器页面.如果无法扫描二维码，则可以选择“手动输入验证码”。设置一个容易记忆的账号名称，并确保“基于时间”一项是选中的，然后在“密钥”一项中输入下列密钥：')}}
+                    {{$t('i18n.绑定身份验证器页面.如果无法扫描二维码，则可以选择“手动输入验证码”。')}}
+                    {{$t('i18n.绑定身份验证器页面.设置一个容易记忆的账号名称，并确保“基于时间”一项是选中的，然后在“密钥”一项中输入下列密钥：')}}
                     <span class="color-success secret-key">{{bindOathDialog.secretKey}}</span>
                 </div>
                 <div class="pad-top">

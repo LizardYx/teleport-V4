@@ -10,19 +10,17 @@
                         <i class="el-icon-circle-plus-outline"></i>
                         {{$t('i18n.主机管理页面.添加主机')}}
                     </el-button>
-                    <el-button size="mini" type="primary">
+                    <el-button size="mini" type="primary" @click="initImportAssetsDialog">
                         <i class="el-icon-circle-plus-outline"></i>
                         {{$t('i18n.主机管理页面.导入主机和账号')}}
                     </el-button>
-                    <el-button size="mini" type="primary">
-                        <i class="el-icon-remove"></i>
+                    <el-button size="mini" type="primary" :disabled="!selectedIdList[0]">
                         {{$t('i18n.主机管理页面.禁用')}}
                     </el-button>
-                    <el-button size="mini" type="primary">
-                        <i class="el-icon-success"></i>
+                    <el-button size="mini" type="primary" :disabled="!selectedIdList[0]">
                         {{$t('i18n.主机管理页面.解禁')}}
                     </el-button>
-                    <el-button size="mini" type="primary">
+                    <el-button size="mini" type="primary" :disabled="!selectedIdList[0]">
                         <i class="el-icon-delete"></i>
                         {{$t('i18n.主机管理页面.删除')}}
                     </el-button>
@@ -33,7 +31,7 @@
                 </el-col>
                 <el-col :span="6">
                     <el-input :class="{'search': true, 'searching': !!filter.searchValue}" prefix-icon="el-icon-search"
-                              size="mini" v-model="filter.searchValue" :placeholder="$t('i18n.主机管理页面.搜索：搜索：主机IP/名称/描述/资产编号')"
+                              size="mini" v-model="filter.searchValue" :placeholder="$t('i18n.主机管理页面.搜索：主机IP/名称/描述/资产编号')"
                               maxlength="50">
                     </el-input>
                 </el-col>
@@ -70,6 +68,15 @@
                     <el-table-column header-align="center" :label="$t('i18n.主机管理页面.操作')">
                         <a class="mar-rgt" v-text="$t('i18n.主机管理页面.禁用')"></a>
                         <a class="mar-rgt" v-text="$t('i18n.主机管理页面.解禁')"></a>
+                        <el-dropdown trigger="click">
+                              <span>
+                                更多操作<i class="el-icon-arrow-down el-icon--right"></i>
+                              </span>
+                            <el-dropdown-menu slot="dropdown">
+                                <el-dropdown-item>编辑详情</el-dropdown-item>
+                                <el-dropdown-item>编辑详情2</el-dropdown-item>
+                            </el-dropdown-menu>
+                        </el-dropdown>
                     </el-table-column>
                 </el-table>
             </div>
@@ -79,14 +86,14 @@
                         <div class="notice">
                             <label class="title box-block" v-text="$t('i18n.主机管理页面.温馨提示：')"></label>
                             <div class="content">
-                                <p>
+                                <span>
                                     {{$t('i18n.主机管理页面.批量导入主机和账号需要上传csv格式的文件，您可以下载')}}
                                     <a href="../../../download/teleport-example-asset.csv"
                                        download="teleport-example-asset.csv">
                                         {{$t('i18n.主机管理页面.资产信息文件模板')}}
                                     </a>
                                     {{$t('i18n.主机管理页面.进行编辑。')}}
-                                </p>
+                                </span>
                             </div>
                         </div>
                     </el-col>
@@ -106,22 +113,22 @@
                     </el-col>
                 </el-row>
             </div>
-            <el-dialog :title="$t('i18n.主机管理页面.添加主机')" :visible.sync="addHostsDialogVisible" width="768px"
-                       :close-on-click-modal="false" :close-on-press-escape="false" v-if="addHostsDialogVisible">
-                <el-form :model="addHostsDialog" status-icon :rules="addHostsDialog.rules" ref="addHostsDialog"
+            <el-dialog :title="$t('i18n.主机管理页面.添加主机')" :visible.sync="hostsInfoDialogVisible" width="768px"
+                       :close-on-click-modal="false" :close-on-press-escape="false" v-if="hostsInfoDialogVisible">
+                <el-form :model="hostsInfoDialog" status-icon :rules="hostsInfoDialog.rules" ref="hostsInfoDialog"
                          size="medium">
                     <el-form-item prop="systemInfo.name" :label="$t('i18n.主机管理页面.远程主机系统')" label-width="120px">
                         <el-dropdown trigger="click" @command="updateSystem">
                             <el-button>
-                                <icon-svg v-if="addHostsDialog.systemInfo && addHostsDialog.systemInfo.icon"
-                                          :icon-class="addHostsDialog.systemInfo.icon">
+                                <icon-svg v-if="hostsInfoDialog.systemInfo && hostsInfoDialog.systemInfo.icon"
+                                          :icon-class="hostsInfoDialog.systemInfo.icon">
                                 </icon-svg>
-                                {{addHostsDialog.systemInfo && addHostsDialog.systemInfo.name ?
-                                addHostsDialog.systemInfo.name : $t('i18n.主机管理页面.请选择远程主机系统')}}
+                                {{hostsInfoDialog.systemInfo && hostsInfoDialog.systemInfo.name ?
+                                hostsInfoDialog.systemInfo.name : $t('i18n.主机管理页面.请选择远程主机系统')}}
                                 <i class="el-icon-arrow-down el-icon--right"></i>
                             </el-button>
                             <el-dropdown-menu solt="dropdown">
-                                <el-dropdown-item v-for="systemObj in addHostsDialog.systemList" :command="systemObj"
+                                <el-dropdown-item v-for="systemObj in hostsInfoDialog.systemList" :command="systemObj"
                                                   v-bind:key="systemObj.id">
                                     <icon-svg :icon-class="systemObj.icon"></icon-svg>
                                     {{systemObj.name}}
@@ -132,7 +139,7 @@
                     <el-row>
                         <el-col :span="10">
                             <el-form-item prop="RemoteHostAddress" :label="$t('i18n.主机管理页面.远程主机地址')" label-width="120px">
-                                <el-input v-model="addHostsDialog.RemoteHostAddress" :placeholder="$t('i18n.主机管理页面.请输入远程主机IP地址')">
+                                <el-input v-model="hostsInfoDialog.RemoteHostAddress" :placeholder="$t('i18n.主机管理页面.请输入远程主机IP地址')">
                                 </el-input>
                             </el-form-item>
                         </el-col>
@@ -140,8 +147,8 @@
                     <el-form-item prop="connectedModal.name" :label="$t('i18n.主机管理页面.连接模式')" label-width="120px">
                         <el-dropdown trigger="click" @command="updateConnectedModal">
                             <el-button class="mar-rgt">
-                                {{addHostsDialog.connectedModal && addHostsDialog.connectedModal.name ?
-                                addHostsDialog.connectedModal.name : $t('i18n.主机管理页面.请选择连接模式')}}
+                                {{hostsInfoDialog.connectedModal && hostsInfoDialog.connectedModal.name ?
+                                hostsInfoDialog.connectedModal.name : $t('i18n.主机管理页面.请选择连接模式')}}
                                 <i class="el-icon-arrow-down el-icon--right"></i>
                             </el-button>
                             <el-popover trigger="hover" placement="right">
@@ -173,18 +180,18 @@
                                 <i class="el-icon-question" slot="reference"></i>
                             </el-popover>
                             <el-dropdown-menu solt="dropdown">
-                                <el-dropdown-item v-for="connectedModalObj in addHostsDialog.connectedModalList"
+                                <el-dropdown-item v-for="connectedModalObj in hostsInfoDialog.connectedModalList"
                                                   :command="connectedModalObj" v-bind:key="connectedModalObj.id"
                                                   v-text="connectedModalObj.name">
                                 </el-dropdown-item>
                             </el-dropdown-menu>
                         </el-dropdown>
                     </el-form-item>
-                    <el-row>
+                    <el-row v-if="hostsInfoDialog.connectedModal.id === hostsInfoDialog.connectedModalList[1].id">
                         <el-col :span="10">
                             <el-form-item prop="RoutingHost.Address" :label="$t('i18n.主机管理页面.路由主机地址')"
                                           label-width="120px">
-                                <el-input v-model="addHostsDialog.RoutingHost.Address"
+                                <el-input v-model="hostsInfoDialog.RoutingHost.Address"
                                           :placeholder="$t('i18n.主机管理页面.请输入路由主机IP地址')">
                                 </el-input>
                             </el-form-item>
@@ -192,7 +199,7 @@
                         <el-col :span="8">
                             <el-form-item prop="RoutingHost.port" :label="$t('i18n.主机管理页面.映射端口')"
                                           label-width="100px">
-                                <el-input v-model="addHostsDialog.RoutingHost.port"
+                                <el-input v-model="hostsInfoDialog.RoutingHost.port"
                                           :placeholder="$t('i18n.主机管理页面.请输入映射端口')">
                                 </el-input>
                             </el-form-item>
@@ -201,7 +208,7 @@
                     <el-row>
                         <el-col :span="13">
                             <el-form-item :label="$t('i18n.主机管理页面.名称')" label-width="120px">
-                                <el-input v-model="addHostsDialog.name" :placeholder="$t('i18n.主机管理页面.请输入名称')">
+                                <el-input v-model="hostsInfoDialog.name" :placeholder="$t('i18n.主机管理页面.请输入名称')">
                                 </el-input>
                             </el-form-item>
                         </el-col>
@@ -209,7 +216,7 @@
                     <el-row>
                         <el-col :span="13">
                             <el-form-item :label="$t('i18n.主机管理页面.资产编号')" label-width="120px">
-                                <el-input v-model="addHostsDialog.assetNumber"
+                                <el-input v-model="hostsInfoDialog.assetNumber"
                                           :placeholder="$t('i18n.主机管理页面.请输入资产编号')">
                                 </el-input>
                             </el-form-item>
@@ -218,7 +225,7 @@
                     <el-row>
                         <el-col :span="20">
                             <el-form-item :label="$t('i18n.主机管理页面.备注')" label-width="120px">
-                                <el-input type="textarea" :rows="3" v-model="addHostsDialog.remark"
+                                <el-input type="textarea" :rows="3" v-model="hostsInfoDialog.remark"
                                           :placeholder="$t('i18n.主机管理页面.请输入备注')">
                                 </el-input>
                             </el-form-item>
@@ -228,6 +235,31 @@
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="cancelAddHosts">{{$t('i18n.主机管理页面.取消')}}</el-button>
                     <el-button type="primary" @click="submitAddHosts">{{$t('i18n.主机管理页面.确定')}}</el-button>
+                </div>
+            </el-dialog>
+            <el-dialog :title="$t('i18n.主机管理页面.导入资产（主机及账号）')" :visible.sync="importADialogVisible" width="768px"
+                       :close-on-click-modal="false" :close-on-press-escape="false" v-if="importADialogVisible">
+                <el-upload drag :action="importAssetsDialog.uploadUrl" accept=".csv" :limit="importAssetsDialog.limit"
+                           :on-exceed="uploadFileOutOfRange" :before-upload="beforeUploadFile">
+                    <i class="el-icon-upload"></i>
+                    <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                </el-upload>
+                <div class="notice mar-top">
+                    <label class="title box-block" v-text="$t('i18n.主机管理页面.温馨提示：')"></label>
+                    <div class="content">
+                        <span>
+                            {{$t('i18n.主机管理页面.批量导入主机和账号需要上传csv格式的文件，您可以下载')}}
+                            <a href="../../../download/teleport-example-asset.csv"
+                               download="teleport-example-asset.csv">
+                                {{$t('i18n.主机管理页面.资产信息文件模板')}}
+                            </a>
+                            {{$t('i18n.主机管理页面.进行编辑。')}}
+                        </span>
+                    </div>
+                </div>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="importADialogVisible = false">{{$t('i18n.主机管理页面.取消')}}</el-button>
+                    <el-button type="primary" @click="importAssets">{{$t('i18n.主机管理页面.确定')}}</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -254,8 +286,10 @@
                 tableData: [],
                 hostsStatusList: this.common.statusList,
                 osTypeList: this.common.osTypeList,
-                addHostsDialogVisible: false,
-                addHostsDialog: {}
+                hostsInfoDialogVisible: false,
+                hostsInfoDialog: {},
+                importADialogVisible: false,
+                importAssetsDialog: {}
             }
         },
         methods: {
@@ -339,9 +373,10 @@
             isWindows(osTypeId) {
                 return osTypeId === this.osTypeList[0].id;
             },
-            initAddHostsDialog() {
-                this.addHostsDialogVisible = true;
-                this.addHostsDialog = {
+            initAddHostsDialog(hostsInfo) {
+                this.hostsInfoDialogVisible = true;
+                this.hostsInfoDialog = {
+                    isCreate: !hostsInfo,
                     systemInfo: {
                         id: 0,
                         name: '',
@@ -379,40 +414,74 @@
                         }]
                     }
                 };
-                //init connect modal
-                this.updateConnectedModal(this.addHostsDialog.connectedModalList[0]);
+                if (!hostsInfo) {
+                    //init connect modal
+                    this.updateConnectedModal(this.hostsInfoDialog.connectedModalList[0]);
+                }
             },
             updateSystem(newSystemObj) {
-                this.addHostsDialog.systemInfo = {
+                this.hostsInfoDialog.systemInfo = {
                     id: newSystemObj.id,
                     name: newSystemObj.name,
                     icon: newSystemObj.icon
                 };
             },
             updateConnectedModal(newConnectedModal) {
-                this.addHostsDialog.connectedModal = {
+                this.hostsInfoDialog.connectedModal = {
                     id: newConnectedModal.id,
                     name: newConnectedModal.name,
                 };
             },
             cancelAddHosts() {
-                this.$refs['addHostsDialog'].resetFields();
-                this.addHostsDialogVisible = false;
+                this.$refs['hostsInfoDialog'].resetFields();
+                this.hostsInfoDialogVisible = false;
             },
             submitAddHosts() {
-                this.$refs['addHostsDialog'].validate((passValidate) => {
+                this.$refs['hostsInfoDialog'].validate((passValidate) => {
                     if (passValidate) {
                         this.$notify({
                             type: 'success',
                             message: this.$t('i18n.主机管理页面.添加主机成功'),
                             duration: 5000
                         });
-                        this.addHostsDialogVisible = false;
+                        this.hostsInfoDialogVisible = false;
 
                     }else {
                         return false;
                     }
                 })
+            },
+            initImportAssetsDialog() {
+                this.importADialogVisible = true;
+                this.importAssetsDialog = {
+                    uploadUrl: this.common.uploadUrl,
+                    limit: 1,
+                    fileList: []
+                };
+            },
+            uploadFileOutOfRange() {
+                this.$notify({
+                    type: 'warning',
+                    message: this.$t('i18n.主机管理页面.单次只能导入一个资产文件'),
+                    duration: 5000
+                });
+            },
+            beforeUploadFile(file) {
+                const fileType = file.name.substring(file.name.lastIndexOf('.') + 1);
+                const isCSV = fileType === 'csv';
+
+                console.log(fileType);
+                if (!isCSV) {
+                    this.$notify({
+                        type: 'warning',
+                        message: this.$t('i18n.主机管理页面.资产文件必须为csv格式'),
+                        duration: 5000
+                    });
+                }
+                return isCSV;
+            },
+            importAssets() {
+                this.$refs.upload.submit();
             }
 
         },
