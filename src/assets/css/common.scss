@@ -133,6 +133,14 @@ a{
 .basic-box-shadow{
   box-shadow: 0 2px 4px rgba(0, 0, 0, .12);
 }
+.el-dropdown-menu.operation > li{
+  padding: 0;
+}
+
+.el-dropdown-menu.operation a{
+  padding: 0 20px;
+  display: block;
+}
 button:hover{
   box-shadow: 0 3px 15px rgba(0, 0, 0, 0.25);
 }

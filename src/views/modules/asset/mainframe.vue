@@ -6,7 +6,7 @@
         <div id="pageContent">
             <el-row :gutter="20" class="tool-bar">
                 <el-col :span="18">
-                    <el-button size="mini" type="primary" @click="initAddHostsDialog">
+                    <el-button size="mini" type="primary" @click="initHostsInfoDialog">
                         <i class="el-icon-circle-plus-outline"></i>
                         {{$t('i18n.主机管理页面.添加主机')}}
                     </el-button>
@@ -31,8 +31,8 @@
                 </el-col>
                 <el-col :span="6">
                     <el-input :class="{'search': true, 'searching': !!filter.searchValue}" prefix-icon="el-icon-search"
-                              size="mini" v-model="filter.searchValue" :placeholder="$t('i18n.主机管理页面.搜索：主机IP/名称/描述/资产编号')"
-                              maxlength="50">
+                              size="mini" :placeholder="$t('i18n.主机管理页面.搜索：主机IP/名称/描述/资产编号')"
+                              v-model="filter.searchValue" maxlength="50">
                     </el-input>
                 </el-col>
             </el-row>
@@ -48,16 +48,19 @@
                             </el-popover>
                         </template>
                     </el-table-column>
-                    <el-table-column header-align="center" prop="ip" :label="$t('i18n.主机管理页面.IP地址')"></el-table-column>
+                    <el-table-column header-align="center" prop="ip" :label="$t('i18n.主机管理页面.IP地址')">
+                    </el-table-column>
                     <el-table-column header-align="center" sortable="custom" :label="$t('i18n.主机管理页面.操作系统')">
                         <template slot-scope="scope">
                             <icon-svg icon-class="windows" v-if="isWindows(scope['row']['os_type'])"></icon-svg>
                             <icon-svg icon-class="linux" v-if="!isWindows(scope['row']['os_type'])"></icon-svg>
                         </template>
                     </el-table-column>
-                    <el-table-column header-align="center" prop="cid" sortable="custom" :label="$t('i18n.主机管理页面.资产编号')">
+                    <el-table-column header-align="center" prop="cid" sortable="custom"
+                                     :label="$t('i18n.主机管理页面.资产编号')">
                     </el-table-column>
-                    <el-table-column header-align="center" prop="acc_count" :label="$t('i18n.主机管理页面.账号数')"></el-table-column>
+                    <el-table-column header-align="center" prop="acc_count" :label="$t('i18n.主机管理页面.账号数')">
+                    </el-table-column>
                     <el-table-column sortable="custom" :label="$t('i18n.主机管理页面.状态')" align="center">
                         <template slot-scope="scope">
                             <el-tag effect="dark" v-text="getHostsStatusInfo(scope['row'].state).name"
@@ -66,17 +69,47 @@
                         </template>
                     </el-table-column>
                     <el-table-column header-align="center" :label="$t('i18n.主机管理页面.操作')">
-                        <a class="mar-rgt" v-text="$t('i18n.主机管理页面.禁用')"></a>
-                        <a class="mar-rgt" v-text="$t('i18n.主机管理页面.解禁')"></a>
-                        <el-dropdown trigger="click">
-                              <span>
-                                更多操作<i class="el-icon-arrow-down el-icon--right"></i>
-                              </span>
-                            <el-dropdown-menu slot="dropdown">
-                                <el-dropdown-item>编辑详情</el-dropdown-item>
-                                <el-dropdown-item>编辑详情2</el-dropdown-item>
-                            </el-dropdown-menu>
-                        </el-dropdown>
+                        <template slot-scope="scope">
+                            <a class="mar-rgt" v-text="$t('i18n.主机管理页面.禁用')"></a>
+                            <a class="mar-rgt" v-text="$t('i18n.主机管理页面.解禁')"></a>
+                            <el-dropdown trigger="click">
+                                <span>
+                                    {{$t('i18n.主机管理页面.更多操作')}}
+                                    <i class="el-icon-arrow-down el-icon--right"></i>
+                                </span>
+                                <el-dropdown-menu slot="dropdown" class="operation">
+                                    <el-dropdown-item>
+                                        <el-link type="primary" :underline="false" v-text="$t('i18n.主机管理页面.编辑详情')"
+                                                 @click="initHostsInfoDialog(scope['row'])">
+                                        </el-link>
+                                    </el-dropdown-item>
+                                    <el-dropdown-item>
+                                        <el-link type="primary" :underline="false" v-text="$t('i18n.主机管理页面.禁用')"
+                                                 :disabled="!canDisabledHost(scope['row'].state)">
+                                        </el-link>
+                                    </el-dropdown-item>
+                                    <el-dropdown-item>
+                                        <el-link type="primary" :underline="false" v-text="$t('i18n.主机管理页面.解禁')"
+                                                 :disabled="!canEnabledHost(scope['row'].state)">
+                                        </el-link>
+                                    </el-dropdown-item>
+                                    <el-dropdown-item>
+                                        <el-link type="primary" :underline="false"
+                                                 v-text="$t('i18n.主机管理页面.管理远程账号')">
+                                        </el-link>
+                                    </el-dropdown-item>
+                                    <el-dropdown-item>
+                                        <el-link type="primary" :underline="false"
+                                                 v-text="$t('i18n.主机管理页面.复制主机')">
+                                        </el-link>
+                                    </el-dropdown-item>
+                                    <el-dropdown-item>
+                                        <el-link type="primary" :underline="false" v-text="$t('i18n.主机管理页面.删除')">
+                                        </el-link>
+                                    </el-dropdown-item>
+                                </el-dropdown-menu>
+                            </el-dropdown>
+                        </template>
                     </el-table-column>
                 </el-table>
             </div>
@@ -237,8 +270,9 @@
                     <el-button type="primary" @click="submitAddHosts">{{$t('i18n.主机管理页面.确定')}}</el-button>
                 </div>
             </el-dialog>
-            <el-dialog :title="$t('i18n.主机管理页面.导入资产（主机及账号）')" :visible.sync="importADialogVisible" width="768px"
-                       :close-on-click-modal="false" :close-on-press-escape="false" v-if="importADialogVisible">
+            <el-dialog :title="$t('i18n.主机管理页面.导入资产（主机及账号）')" :visible.sync="importADialogVisible"
+                       width="768px" :close-on-click-modal="false" :close-on-press-escape="false"
+                       v-if="importADialogVisible">
                 <el-upload drag :action="importAssetsDialog.uploadUrl" accept=".csv" :limit="importAssetsDialog.limit"
                            :on-exceed="uploadFileOutOfRange" :before-upload="beforeUploadFile">
                     <i class="el-icon-upload"></i>
@@ -373,7 +407,7 @@
             isWindows(osTypeId) {
                 return osTypeId === this.osTypeList[0].id;
             },
-            initAddHostsDialog(hostsInfo) {
+            initHostsInfoDialog(hostsInfo) {
                 this.hostsInfoDialogVisible = true;
                 this.hostsInfoDialog = {
                     isCreate: !hostsInfo,
@@ -382,18 +416,18 @@
                         name: '',
                         icon: ''
                     },
-                    RemoteHostAddress: '',
+                    RemoteHostAddress: !!hostsInfo ? hostsInfo.ip : '',
                     connectedModal: {
                         id: '',
                         name: '',
                     },
                     RoutingHost: {
-                        Address: '',
-                        port: ''
+                        Address: !!hostsInfo ? hostsInfo.router_ip : '',
+                        port: !!hostsInfo ? hostsInfo.router_port : ''
                     },
-                    name: '',
-                    assetNumber: '',
-                    remark: '',
+                    name: !!hostsInfo ? hostsInfo.name : '',
+                    assetNumber: !!hostsInfo ? hostsInfo.cid : '',
+                    remark: !!hostsInfo ? hostsInfo.desc : '',
                     systemList: this.common.osTypeList,
                     connectedModalList: this.common.connectedModalList,
                     rules: {
@@ -417,6 +451,21 @@
                 if (!hostsInfo) {
                     //init connect modal
                     this.updateConnectedModal(this.hostsInfoDialog.connectedModalList[0]);
+                }else {
+                    // init system info
+                    for (let osTypeObj of this.hostsInfoDialog.systemList){
+                        if (osTypeObj.id === hostsInfo['os_type']) {
+                            this.updateSystem(osTypeObj);
+                            break;
+                        }
+                    }
+                    // init connected modal
+                    for (let connectedModalObj of this.hostsInfoDialog.connectedModalList){
+                        if (connectedModalObj.id === hostsInfo.type) {
+                            this.updateConnectedModal(connectedModalObj);
+                            break;
+                        }
+                    }
                 }
             },
             updateSystem(newSystemObj) {
@@ -482,6 +531,12 @@
             },
             importAssets() {
                 this.$refs.upload.submit();
+            },
+            canDisabledHost(status) {
+                return status && status === this.hostsStatusList[0].id;
+            },
+            canEnabledHost(status) {
+                return status && status === this.hostsStatusList[1].id;
             }
 
         },
