@@ -133,6 +133,9 @@
                 #pageTitle{
                     font-size: 20px;
                     padding: 15px 0 30px;
+                    .page-title{
+                        font-size: 20px;
+                    }
                 }
                 #pageContent{
                     background-color: #fff;

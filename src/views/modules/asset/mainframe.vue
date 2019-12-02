@@ -1,7 +1,7 @@
 <template>
     <div id="mainframe">
         <el-breadcrumb id="pageTitle" separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item>{{$t('i18n.主机管理页面.主机管理')}}</el-breadcrumb-item>
+            <el-breadcrumb-item>{{$t('i18n.导航页面.主机管理')}}</el-breadcrumb-item>
         </el-breadcrumb>
         <div id="pageContent">
             <el-row :gutter="20" class="tool-bar">
@@ -94,8 +94,8 @@
                                         </el-link>
                                     </el-dropdown-item>
                                     <el-dropdown-item>
-                                        <el-link type="primary" :underline="false"
-                                                 v-text="$t('i18n.主机管理页面.管理远程账号')">
+                                        <el-link type="primary" :underline="false" v-text="$t('i18n.主机管理页面.管理远程账号')"
+                                                 @click="MRemoteAccount(scope['row']['_id'], scope['row'].name)">
                                         </el-link>
                                     </el-dropdown-item>
                                     <el-dropdown-item>
@@ -104,7 +104,8 @@
                                         </el-link>
                                     </el-dropdown-item>
                                     <el-dropdown-item>
-                                        <el-link type="primary" :underline="false" v-text="$t('i18n.主机管理页面.删除')">
+                                        <el-link type="primary" :underline="false" v-text="$t('i18n.主机管理页面.删除')"
+                                                 @click="deleteHost">
                                         </el-link>
                                     </el-dropdown-item>
                                 </el-dropdown-menu>
@@ -349,7 +350,6 @@
                         order: this.filter.sort.order
                     };
                 }
-
                 asyncGet(api.getHostsList, params)
                     .then((response) => {
                         let res = response && response.rows ? response.rows : {};
@@ -537,8 +537,31 @@
             },
             canEnabledHost(status) {
                 return status && status === this.hostsStatusList[1].id;
+            },
+            deleteHost() {
+                this.$confirm(this.$t('i18n.主机管理页面.确定删除该主机'), this.$t('i18n.主机管理页面.删除'), {
+                    confirmButtonText: this.$t('i18n.主机管理页面.确定'),
+                    cancelButtonText: this.$t('i18n.主机管理页面.取消'),
+                    type: 'warning'
+                }).then(() =>{
+                    // this.filter.pageNation.pageNo = 1;
+                    this.getHostList();
+                    this.$notify({
+                        type: 'success',
+                        message: this.$t('i18n.主机管理页面.删除主机成功'),
+                        duration: 5000
+                    });
+                });
+            },
+            MRemoteAccount(id, name) {
+                this.$router.push({
+                    path: '/modules-main/asset/manage-remote-account',
+                    query: {
+                        id: id,
+                        name: name
+                    }
+                })
             }
-
         },
         created() {
             this.initPageInfo();

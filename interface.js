@@ -23,7 +23,7 @@ let server = http.createServer(function (request, response) {
         if (request.url === `${commonUrl}/user/bind-oath-qrcode`) {
             data.rows.QRCode = '';
         }
-        if (request.url === `${commonUrl}/asset/get-hosts`) {
+        if (request.url.indexOf(`${commonUrl}/asset/get-hosts`) >= 0) {
             data.rows = {
                 data: [{
                     _id: 1,
@@ -32,7 +32,7 @@ let server = http.createServer(function (request, response) {
                     desc: 'this is for test',
                     id: 1,
                     ip: "10.0.0.1",
-                    name: "test",
+                    name: "测试服务器",
                     os_type: 1,
                     os_ver: "",
                     router_ip: "",
@@ -46,7 +46,7 @@ let server = http.createServer(function (request, response) {
                     desc: '1.备注    123123\n2备注说明\n\n4.备注',
                     id: 1,
                     ip: "10.0.0.1",
-                    name: "test22",
+                    name: "test",
                     os_type: 2,
                     os_ver: "",
                     router_ip: "",

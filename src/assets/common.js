@@ -45,12 +45,10 @@ export const common = {
     }],
     initPageNation () {
         return {
-            pageNation: {
-                pageNo: 1,
-                pageSize: 10,
-                totalItem: 0,
-                pageList: [10, 20, 50, 100]
-            }
+            pageNo: 1,
+            pageSize: 10,
+            totalItem: 0,
+            pageList: [10, 20, 50, 100]
         }
     }
 };
