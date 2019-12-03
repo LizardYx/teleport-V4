@@ -58,9 +58,7 @@
             initLangInfo() {
                 let currentTag = !!localStorage.getItem('locale') ? localStorage.getItem('locale') : this.$i18n.locale;
 
-                for (let index = 0 ;index < common.langList.length; index++) {
-                    let langObj = common.langList[index];
-
+                for (let langObj of common.langList) {
                     if (langObj.tag === currentTag) {
                         this.currentLang = langObj;
                         break;
@@ -73,9 +71,7 @@
             updateLang(langTag) {
                 if (langTag !== this.currentLang.tag) {
                     localStorage.setItem('locale', langTag);
-                    for (let index = 0 ;index < this.langList.length; index++) {
-                        let langObj = this.langList[index];
-
+                    for (let langObj of this.langList) {
                         if (langObj.tag === langTag) {
                             this.currentLang = langObj;
                             this.$i18n.locale = langTag;

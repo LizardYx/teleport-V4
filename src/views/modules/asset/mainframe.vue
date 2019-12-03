@@ -38,8 +38,7 @@
             </el-row>
             <div class="mar-btm">
                 <el-table :data="tableData" border @selection-change="updateSelected" @sort-change="updateFilter">
-                    <el-table-column align="center" type="selection">
-                    </el-table-column>
+                    <el-table-column align="center" type="selection"></el-table-column>
                     <el-table-column header-align="center" sortable="custom" :label="$t('i18n.主机管理页面.主机名称')">
                         <template slot-scope="scope">
                             <el-popover placement="right" trigger="hover">
@@ -70,8 +69,12 @@
                     </el-table-column>
                     <el-table-column header-align="center" :label="$t('i18n.主机管理页面.操作')">
                         <template slot-scope="scope">
-                            <a class="mar-rgt" v-text="$t('i18n.主机管理页面.禁用')"></a>
-                            <a class="mar-rgt" v-text="$t('i18n.主机管理页面.解禁')"></a>
+                            <el-link type="primary" :underline="false" v-text="$t('i18n.主机管理页面.禁用')"
+                                     :disabled="!canDisabledHost(scope['row'].state)" class="mar-rgt">
+                            </el-link>
+                            <el-link type="primary" :underline="false" v-text="$t('i18n.主机管理页面.解禁')"
+                                     :disabled="!canEnabledHost(scope['row'].state)" class="mar-rgt">
+                            </el-link>
                             <el-dropdown trigger="click">
                                 <span>
                                     {{$t('i18n.主机管理页面.更多操作')}}
@@ -81,16 +84,6 @@
                                     <el-dropdown-item>
                                         <el-link type="primary" :underline="false" v-text="$t('i18n.主机管理页面.编辑详情')"
                                                  @click="initHostsInfoDialog(scope['row'])">
-                                        </el-link>
-                                    </el-dropdown-item>
-                                    <el-dropdown-item>
-                                        <el-link type="primary" :underline="false" v-text="$t('i18n.主机管理页面.禁用')"
-                                                 :disabled="!canDisabledHost(scope['row'].state)">
-                                        </el-link>
-                                    </el-dropdown-item>
-                                    <el-dropdown-item>
-                                        <el-link type="primary" :underline="false" v-text="$t('i18n.主机管理页面.解禁')"
-                                                 :disabled="!canEnabledHost(scope['row'].state)">
                                         </el-link>
                                     </el-dropdown-item>
                                     <el-dropdown-item>
@@ -390,19 +383,23 @@
                 return content;
             },
             getHostsStatusInfo(statusId) {
-                let statusInfo = '';
+                let statusInfo = {
+                    name: '',
+                    css: ''
+                };
 
                 if (statusId) {
-                    for (let index = 0; index < this.hostsStatusList.length; index++) {
-                        let hostsStatusObj = this.hostsStatusList[index];
-
+                    for (let hostsStatusObj of this.hostsStatusList) {
                         if (hostsStatusObj.id === statusId) {
-                            statusInfo = hostsStatusObj;
+                            statusInfo = {
+                                name: hostsStatusObj.name,
+                                css: hostsStatusObj.css
+                            };
                             break;
                         }
                     }
                 }
-                return !!statusInfo ? statusInfo : '-';
+                return statusInfo;
             },
             isWindows(osTypeId) {
                 return osTypeId === this.osTypeList[0].id;

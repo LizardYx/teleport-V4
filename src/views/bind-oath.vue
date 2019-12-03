@@ -256,9 +256,7 @@
                 let keyValue = '';
 
                 if (keyName && !!this.bindWayDialog.selectedId) {
-                    for (let index = 0; index < this.bindWayDialog.detailInfoList.length; index++) {
-                        let oathDetailInfoObj = this.bindWayDialog.detailInfoList[index];
-
+                    for (let oathDetailInfoObj of this.bindWayDialog.detailInfoList) {
                         if (oathDetailInfoObj.id === this.bindWayDialog.selectedId) {
                             keyValue = oathDetailInfoObj[keyName];
                             break;

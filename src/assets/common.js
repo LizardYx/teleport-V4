@@ -23,6 +23,29 @@ export const common = {
         name: 'Linux/Unix',
         icon: 'linux'
     }],
+    protocolTypeList: [{
+        id: 1,
+        name: 'RDP',
+        icon: 'rdp'
+    },{
+        id: 2,
+        name: 'SSH',
+        icon: 'ssh'
+    },{
+        id: 3,
+        name: 'TELNET',
+        icon: 'telnet'
+    }],
+    authTypeList: [{
+        id: 0,
+        name: i18n.t('i18n.无需认证')
+    },{
+        id: 1,
+        name: i18n.t('i18n.用户名/密码 认证')
+    },{
+        id: 2,
+        name: i18n.t('i18n.SSH私钥 认证')
+    }],
     statusList: [{
         id: 1,
         name: i18n.t('i18n.正常'),

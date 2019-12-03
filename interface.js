@@ -57,6 +57,39 @@ let server = http.createServer(function (request, response) {
                 count: 2000
             }
         }
+        if (request.url.indexOf(`${commonUrl}/asset/get-accounts`) >= 0) {
+            data.rows = {
+                data: [{
+                    auth_type: 1,
+                    _id: 2,
+                    password_prompt: "",
+                    protocol_port: 3389,
+                    protocol_type: 1,
+                    state: 1,
+                    username: "11111",
+                    username_prompt: ""
+                },{
+                    auth_type: 1,
+                    _id: 4,
+                    password_prompt: "assword:123123123",
+                    protocol_port: 23,
+                    protocol_type: 3,
+                    state: 1,
+                    username: "123123123",
+                    username_prompt: "ogin:144124"
+                },{
+                    auth_type: 2,
+                    _id: 3,
+                    password_prompt: "",
+                    protocol_port: 22,
+                    protocol_type: 2,
+                    state: 1,
+                    username: "333333",
+                    username_prompt: ""
+                }],
+                count: 3
+            }
+        }
         response.writeHead(statusCode, {'Content-Type': 'text/html'});
         //参数序列化
         response.end(JSON.stringify(data));
