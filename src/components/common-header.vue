@@ -4,6 +4,11 @@
             <router-link class="logo" :to="{path: '/modules-main/system-overview'}">
                 <img src="../assets/img/logo.png" alt="Teleport">
             </router-link>
+            <i v-if="isLogin" class="collapse-icon" v-bind:class="{'el-icon-s-unfold': isCollapse, 'el-icon-s-fold': !isCollapse}"
+               @click="updateCollapse">
+            </i>
+        </div>
+        <div class="header-right">
             <el-dropdown class="lang pad-rgt" trigger="click" @command="updateLang">
                 <label>
                     <icon-svg :icon-class="currentLang.iconName"></icon-svg>
@@ -19,11 +24,6 @@
                     </el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
-            <i v-if="isLogin" class="collapse-icon" v-bind:class="{'el-icon-s-unfold': isCollapse, 'el-icon-s-fold': !isCollapse}"
-               @click="updateCollapse">
-            </i>
-        </div>
-        <div class="header-right">
             <el-dropdown class="user-info">
                 <label>
                     <span>{{$t('i18n.您好，')}}乌拉</span>

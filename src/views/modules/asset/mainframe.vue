@@ -51,8 +51,9 @@
                     </el-table-column>
                     <el-table-column header-align="center" sortable="custom" :label="$t('i18n.主机管理页面.操作系统')">
                         <template slot-scope="scope">
-                            <icon-svg icon-class="windows" v-if="isWindows(scope['row']['os_type'])"></icon-svg>
-                            <icon-svg icon-class="linux" v-if="!isWindows(scope['row']['os_type'])"></icon-svg>
+                            <el-tooltip effect="dark" :content="getOperationSystemInfo(scope['row']['os_type']).name" placement="right">
+                                <icon-svg :icon-class="getOperationSystemInfo(scope['row']['os_type']).icon"></icon-svg>
+                            </el-tooltip>
                         </template>
                     </el-table-column>
                     <el-table-column header-align="center" prop="cid" sortable="custom"
@@ -348,6 +349,12 @@
                         let res = response && response.rows ? response.rows : {};
 
                         this.tableData = res && res.data ? res.data : [];
+                        for (let index = 1; index < 30; index++) {
+                            let newDate = this.tableData[0];
+
+                            newDate._id = newDate._id + index * 10;
+                            this.tableData.push(newDate);
+                        }
                         this.filter.pageNation.totalItem = res && res.count ? res.count : 0;
                     }, (error) => {
                         this.$notify({
@@ -401,8 +408,24 @@
                 }
                 return statusInfo;
             },
-            isWindows(osTypeId) {
-                return osTypeId === this.osTypeList[0].id;
+            getOperationSystemInfo(osTypeId){
+                let OSInfo = {
+                    name: '',
+                    icon: ''
+                };
+
+                if (osTypeId) {
+                    for (let osTypeObj of this.osTypeList) {
+                        if (osTypeObj.id === osTypeId) {
+                            OSInfo = {
+                                name: osTypeObj.name,
+                                icon: osTypeObj.icon
+                            };
+                            break;
+                        }
+                    }
+                }
+                return OSInfo;
             },
             initHostsInfoDialog(hostsInfo) {
                 this.hostsInfoDialogVisible = true;

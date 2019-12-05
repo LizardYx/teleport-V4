@@ -124,12 +124,18 @@
         #nav{
             overflow-y: auto;
             background-color: transparent;
+            .el-submenu__title:hover{
+                background-color: transparent !important;
+            }
+            li:hover{
+                background-color: transparent !important;
+                color: #fff !important;
+            }
         }
         .mainContent{
             background-color: #EEEFF1;
             height: 100%;
             padding-bottom: 0;
-            overflow-y: hidden;
             > div{
                 height: 100%;
                 #pageTitle{
