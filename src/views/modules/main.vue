@@ -1,13 +1,13 @@
 <template>
     <div id="modulesMain">
         <el-container class="content">
-            <el-header class="bord-btm pad-no">
+            <el-header class="pad-no">
                 <common-header></common-header>
             </el-header>
             <el-container>
-                <el-aside id="nav" class="bord-rgt" width="auto">
+                <el-aside id="nav" width="auto">
                     <el-menu class="bord-no" :default-active="$route.path" router :unique-opened="true" :collapse="isCollapse"
-                             background-color="#66696F" text-color="#c3c3c3" active-text-color="#fff">
+                             background-color="transparent" text-color="#c3c3c3" active-text-color="#fff">
                         <el-menu-item index="/modules-main/system-overview">
                             <i class="el-icon-menu"></i>
                             <span slot="title" v-text="$t('i18n.导航页面.系统总览')"></span>
@@ -115,16 +115,18 @@
 
 <style lang="scss">
     #modulesMain{
+        background: url("../../assets/img/bg-img.jpg") no-repeat;
+        background-size: 100%;
         > .content{
             height: 100vh;
             overflow-y: hidden;
         }
         #nav{
             overflow-y: auto;
-            background-color: #66696F;
+            background-color: transparent;
         }
         .mainContent{
-            background-color: #d1d4d85e;
+            background-color: #EEEFF1;
             height: 100%;
             padding-bottom: 0;
             overflow-y: hidden;
@@ -165,7 +167,7 @@
             }
         }
         footer{
-            background-color: #d1d4d85e;
+            background-color: #EEEFF1;
         }
     }
 </style>

@@ -1,4 +1,8 @@
 const path = require("path");
+
+function resolve (dir) {
+    return path.join(__dirname, dir)
+}
 module.exports = {
     // 部署应用包时的基本 URL
     publicPath: process.env.NODE_ENV === 'production' ? '/' : '/',
@@ -19,6 +23,10 @@ module.exports = {
                 `
             }
         }
+    },
+    chainWebpack: config => {
+        config.resolve.alias
+            .set('@src', resolve('src'))
     },
     pluginOptions: {
         'style-resources-loader': {

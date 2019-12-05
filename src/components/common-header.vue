@@ -1,7 +1,7 @@
 <template>
     <div id="header" class="pad-hor">
         <div class="header-left">
-            <router-link class="logo" :to="{path: isLogin ? '/modules-main/system-overview' : '/'}">
+            <router-link class="logo" :to="{path: '/modules-main/system-overview'}">
                 <img src="../assets/img/logo.png" alt="Teleport">
             </router-link>
             <el-dropdown class="lang pad-rgt" trigger="click" @command="updateLang">
@@ -117,12 +117,12 @@
                 position: relative;
                 top: -15px;
                 font-size: 30px;
-                color: #66696F;
+                color: #fff;
                 cursor: pointer;
             }
         }
-        .header-right{
-
+        .el-dropdown{
+            color: #fff;
         }
     }
 </style>
