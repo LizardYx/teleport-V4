@@ -81,13 +81,71 @@
   content: " ";
   clear: both;
 }
+.box-inline{
+  display: inline-block;
+}
+.box-block{
+  display: block;
+}
 .text-center{
   text-align: center;
 }
-a,
+.float-left{
+  float: left;
+}
+.float-right{
+  float: right;
+}
+.text-semibold{
+  font-weight: 600;
+}
+.text-bold{
+  font-weight: 700;
+}
 .color-main{
   color: $color-main;
 }
+.color-warning{
+  color: $color-warning;
+}
+.color-success{
+  color: $color-success;
+}
 .bg-color-main{
   background-color: $color-main;
+}
+.label-tag{
+  padding: 2px 6px;
+  color: #fff;
+  background-color: $color-main;
+  border-radius: 4px;
+}
+a{
+  color: $color-main;
+  cursor: pointer;
+}
+.el-popover{
+  color: $color-info;
+}
+.el-dialog__body{
+  padding-bottom: 0;
+}
+.basic-box-shadow{
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .12);
+}
+.el-dropdown-menu.operation > li{
+  padding: 0;
+}
+
+.el-dropdown-menu.operation a{
+  padding: 0 20px;
+  display: block;
+}
+button:hover{
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.25);
+}
+
+button[aria-label='Close'],
+button[disabled='disabled']:hover{
+  box-shadow: none;
 }

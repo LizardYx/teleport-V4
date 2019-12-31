@@ -1,16 +1,14 @@
 /**
  * api接口统一管理
  */
-import {asyncGet, asyncPost} from './axios'
+const baseUrl = 'teleport/api/v3';
 
-/**
- * 登录
- * @param userName {string} [用户名]
- * @param password {int} [密码]
- * @param verificationCode {int} [验证码,6]
- * @param rememberMe {blur} [记住我]
- * @returns {Promise}
- */
-export const api_login = (params) => asyncPost('teleport/api/v3/login', params);
-
-export const api_serverTime = () => asyncGet('teleport/api/v3/serverTime', {});
+export const api = {
+    login: `${baseUrl}/login`, //登录
+    verifyUser: `${baseUrl}/verify-user`, //验证用户名密码
+    serverTime: `${baseUrl}/serverTime`, //服务器事时间
+    bindOath: `${baseUrl}/user/bind-oath`, //绑定身份验证器
+    bindOathQRCode: `${baseUrl}/user/bind-oath-qrcode`, //绑定身份验证器二维码
+    getHostsList: `${baseUrl}/asset/get-hosts`, //获取主机列表
+    getHostAccountList: `${baseUrl}/asset/get-accounts`, //获取主机账号列表
+};
