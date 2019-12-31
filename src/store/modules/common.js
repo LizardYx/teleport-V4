@@ -1,10 +1,13 @@
+import fa from "element-ui/src/locale/lang/fa";
+
 const common = {
     namespaced: true,
     state: {
         isLogin: false,
         token: '',
         userInfo: {},
-        isCollapse: false
+        isCollapse: false,
+        fixToolbar: false
     },
     mutations: {
         updateLogin(state, newStatus){
@@ -28,6 +31,9 @@ const common = {
         },
         updateCollapse(state, newCollapse) {
             state.isCollapse = newCollapse;
+        },
+        updateFixToolBar(state, isFixed) {
+            state.fixToolbar = isFixed;
         }
     },
     actions: {
@@ -42,6 +48,9 @@ const common = {
         },
         updateCollapse(context, payload) {
             context.commit('updateCollapse', payload);
+        },
+        updateFixToolBar(context, payload) {
+            context.commit('updateFixToolBar', payload);
         }
     },
     getters: {

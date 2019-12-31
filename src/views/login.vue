@@ -70,12 +70,12 @@
 </template>
 
 <script>
-    import NoPermissionHeader from '../components/no-permission-header';
-    import copyRight from '../components/copy-right';
-    import {setup} from '../../public/lib/bg-canvas/swirl';
-    import {asyncPost} from '../assets/axios'
-    import {api} from "../assets/api";
-    import store from "../store/store";
+    import NoPermissionHeader from '@src/components/no-permission-header';
+    import copyRight from '@src/components/copy-right';
+    import {setup} from '@public/lib/bg-canvas/swirl';
+    import {asyncPost} from '@src/assets/axios'
+    import {api} from "@src/assets/api";
+    import store from "@src/store/store";
 
     export default {
         name: 'login',
@@ -144,7 +144,7 @@
             //如果没有延迟可能会出现swirl.js使用noise.min.js中的SimplexNoise时,SimplexNoise未定义
             setTimeout(function () {
                 setup();
-            }, 50)
+            }, 80)
         }
     };
 </script>

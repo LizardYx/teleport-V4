@@ -5,7 +5,7 @@ function resolve (dir) {
 }
 module.exports = {
     // 部署应用包时的基本 URL
-    publicPath: process.env.NODE_ENV === 'production' ? '/' : '/',
+    publicPath: process.env.NODE_ENV === 'production' ? './' : '/',
     // 当运行 vue-cli-service build 时构建文件的目录
     outputDir: 'dist',
     // 生成的静态资源文件名中是否包含 hash
@@ -27,6 +27,7 @@ module.exports = {
     chainWebpack: config => {
         config.resolve.alias
             .set('@src', resolve('src'))
+            .set('@public', resolve('public'))
     },
     pluginOptions: {
         'style-resources-loader': {

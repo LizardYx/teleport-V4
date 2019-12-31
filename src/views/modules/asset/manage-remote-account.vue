@@ -61,7 +61,7 @@
                         </template>
                     </el-table-column>
                     <el-table-column header-align="center" :label="$t('i18n.主机管理页面.操作')">
-                        <template slot-scope="scope">
+                        <template>
                             <el-link type="primary" :underline="false" v-text="$t('i18n.主机管理页面.禁用')" class="mar-rgt">
                             </el-link>
                             <el-link type="primary" :underline="false" v-text="$t('i18n.主机管理页面.解禁')" class="mar-rgt">
@@ -109,8 +109,8 @@
 </template>
 
 <script>
-    import {asyncGet} from '../../../assets/axios'
-    import {api} from "../../../assets/api";
+    import {asyncGet} from '@src/assets/axios'
+    import {api} from "@src/assets/api";
 
     export default {
         name: "manage-remote-account",

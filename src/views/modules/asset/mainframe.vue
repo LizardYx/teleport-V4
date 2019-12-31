@@ -278,7 +278,7 @@
                     <div class="content">
                         <span>
                             {{$t('i18n.主机管理页面.批量导入主机和账号需要上传csv格式的文件，您可以下载')}}
-                            <a href="../../../download/teleport-example-asset.csv"
+                            <a :href="`${publicPath}file/teleport-example-asset.csv`"
                                download="teleport-example-asset.csv">
                                 {{$t('i18n.主机管理页面.资产信息文件模板')}}
                             </a>
@@ -292,17 +292,21 @@
                 </div>
             </el-dialog>
         </div>
+        <fix-tool-bar ref="toolbar"></fix-tool-bar>
     </div>
 </template>
 
 <script>
-    import {asyncGet} from '../../../assets/axios'
-    import {api} from "../../../assets/api";
+    import {asyncGet} from '@src/assets/axios'
+    import {api} from "@src/assets/api";
+    import FixToolBar from  "@src/components/fix-tool-bar"
 
     export default {
         name: 'mainframe',
+        components: {FixToolBar},
         data() {
             return {
+                publicPath: process.env.BASE_URL,
                 filter: {
                     pageNation: this.common.initPageNation(),
                     searchValue: '',
@@ -585,6 +589,12 @@
         },
         created() {
             this.initPageInfo();
+        },
+        mounted() {
+            this.$refs.toolbar.fixToolBarInit(100);
+        },
+        beforeDestroy() {
+            this.$refs.toolbar.removeFixToolBar();
         }
     };
 </script>

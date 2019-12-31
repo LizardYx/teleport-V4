@@ -143,11 +143,11 @@
 
 <script>
     import NoPermissionHeader from '../components/no-permission-header';
-    import copyRight from '../components/copy-right';
-    import {setup} from '../../public/lib/bg-canvas/swirl';
-    import {formatTimeToStr} from '../assets/filter/date-format';
-    import {asyncGet, asyncPost} from '../assets/axios'
-    import {api} from "../assets/api";
+    import copyRight from '@src/components/copy-right';
+    import {setup} from '@public/lib/bg-canvas/swirl';
+    import {formatTimeToStr} from '@src/assets/filter/date-format';
+    import {asyncGet, asyncPost} from '@src/assets/axios'
+    import {api} from "@src/assets/api";
 
     export default {
         name: 'bindAuthenticator',
@@ -348,7 +348,7 @@
             //初始化背景canvas
             setTimeout(function () {
                 setup();
-            }, 50);
+            }, 80);
             this.initServerDate(); //初始化服务器时间
         },
         beforeDestroy() {

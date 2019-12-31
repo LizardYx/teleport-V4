@@ -73,12 +73,12 @@
                         </el-menu-item>
                     </el-menu>
                 </el-aside>
-                <el-container>
-                    <el-main class="mainContent">
+                <el-container id="content">
+                    <el-main id="mainContent" v-bind:class="{'fixed-tool-bar': isFixToolBar, 'isCollapse': isCollapse}">
                         <router-view></router-view>
                     </el-main>
                     <el-footer height="40px">
-                        <copyRight></copyRight>
+                        <copy-right></copy-right>
                     </el-footer>
                 </el-container>
             </el-container>
@@ -88,15 +88,15 @@
 
 <script>
     import Vue from 'vue';
-    import CommonHeader from '../../components/common-header';
-    import copyRight from '../../components/copy-right';
-    import store from "../../store/store";
-    import {common} from "../../assets/common";
+    import CommonHeader from '@src/components/common-header';
+    import CopyRight from '@src/components/copy-right';
+    import store from "@src/store/store";
+    import {common} from "@src/assets/common";
 
     Vue.prototype.common = common;
     export default {
         name: "modulesMain",
-        components: {CommonHeader, copyRight},
+        components: {CommonHeader, CopyRight},
         data() {
             return {
 
@@ -105,6 +105,9 @@
         computed: {
             isCollapse: function () {
                 return store.state.common.isCollapse;
+            },
+            isFixToolBar: function () {
+                return store.state.common.fixToolbar;
             }
         },
         methods: {
@@ -132,41 +135,68 @@
                 color: #fff !important;
             }
         }
-        .mainContent{
-            background-color: #EEEFF1;
-            height: 100%;
-            padding-bottom: 0;
-            > div{
+        #content{
+            height: calc(100vh - 60px);
+            #mainContent{
+                background-color: #EEEFF1;
                 height: 100%;
-                #pageTitle{
-                    font-size: 20px;
-                    padding: 15px 0 30px;
-                    .page-title{
+                padding-bottom: 0;
+                > div{
+                    height: 100%;
+                    #pageTitle{
                         font-size: 20px;
+                        padding: 15px 0 30px;
+                        .page-title{
+                            font-size: 20px;
+                        }
                     }
-                }
-                #pageContent{
-                    background-color: #fff;
-                    padding: 15px 20px;
-                    .tool-bar{
-                        margin-bottom: 30px;
-                        .search{
-                            input{
-                                float: left;
-                                min-width: 225px;
+                    #pageContent{
+                        background-color: #fff;
+                        padding: 15px 20px;
+                        .tool-bar{
+                            margin-bottom: 30px;
+                            .search{
+                                input{
+                                    float: left;
+                                    min-width: 225px;
+                                }
+                            }
+                        }
+                        .notice{
+                            .title{
+                                font-weight: 600;
+                                font-size: 16px;
+                                color: $color-warning;
+                            }
+                        }
+                        .pagination{
+                            .el-pagination{
+                                float: right;
                             }
                         }
                     }
-                    .notice{
-                        .title{
-                            font-weight: 600;
-                            font-size: 16px;
-                            color: $color-warning;
+                }
+                &.fixed-tool-bar{
+                    #pageContent{
+                        padding-top: 77px;
+                        .tool-bar{
+                            position: fixed;
+                            top: 60px;
+                            display: flex;
+                            left: 240px;
+                            right: 55px;
+                            align-items: center;
+                            z-index: 10;
+                            height: 50px;
+                            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.25);
+                            background-color: #EEEFF1;
                         }
                     }
-                    .pagination{
-                        .el-pagination{
-                            float: right;
+                }
+                &.isCollapse{
+                    #pageContent{
+                        .tool-bar{
+                            left: 104px;
                         }
                     }
                 }
