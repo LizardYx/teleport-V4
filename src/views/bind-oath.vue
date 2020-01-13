@@ -135,7 +135,7 @@
             </div>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="bindOathDialog.visible = false" v-text="$t('i18n.绑定身份验证器页面.取消')"></el-button>
-                <el-button type="primary" @click="confirmBindOath" v-text="$t('i18n.绑定身份验证器页面.验证并完成绑定')"></el-button>
+                <el-button type="primary" @click="confirmBindOath()" v-text="$t('i18n.绑定身份验证器页面.验证并完成绑定')"></el-button>
             </div>
         </el-dialog>
     </div>
@@ -311,12 +311,13 @@
             },
             confirmBindOath() {
                 if (this.validateBindOath()) {
-                    this.$confirm(this.$t('i18n.绑定身份验证器页面.确认绑定该身份验证器？'))
-                        .then(() => {
-                            this.bindOathToUser();
-                            this.bindOathDialog.visible = false;
-                        })
-                        .catch(() => {});
+                    this.$confirm(this.$t('i18n.绑定身份验证器页面.确认绑定该身份验证器？'), {
+                        closeOnClickModal: false,
+                    }).then(() => {
+                        this.bindOathToUser();
+                        this.bindOathDialog.visible = false;
+                    })
+                    .catch(() => {});
                 }
             },
             bindOathToUser() {

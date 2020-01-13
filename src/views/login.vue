@@ -27,7 +27,7 @@
                             <el-checkbox class="remember-me mar-btm" v-model="loginInfo.rememberMe" v-text="$t('i18n.登陆页面.记住我，12小时内免登陆')">
                             </el-checkbox>
                             <el-form-item>
-                                <el-button type="primary" class="login-btn" @click="login" v-text="$t('i18n.登陆页面.登陆')"></el-button>
+                                <el-button type="primary" class="login-btn" @click="login()" v-text="$t('i18n.登陆页面.登陆')"></el-button>
                             </el-form-item>
                         </el-form>
                     </el-tab-pane>
@@ -51,7 +51,7 @@
                             <el-checkbox class="remember-me mar-btm" v-model="loginInfo.rememberMe" v-text="$t('i18n.登陆页面.记住我，12小时内免登陆')">
                             </el-checkbox>
                             <el-form-item>
-                                <el-button type="primary" class="login-btn" @click="login" v-text="$t('i18n.登陆页面.登陆')"></el-button>
+                                <el-button type="primary" class="login-btn" @click="login()" v-text="$t('i18n.登陆页面.登陆')"></el-button>
                             </el-form-item>
                         </el-form>
                     </el-tab-pane>

@@ -73,8 +73,8 @@
                         </el-menu-item>
                     </el-menu>
                 </el-aside>
-                <el-container id="content">
-                    <el-main id="mainContent" v-bind:class="{'fixed-tool-bar': isFixToolBar, 'isCollapse': isCollapse}">
+                <el-container id="content" v-bind:class="{'fixed-tool-bar': isFixToolBar}">
+                    <el-main id="mainContent">
                         <router-view></router-view>
                     </el-main>
                     <el-footer height="40px">
@@ -137,6 +137,24 @@
         }
         #content{
             height: calc(100vh - 60px);
+            &.fixed-tool-bar{
+                position: relative;
+                #pageContent{
+                    padding-top: 77px !important;
+                    .tool-bar{
+                        position: absolute;
+                        top: 0;
+                        display: flex;
+                        left: 40px;
+                        right: 54px;
+                        align-items: center;
+                        z-index: 10;
+                        height: 50px;
+                        box-shadow: 0 3px 15px rgba(0, 0, 0, 0.25);
+                        background-color: #EEEFF1;
+                    }
+                }
+            }
             #mainContent{
                 background-color: #EEEFF1;
                 height: 100%;
@@ -173,30 +191,6 @@
                             .el-pagination{
                                 float: right;
                             }
-                        }
-                    }
-                }
-                &.fixed-tool-bar{
-                    #pageContent{
-                        padding-top: 77px;
-                        .tool-bar{
-                            position: fixed;
-                            top: 60px;
-                            display: flex;
-                            left: 240px;
-                            right: 55px;
-                            align-items: center;
-                            z-index: 10;
-                            height: 50px;
-                            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.25);
-                            background-color: #EEEFF1;
-                        }
-                    }
-                }
-                &.isCollapse{
-                    #pageContent{
-                        .tool-bar{
-                            left: 104px;
                         }
                     }
                 }

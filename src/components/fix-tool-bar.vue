@@ -23,6 +23,7 @@
             removeFixToolBar() {
                 const mainContent = document.getElementById('mainContent');
 
+                store.commit('common/updateFixToolBar', false);
                 mainContent.removeEventListener('scroll', this.fixToolBar);
             },
             fixToolBar() {

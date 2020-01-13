@@ -6,25 +6,25 @@
         <div id="pageContent">
             <el-row :gutter="20" class="tool-bar">
                 <el-col :span="18">
-                    <el-button size="mini" type="primary" @click="initHostsInfoDialog">
+                    <el-button size="mini" type="primary" @click="initHostsInfoDialog()">
                         <i class="el-icon-circle-plus-outline"></i>
                         {{$t('i18n.主机管理页面.添加主机')}}
                     </el-button>
-                    <el-button size="mini" type="primary" @click="initImportAssetsDialog">
+                    <el-button size="mini" type="primary" @click="initImportAssetsDialog()">
                         <i class="el-icon-circle-plus-outline"></i>
                         {{$t('i18n.主机管理页面.导入主机和账号')}}
                     </el-button>
-                    <el-button size="mini" type="primary" :disabled="!selectedIdList[0]">
+                    <el-button size="mini" type="primary" :disabled="!selectedIdList[0]" @click="confirmDisabledHost(selectedIdList)">
                         {{$t('i18n.主机管理页面.禁用')}}
                     </el-button>
-                    <el-button size="mini" type="primary" :disabled="!selectedIdList[0]">
+                    <el-button size="mini" type="primary" :disabled="!selectedIdList[0]" @click="confirmEnabledHost(selectedIdList)">
                         {{$t('i18n.主机管理页面.解禁')}}
                     </el-button>
-                    <el-button size="mini" type="primary" :disabled="!selectedIdList[0]">
+                    <el-button size="mini" type="primary" :disabled="!selectedIdList[0]" @click="confirmDeleteHost(selectedIdList)">
                         <i class="el-icon-delete"></i>
                         {{$t('i18n.主机管理页面.删除')}}
                     </el-button>
-                    <el-button size="mini" type="primary" @click="getHostList">
+                    <el-button size="mini" type="primary" @click="getHostList()">
                         <i class="el-icon-refresh"></i>
                         {{$t('i18n.主机管理页面.刷新列表')}}
                     </el-button>
@@ -59,22 +59,27 @@
                     <el-table-column header-align="center" prop="cid" sortable="custom"
                                      :label="$t('i18n.主机管理页面.资产编号')">
                     </el-table-column>
-                    <el-table-column header-align="center" prop="acc_count" :label="$t('i18n.主机管理页面.账号数')">
+                    <el-table-column header-align="center" :label="$t('i18n.主机管理页面.账号数')">
+                        <template slot-scope="scope">
+                            <el-link type="primary" :underline="false" v-text="scope['row']['acc_count']"
+                                     @click="MRemoteAccount(scope['row']['id'], scope['row'].name)">
+                            </el-link>
+                        </template>
                     </el-table-column>
                     <el-table-column sortable="custom" :label="$t('i18n.主机管理页面.状态')" align="center">
                         <template slot-scope="scope">
-                            <el-tag effect="dark" v-text="getHostsStatusInfo(scope['row'].state).name"
+                            <el-tag effect="dark" v-text="getHostsStatusInfo(scope['row'].state).name"  size="small"
                                     :type="getHostsStatusInfo(scope['row'].state).css">
                             </el-tag>
                         </template>
                     </el-table-column>
                     <el-table-column header-align="center" :label="$t('i18n.主机管理页面.操作')">
                         <template slot-scope="scope">
-                            <el-link type="primary" :underline="false" v-text="$t('i18n.主机管理页面.禁用')"
-                                     :disabled="!canDisabledHost(scope['row'].state)" class="mar-rgt">
+                            <el-link type="primary" class="mar-rgt" :underline="false" v-text="$t('i18n.主机管理页面.禁用')"
+                                     :disabled="!canDisabledHost(scope['row'].state)" @click="confirmDisabledHost([scope['row'].id])">
                             </el-link>
-                            <el-link type="primary" :underline="false" v-text="$t('i18n.主机管理页面.解禁')"
-                                     :disabled="!canEnabledHost(scope['row'].state)" class="mar-rgt">
+                            <el-link type="primary" class="mar-rgt" :underline="false" v-text="$t('i18n.主机管理页面.解禁')"
+                                     :disabled="!canEnabledHost(scope['row'].state)" @click="confirmEnabledHost([scope['row'].id])">
                             </el-link>
                             <el-dropdown trigger="click">
                                 <span>
@@ -89,7 +94,7 @@
                                     </el-dropdown-item>
                                     <el-dropdown-item>
                                         <el-link type="primary" :underline="false" v-text="$t('i18n.主机管理页面.管理远程账号')"
-                                                 @click="MRemoteAccount(scope['row']['_id'], scope['row'].name)">
+                                                 @click="MRemoteAccount(scope['row']['id'], scope['row'].name)">
                                         </el-link>
                                     </el-dropdown-item>
                                     <el-dropdown-item>
@@ -99,7 +104,7 @@
                                     </el-dropdown-item>
                                     <el-dropdown-item>
                                         <el-link type="primary" :underline="false" v-text="$t('i18n.主机管理页面.删除')"
-                                                 @click="deleteHost">
+                                                 @click="confirmDeleteHost([scope['row'].id])">
                                         </el-link>
                                     </el-dropdown-item>
                                 </el-dropdown-menu>
@@ -116,7 +121,7 @@
                             <div class="content">
                                 <span>
                                     {{$t('i18n.主机管理页面.批量导入主机和账号需要上传csv格式的文件，您可以下载')}}
-                                    <a href="../../../download/teleport-example-asset.csv"
+                                    <a href="../../../../file/teleport-example-asset.csv"
                                        download="teleport-example-asset.csv">
                                         {{$t('i18n.主机管理页面.资产信息文件模板')}}
                                     </a>
@@ -141,13 +146,13 @@
                     </el-col>
                 </el-row>
             </div>
-            <el-dialog :title="$t('i18n.主机管理页面.添加主机')" :visible.sync="hostsInfoDialogVisible" width="768px"
+            <el-dialog :title="hostsInfoDialog.title" :visible.sync="hostsInfoDialogVisible" width="768px"
                        :close-on-click-modal="false" :close-on-press-escape="false" v-if="hostsInfoDialogVisible">
                 <el-form :model="hostsInfoDialog" status-icon :rules="hostsInfoDialog.rules" ref="hostsInfoDialog"
                          size="medium">
                     <el-form-item prop="systemInfo.name" :label="$t('i18n.主机管理页面.远程主机系统')" label-width="120px">
-                        <el-dropdown trigger="click" @command="updateSystem">
-                            <el-button>
+                        <el-dropdown trigger="click" @command="updateSystem" size="mini" placement="bottom-start">
+                            <el-button size="mini">
                                 <icon-svg v-if="hostsInfoDialog.systemInfo && hostsInfoDialog.systemInfo.icon"
                                           :icon-class="hostsInfoDialog.systemInfo.icon">
                                 </icon-svg>
@@ -167,14 +172,15 @@
                     <el-row>
                         <el-col :span="10">
                             <el-form-item prop="RemoteHostAddress" :label="$t('i18n.主机管理页面.远程主机地址')" label-width="120px">
-                                <el-input v-model="hostsInfoDialog.RemoteHostAddress" :placeholder="$t('i18n.主机管理页面.请输入远程主机IP地址')">
+                                <el-input v-model="hostsInfoDialog.RemoteHostAddress" :placeholder="$t('i18n.主机管理页面.请输入远程主机IP地址')"
+                                          size="mini">
                                 </el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-form-item prop="connectedModal.name" :label="$t('i18n.主机管理页面.连接模式')" label-width="120px">
-                        <el-dropdown trigger="click" @command="updateConnectedModal">
-                            <el-button class="mar-rgt">
+                        <el-dropdown trigger="click" @command="updateConnectedModal" size="mini" placement="bottom-start">
+                            <el-button size="mini" class="mar-rgt">
                                 {{hostsInfoDialog.connectedModal && hostsInfoDialog.connectedModal.name ?
                                 hostsInfoDialog.connectedModal.name : $t('i18n.主机管理页面.请选择连接模式')}}
                                 <i class="el-icon-arrow-down el-icon--right"></i>
@@ -219,7 +225,7 @@
                         <el-col :span="10">
                             <el-form-item prop="RoutingHost.Address" :label="$t('i18n.主机管理页面.路由主机地址')"
                                           label-width="120px">
-                                <el-input v-model="hostsInfoDialog.RoutingHost.Address"
+                                <el-input v-model="hostsInfoDialog.RoutingHost.Address" size="mini"
                                           :placeholder="$t('i18n.主机管理页面.请输入路由主机IP地址')">
                                 </el-input>
                             </el-form-item>
@@ -227,7 +233,7 @@
                         <el-col :span="8">
                             <el-form-item prop="RoutingHost.port" :label="$t('i18n.主机管理页面.映射端口')"
                                           label-width="100px">
-                                <el-input v-model="hostsInfoDialog.RoutingHost.port"
+                                <el-input v-model="hostsInfoDialog.RoutingHost.port" size="mini"
                                           :placeholder="$t('i18n.主机管理页面.请输入映射端口')">
                                 </el-input>
                             </el-form-item>
@@ -236,7 +242,7 @@
                     <el-row>
                         <el-col :span="13">
                             <el-form-item :label="$t('i18n.主机管理页面.名称')" label-width="120px">
-                                <el-input v-model="hostsInfoDialog.name" :placeholder="$t('i18n.主机管理页面.请输入名称')">
+                                <el-input v-model="hostsInfoDialog.name" :placeholder="$t('i18n.主机管理页面.请输入名称')" size="mini">
                                 </el-input>
                             </el-form-item>
                         </el-col>
@@ -244,7 +250,7 @@
                     <el-row>
                         <el-col :span="13">
                             <el-form-item :label="$t('i18n.主机管理页面.资产编号')" label-width="120px">
-                                <el-input v-model="hostsInfoDialog.assetNumber"
+                                <el-input v-model="hostsInfoDialog.assetNumber" size="mini"
                                           :placeholder="$t('i18n.主机管理页面.请输入资产编号')">
                                 </el-input>
                             </el-form-item>
@@ -253,7 +259,7 @@
                     <el-row>
                         <el-col :span="20">
                             <el-form-item :label="$t('i18n.主机管理页面.备注')" label-width="120px">
-                                <el-input type="textarea" :rows="3" v-model="hostsInfoDialog.remark"
+                                <el-input type="textarea" :rows="3" v-model="hostsInfoDialog.remark" size="mini"
                                           :placeholder="$t('i18n.主机管理页面.请输入备注')">
                                 </el-input>
                             </el-form-item>
@@ -261,8 +267,8 @@
                     </el-row>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button @click="cancelAddHosts">{{$t('i18n.主机管理页面.取消')}}</el-button>
-                    <el-button type="primary" @click="submitAddHosts">{{$t('i18n.主机管理页面.确定')}}</el-button>
+                    <el-button type="primary" @click="submitAddHosts()" size="mini">{{$t('i18n.主机管理页面.确定')}}</el-button>
+                    <el-button @click="cancelAddHosts()" size="mini">{{$t('i18n.主机管理页面.取消')}}</el-button>
                 </div>
             </el-dialog>
             <el-dialog :title="$t('i18n.主机管理页面.导入资产（主机及账号）')" :visible.sync="importADialogVisible"
@@ -278,7 +284,7 @@
                     <div class="content">
                         <span>
                             {{$t('i18n.主机管理页面.批量导入主机和账号需要上传csv格式的文件，您可以下载')}}
-                            <a :href="`${publicPath}file/teleport-example-asset.csv`"
+                            <a href="../../../../file/teleport-example-asset.csv"
                                download="teleport-example-asset.csv">
                                 {{$t('i18n.主机管理页面.资产信息文件模板')}}
                             </a>
@@ -287,8 +293,8 @@
                     </div>
                 </div>
                 <div slot="footer" class="dialog-footer">
-                    <el-button @click="importADialogVisible = false">{{$t('i18n.主机管理页面.取消')}}</el-button>
-                    <el-button type="primary" @click="importAssets">{{$t('i18n.主机管理页面.确定')}}</el-button>
+                    <el-button type="primary" size="mini" @click="importAssets()">{{$t('i18n.主机管理页面.确定')}}</el-button>
+                    <el-button size="mini" @click="importADialogVisible = false">{{$t('i18n.主机管理页面.取消')}}</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -306,7 +312,6 @@
         components: {FixToolBar},
         data() {
             return {
-                publicPath: process.env.BASE_URL,
                 filter: {
                     pageNation: this.common.initPageNation(),
                     searchValue: '',
@@ -353,12 +358,6 @@
                         let res = response && response.rows ? response.rows : {};
 
                         this.tableData = res && res.data ? res.data : [];
-                        for (let index = 1; index < 30; index++) {
-                            let newDate = this.tableData[0];
-
-                            newDate._id = newDate._id + index * 10;
-                            this.tableData.push(newDate);
-                        }
                         this.filter.pageNation.totalItem = res && res.count ? res.count : 0;
                     }, (error) => {
                         this.$notify({
@@ -372,7 +371,7 @@
                 let selectedIdList = [];
 
                 selectedItemList.forEach(function (selectedItemObj) {
-                    selectedIdList.push(selectedItemObj['_id']);
+                    selectedIdList.push(selectedItemObj.id);
                 });
                 this.selectedIdList = selectedIdList;
             },
@@ -435,6 +434,7 @@
                 this.hostsInfoDialogVisible = true;
                 this.hostsInfoDialog = {
                     isCreate: !hostsInfo,
+                    title: !hostsInfo ? this.$t('i18n.主机管理页面.添加主机') : this.$t('i18n.主机管理页面.编辑主机详情'),
                     systemInfo: {
                         id: 0,
                         name: '',
@@ -559,22 +559,71 @@
             canDisabledHost(status) {
                 return status && status === this.hostsStatusList[0].id;
             },
+            confirmDisabledHost(idList) {
+                if (idList && idList[0]) {
+                    this.$confirm(this.$t('i18n.主机管理页面.确认禁用远程主机'), this.$t('i18n.主机管理页面.禁用'), {
+                        closeOnClickModal: false,
+                        confirmButtonText: this.$t('i18n.主机管理页面.确定'),
+                        cancelButtonText: this.$t('i18n.主机管理页面.取消'),
+                        type: 'warning'
+                    }).then(() =>{
+                        this.disabledHost(idList);
+                    });
+                }
+            },
+            disabledHost(idList) {
+                //call API
+                this.getHostList();
+                this.$notify({
+                    type: 'success',
+                    message: this.$t('i18n.主机管理页面.禁用远程主机成功'),
+                    duration: 5000
+                });
+            },
             canEnabledHost(status) {
                 return status && status === this.hostsStatusList[1].id;
             },
-            deleteHost() {
-                this.$confirm(this.$t('i18n.主机管理页面.确定删除该主机'), this.$t('i18n.主机管理页面.删除'), {
-                    confirmButtonText: this.$t('i18n.主机管理页面.确定'),
-                    cancelButtonText: this.$t('i18n.主机管理页面.取消'),
-                    type: 'warning'
-                }).then(() =>{
-                    // this.filter.pageNation.pageNo = 1;
-                    this.getHostList();
-                    this.$notify({
-                        type: 'success',
-                        message: this.$t('i18n.主机管理页面.删除主机成功'),
-                        duration: 5000
+            confirmEnabledHost(idList) {
+                if (idList && idList[0]) {
+                    this.$confirm(this.$t('i18n.主机管理页面.确认解禁远程主机'), this.$t('i18n.主机管理页面.禁用'), {
+                        closeOnClickModal: false,
+                        confirmButtonText: this.$t('i18n.主机管理页面.确定'),
+                        cancelButtonText: this.$t('i18n.主机管理页面.取消'),
+                        type: 'warning'
+                    }).then(() =>{
+                        this.enabledHost(idList);
                     });
+                }
+            },
+            enabledHost(idList) {
+                //call API
+                this.getHostList();
+                this.$notify({
+                    type: 'success',
+                    message: this.$t('i18n.主机管理页面.解禁远程主机成功'),
+                    duration: 5000
+                });
+            },
+            confirmDeleteHost(idList) {
+                if (idList && idList[0]) {
+                    this.$confirm(this.$t('i18n.主机管理页面.确定删除该主机'), this.$t('i18n.主机管理页面.删除'), {
+                        closeOnClickModal: false,
+                        confirmButtonText: this.$t('i18n.主机管理页面.确定'),
+                        cancelButtonText: this.$t('i18n.主机管理页面.取消'),
+                        type: 'warning'
+                    }).then(() =>{
+                        this.deleteHost(idList);
+                    });
+                }
+            },
+            deleteHost(idList) {
+                //call API
+                this.filter.pageNation.pageNo = 1;
+                this.getHostList();
+                this.$notify({
+                    type: 'success',
+                    message: this.$t('i18n.主机管理页面.删除主机成功'),
+                    duration: 5000
                 });
             },
             MRemoteAccount(id, name) {

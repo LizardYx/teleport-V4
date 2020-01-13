@@ -26,25 +26,28 @@ export const common = {
     protocolTypeList: [{
         id: 1,
         name: 'RDP',
-        icon: 'rdp'
+        icon: 'rdp',
+        port: 3389
     },{
         id: 2,
         name: 'SSH',
-        icon: 'ssh'
+        icon: 'ssh',
+        port: 22
     },{
         id: 3,
         name: 'TELNET',
-        icon: 'telnet'
+        icon: 'telnet',
+        port: 23
     }],
     authTypeList: [{
         id: 0,
         name: i18n.t('i18n.无需认证')
     },{
         id: 1,
-        name: i18n.t('i18n.用户名/密码 认证')
+        name: i18n.t('i18n.用户名/密码')
     },{
         id: 2,
-        name: i18n.t('i18n.SSH私钥 认证')
+        name: i18n.t('i18n.SSH私钥')
     }],
     statusList: [{
         id: 1,

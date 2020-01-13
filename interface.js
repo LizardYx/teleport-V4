@@ -26,7 +26,6 @@ let server = http.createServer(function (request, response) {
         if (request.url.indexOf(`${commonUrl}/asset/get-hosts`) >= 0) {
             data.rows = {
                 data: [{
-                    _id: 1,
                     acc_count: 0,
                     cid: '111',
                     desc: 'this is for test',
@@ -40,7 +39,6 @@ let server = http.createServer(function (request, response) {
                     state: 1,
                     type: 1,
                 },{
-                    _id: 2,
                     acc_count: 0,
                     cid: '1112',
                     desc: '1.备注    123123\n2备注说明\n\n4.备注',
@@ -60,32 +58,32 @@ let server = http.createServer(function (request, response) {
         if (request.url.indexOf(`${commonUrl}/asset/get-accounts`) >= 0) {
             data.rows = {
                 data: [{
-                    auth_type: 1,
-                    _id: 2,
-                    password_prompt: "",
-                    protocol_port: 3389,
+                    id: 2,
+                    state: 1,
                     protocol_type: 1,
-                    state: 1,
-                    username: "11111",
-                    username_prompt: ""
-                },{
+                    protocol_port: 3389,
                     auth_type: 1,
-                    _id: 4,
-                    password_prompt: "assword:123123123",
-                    protocol_port: 23,
-                    protocol_type: 3,
-                    state: 1,
-                    username: "123123123",
-                    username_prompt: "ogin:144124"
+                    username: "root",
+                    username_prompt: "",
+                    password_prompt: ""
                 },{
-                    auth_type: 2,
-                    _id: 3,
-                    password_prompt: "",
-                    protocol_port: 22,
-                    protocol_type: 2,
+                    id: 4,
                     state: 1,
-                    username: "333333",
-                    username_prompt: ""
+                    protocol_type: 2,
+                    protocol_port: 22,
+                    auth_type: 2,
+                    username: "root",
+                    username_prompt: "",
+                    password_prompt: ""
+                },{
+                    id: 3,
+                    state: 1,
+                    protocol_type: 3,
+                    protocol_port: 23,
+                    auth_type: 1,
+                    username: "root",
+                    username_prompt: "ogin:username",
+                    password_prompt: "assword:notice"
                 }],
                 count: 3
             }
