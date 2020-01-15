@@ -55,12 +55,12 @@ const router = new Router({
                 },
                 component: lazyLoadView('modules/asset/mainframe'),
             },{
-                path: 'asset/manage-remote-account',
-                name: 'manage-remote-account',
+                path: 'asset/mainframe-account',
+                name: 'mainframe-account',
                 meta: {
                     needLogin: true
                 },
-                component: lazyLoadView('modules/asset/manage-remote-account'),
+                component: lazyLoadView('modules/asset/mainframe-account'),
             }],
         },
     ],

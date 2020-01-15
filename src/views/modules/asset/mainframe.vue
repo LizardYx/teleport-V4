@@ -41,10 +41,9 @@
                     <el-table-column align="center" type="selection"></el-table-column>
                     <el-table-column header-align="center" sortable="custom" :label="$t('i18n.主机管理页面.主机名称')">
                         <template slot-scope="scope">
-                            <el-popover placement="right" trigger="hover">
-                                <div v-html="getHostsRemarkInfo(scope['row'].desc)"></div>
-                                <span v-text="scope['row'].name" slot="reference"></span>
-                            </el-popover>
+                            <edit-input :id="scope['row'].id" :name="scope['row'].name" :desc="scope['row'].desc"
+                                        :callback="updateMainframeName">
+                            </edit-input>
                         </template>
                     </el-table-column>
                     <el-table-column header-align="center" prop="ip" :label="$t('i18n.主机管理页面.IP地址')">
@@ -306,10 +305,11 @@
     import {asyncGet} from '@src/assets/axios'
     import {api} from "@src/assets/api";
     import FixToolBar from  "@src/components/fix-tool-bar"
+    import EditInput from "@src/components/edit-input";
 
     export default {
         name: 'mainframe',
-        components: {FixToolBar},
+        components: {EditInput, FixToolBar},
         data() {
             return {
                 filter: {
@@ -384,14 +384,6 @@
                 this.filter.pageNation.pageNo = newPageNo;
                 this.getHostList();
             },
-            getHostsRemarkInfo(desc) {
-                let content = '';
-
-                if (desc !== '') {
-                    content = desc.replace(/\r/g, '').replace(/\n/g, '<br/>');
-                }
-                return content;
-            },
             getHostsStatusInfo(statusId) {
                 let statusInfo = {
                     name: '',
@@ -429,6 +421,14 @@
                     }
                 }
                 return OSInfo;
+            },
+            updateMainframeName(id, name) {
+                //call API update mainframe name
+                this.$notify({
+                    type: 'success',
+                    message: this.$t('i18n.主机管理页面.更新主机名称成功'),
+                    duration: 5000
+                });
             },
             initHostsInfoDialog(hostsInfo) {
                 this.hostsInfoDialogVisible = true;
@@ -518,7 +518,6 @@
                             duration: 5000
                         });
                         this.hostsInfoDialogVisible = false;
-
                     }else {
                         return false;
                     }
@@ -606,7 +605,7 @@
             },
             confirmDeleteHost(idList) {
                 if (idList && idList[0]) {
-                    this.$confirm(this.$t('i18n.主机管理页面.确定删除该主机'), this.$t('i18n.主机管理页面.删除'), {
+                    this.$confirm(this.$t('i18n.主机管理页面.确定删除远程主机'), this.$t('i18n.主机管理页面.删除'), {
                         closeOnClickModal: false,
                         confirmButtonText: this.$t('i18n.主机管理页面.确定'),
                         cancelButtonText: this.$t('i18n.主机管理页面.取消'),
@@ -622,13 +621,13 @@
                 this.getHostList();
                 this.$notify({
                     type: 'success',
-                    message: this.$t('i18n.主机管理页面.删除主机成功'),
+                    message: this.$t('i18n.主机管理页面.删除远程主机成功'),
                     duration: 5000
                 });
             },
             MRemoteAccount(id, name) {
                 this.$router.push({
-                    path: '/modules-main/asset/manage-remote-account',
+                    path: '/modules-main/asset/mainframe-account',
                     query: {
                         id: id,
                         name: name
