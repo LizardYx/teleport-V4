@@ -88,6 +88,43 @@ let server = http.createServer(function (request, response) {
                 count: 3
             }
         }
+        if (request.url.indexOf(`${commonUrl}/asset/get-host-group`) >= 0) {
+            data.rows = {
+                data: [{
+                    id: 1,
+                    state: 1,
+                    name: '分组名称',
+                    desc: '描述信息',
+                    host_count: 1,
+                    hostList: [{
+                        id: 1,
+                        os_type: 1,
+                        name: '测试服务器',
+                        ip: '10.0.0.1',
+                        router_ip: "",
+                        router_port: 0,
+                        cid: '111',
+                    },{
+                        id: 2,
+                        os_type: 2,
+                        name: '服务器2',
+                        ip: '10.0.0.5',
+                        router_ip: "",
+                        router_port: 0,
+                        cid: '111',
+                    },{
+                        id: 3,
+                        os_type: 2,
+                        name: '测试服务器3',
+                        ip: '10.0.0.14',
+                        router_ip: "",
+                        router_port: 0,
+                        cid: '111',
+                    }]
+                }],
+                count: 3
+            }
+        }
         response.writeHead(statusCode, {'Content-Type': 'text/html'});
         //参数序列化
         response.end(JSON.stringify(data));

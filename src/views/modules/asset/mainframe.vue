@@ -39,7 +39,7 @@
             <div class="mar-btm">
                 <el-table :data="tableData" border @selection-change="updateSelected" @sort-change="updateFilter">
                     <el-table-column align="center" type="selection"></el-table-column>
-                    <el-table-column header-align="center" sortable="custom" :label="$t('i18n.主机管理页面.主机名称')">
+                    <el-table-column header-align="center" sortable="custom" :label="$t('i18n.主机管理页面.名称')">
                         <template slot-scope="scope">
                             <edit-input :id="scope['row'].id" :name="scope['row'].name" :desc="scope['row'].desc"
                                         :callback="updateMainframeName">
@@ -118,14 +118,14 @@
                         <div class="notice">
                             <label class="title box-block" v-text="$t('i18n.主机管理页面.温馨提示：')"></label>
                             <div class="content">
-                                <span>
-                                    {{$t('i18n.主机管理页面.批量导入主机和账号需要上传csv格式的文件，您可以下载')}}
+                                <div>
+                                    1.{{$t('i18n.主机管理页面.批量导入主机和账号需要上传csv格式的文件，您可以下载')}}
                                     <a href="../../../../file/teleport-example-asset.csv"
                                        download="teleport-example-asset.csv">
                                         {{$t('i18n.主机管理页面.资产信息文件模板')}}
                                     </a>
                                     {{$t('i18n.主机管理页面.进行编辑。')}}
-                                </span>
+                                </div>
                             </div>
                         </div>
                     </el-col>
@@ -360,11 +360,7 @@
                         this.tableData = res && res.data ? res.data : [];
                         this.filter.pageNation.totalItem = res && res.count ? res.count : 0;
                     }, (error) => {
-                        this.$notify({
-                            type: 'warning',
-                            message: error.msg,
-                            duration: 5000
-                        });
+                        this.common.notification('warning', error.msg);
                     })
             },
             updateSelected(selectedItemList) {
@@ -424,12 +420,9 @@
             },
             updateMainframeName(id, name) {
                 //call API update mainframe name
-                this.$notify({
-                    type: 'success',
-                    message: this.$t('i18n.主机管理页面.更新主机名称成功'),
-                    duration: 5000
-                });
+                this.common.notification('success', this.$t('i18n.主机管理页面.更新主机名称成功'));
             },
+            // create & update host start
             initHostsInfoDialog(hostsInfo) {
                 this.hostsInfoDialogVisible = true;
                 this.hostsInfoDialog = {
@@ -512,17 +505,15 @@
             submitAddHosts() {
                 this.$refs['hostsInfoDialog'].validate((passValidate) => {
                     if (passValidate) {
-                        this.$notify({
-                            type: 'success',
-                            message: this.$t('i18n.主机管理页面.添加主机成功'),
-                            duration: 5000
-                        });
+                        this.common.notification('success', this.$t('i18n.主机管理页面.添加主机成功'));
                         this.hostsInfoDialogVisible = false;
                     }else {
                         return false;
                     }
                 })
             },
+            // create & update host end
+            // import assets start
             initImportAssetsDialog() {
                 this.importADialogVisible = true;
                 this.importAssetsDialog = {
@@ -532,11 +523,7 @@
                 };
             },
             uploadFileOutOfRange() {
-                this.$notify({
-                    type: 'warning',
-                    message: this.$t('i18n.主机管理页面.单次只能导入一个资产文件'),
-                    duration: 5000
-                });
+                this.common.notification('warning', this.$t('i18n.主机管理页面.单次只能导入一个资产文件'));
             },
             beforeUploadFile(file) {
                 const fileType = file.name.substring(file.name.lastIndexOf('.') + 1);
@@ -544,17 +531,15 @@
 
                 console.log(fileType);
                 if (!isCSV) {
-                    this.$notify({
-                        type: 'warning',
-                        message: this.$t('i18n.主机管理页面.资产文件必须为csv格式'),
-                        duration: 5000
-                    });
+                    this.common.notification('warning', this.$t('i18n.主机管理页面.资产文件必须为csv格式'));
                 }
                 return isCSV;
             },
             importAssets() {
                 this.$refs.upload.submit();
             },
+            // import assets end
+            // disabled host start
             canDisabledHost(status) {
                 return status && status === this.hostsStatusList[0].id;
             },
@@ -573,12 +558,10 @@
             disabledHost(idList) {
                 //call API
                 this.getHostList();
-                this.$notify({
-                    type: 'success',
-                    message: this.$t('i18n.主机管理页面.禁用远程主机成功'),
-                    duration: 5000
-                });
+                this.common.notification('success', this.$t('i18n.主机管理页面.禁用远程主机成功'));
             },
+            // disabled host end
+            // enabled host start
             canEnabledHost(status) {
                 return status && status === this.hostsStatusList[1].id;
             },
@@ -597,12 +580,10 @@
             enabledHost(idList) {
                 //call API
                 this.getHostList();
-                this.$notify({
-                    type: 'success',
-                    message: this.$t('i18n.主机管理页面.解禁远程主机成功'),
-                    duration: 5000
-                });
+                this.common.notification('success', this.$t('i18n.主机管理页面.解禁远程主机成功'));
             },
+            // enabled host end
+            // delete host start
             confirmDeleteHost(idList) {
                 if (idList && idList[0]) {
                     this.$confirm(this.$t('i18n.主机管理页面.确定删除远程主机'), this.$t('i18n.主机管理页面.删除'), {
@@ -619,12 +600,9 @@
                 //call API
                 this.filter.pageNation.pageNo = 1;
                 this.getHostList();
-                this.$notify({
-                    type: 'success',
-                    message: this.$t('i18n.主机管理页面.删除远程主机成功'),
-                    duration: 5000
-                });
+                this.common.notification('success', this.$t('i18n.主机管理页面.删除远程主机成功'));
             },
+            // delete host end
             MRemoteAccount(id, name) {
                 this.$router.push({
                     path: '/modules-main/asset/mainframe-account',

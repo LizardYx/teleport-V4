@@ -132,11 +132,7 @@
                         store.commit('common/updateLogin', true);
                         this.$router.push('/modules-main/system-overview');
                     }, (error) => {
-                        this.$notify({
-                            type: 'warning',
-                            message: error.msg,
-                            duration: 5000
-                        });
+                        this.common.notification('warning', error.msg);
                     })
             }
         },

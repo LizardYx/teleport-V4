@@ -266,11 +266,7 @@
                         this.accountList = res && res.data ? res.data : [];
                         this.filter.pageNation.totalItem = res && res.count ? res.count : 0;
                     }, (error) => {
-                        this.$notify({
-                            type: 'warning',
-                            message: error.msg,
-                            duration: 5000
-                        });
+                        this.common.notification('warning', error.msg);
                     })
             },
             pageSizeChange(newPageSize) {
@@ -341,6 +337,7 @@
                 }
                 return !!authName ? authName : '-';
             },
+            // disabled account start
             canDisabledAccount(state) {
                 return state && state === this.statusList[0].id;
             },
@@ -359,12 +356,10 @@
             disabledAccount(idList) {
                 //call API
                 this.getAccountList();
-                this.$notify({
-                    type: 'success',
-                    message: this.$t('i18n.管理远程账号.禁用远程主机账号成功'),
-                    duration: 5000
-                });
+                this.common.notification('success', this.$t('i18n.管理远程账号.禁用远程主机账号成功'));
             },
+            // disabled account end
+            // enabled account start
             canEnabledAccount(state) {
                 return state && state === this.statusList[1].id;
             },
@@ -383,12 +378,10 @@
             enabledAccount(idList) {
                 //call API
                 this.getAccountList();
-                this.$notify({
-                    type: 'success',
-                    message: this.$t('i18n.管理远程账号.解禁远程主机账号成功'),
-                    duration: 5000
-                });
+                this.common.notification('success', this.$t('i18n.管理远程账号.解禁远程主机账号成功'));
             },
+            // enabled account end
+            // create & update account info start
             initAccountInfo(accountInfo) {
                 this.accountInfoDialogVisible = true;
                 this.accountInfoDialog = {
@@ -510,6 +503,8 @@
                     this.$refs['accountInfoDialog'].resetFields();
                 }
             },
+            // create & update account info end
+            // delete account start
             confirmDeleteAccount(idList) {
                 if (idList && idList[0]) {
                     this.$confirm(this.$t('i18n.管理远程账号.确认删除远程主机账号'), this.$t('i18n.管理远程账号.删除'), {
@@ -526,12 +521,9 @@
                 //call API
                 this.filter.pageNation.pageNo = 1;
                 this.getAccountList();
-                this.$notify({
-                    type: 'success',
-                    message: this.$t('i18n.管理远程账号.删除远程主机账号成功'),
-                    duration: 5000
-                });
+                this.common.notification('success', this.$t('i18n.管理远程账号.删除远程主机账号成功'));
             }
+            // delete account end
         },
         created() {
             this.initPageInfo();

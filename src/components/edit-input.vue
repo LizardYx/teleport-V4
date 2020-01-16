@@ -56,11 +56,7 @@
                     this.editInput = false;
                     this.callback(this.id, this.newName);
                 }else {
-                    this.$notify({
-                        type: 'warning',
-                        message: this.$t('i18n.组件.名称不能为空'),
-                        duration: 5000
-                    });
+                    this.common.notification('warning', this.$t('i18n.组件.名称不能为空'));
                 }
             },
             cancelEditInput() {

@@ -2,6 +2,7 @@
  * 公用方法封装
  */
 import i18n from './lang/i18n'
+import { Notification } from 'element-ui';
 
 export const common = {
     uploadUrl: '',
@@ -76,5 +77,12 @@ export const common = {
             totalItem: 0,
             pageList: [10, 20, 50, 100]
         }
-    }
+    },
+    notification(status, msg, time) {
+        Notification({
+            type: status,
+            message: msg,
+            duration: time ? time : 5000
+        });
+    },
 };
