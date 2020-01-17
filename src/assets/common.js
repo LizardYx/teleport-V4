@@ -63,6 +63,13 @@ export const common = {
         name: i18n.t('i18n.临时锁定'),
         css: 'warning'
     }],
+    statusFilterList: [{
+        text: i18n.t('i18n.正常'),
+        value: 1
+    },{
+        text: i18n.t('i18n.禁用'),
+        value: 2
+    }],
     connectedModalList: [{
         id: 1,
         name: i18n.t('i18n.直接连接')

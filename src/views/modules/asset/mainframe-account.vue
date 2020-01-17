@@ -62,7 +62,7 @@
                             </el-tag>
                         </template>
                     </el-table-column>
-                    <el-table-column header-align="center" :label="$t('i18n.管理远程账号.操作')">
+                    <el-table-column align="center" :label="$t('i18n.管理远程账号.操作')">
                         <template slot-scope="scope">
                             <el-link type="primary" :underline="false" v-text="$t('i18n.管理远程账号.禁用')" class="mar-rgt"
                                      :disabled="!canDisabledAccount(scope['row'].state)" @click="confirmDisabledAccount([scope['row'].id])">
@@ -213,8 +213,8 @@
                         <icon-svg icon-class="shandian"></icon-svg>
                         {{$t('i18n.管理远程账号.测试连接')}}
                     </el-button>
-                    <el-button type="primary" size="mini">{{$t('i18n.管理远程账号.确定')}}</el-button>
-                    <el-button size="mini" @click="accountInfoDialogVisible = false">{{$t('i18n.管理远程账号.取消')}}</el-button>
+                    <el-button type="primary" size="mini" @click="submitAccountInfo()">{{$t('i18n.管理远程账号.确定')}}</el-button>
+                    <el-button size="mini" @click="cancelAccountInfoDialog()">{{$t('i18n.管理远程账号.取消')}}</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -359,6 +359,7 @@
                 this.common.notification('success', this.$t('i18n.管理远程账号.禁用远程主机账号成功'));
             },
             // disabled account end
+
             // enabled account start
             canEnabledAccount(state) {
                 return state && state === this.statusList[1].id;
@@ -381,6 +382,7 @@
                 this.common.notification('success', this.$t('i18n.管理远程账号.解禁远程主机账号成功'));
             },
             // enabled account end
+
             // create & update account info start
             initAccountInfo(accountInfo) {
                 this.accountInfoDialogVisible = true;
@@ -503,7 +505,31 @@
                     this.$refs['accountInfoDialog'].resetFields();
                 }
             },
+            cancelAccountInfoDialog() {
+                this.$refs['accountInfoDialog'].resetFields();
+                this.accountInfoDialogVisible = false;
+            },
+            submitAccountInfo() {
+                this.$refs['accountInfoDialog'].validate((passValidate) => {
+                    if (passValidate) {
+                        this.accountInfoDialog.isCreate ? this.createAccountInfo() : this.updateAccountInfo();
+                    }else {
+                        return false;
+                    }
+                })
+            },
+            createAccountInfo() {
+                // call API
+                this.common.notification('success', this.$t('i18n.管理远程账号.添加远程账号成功'));
+                this.accountInfoDialogVisible = false;
+            },
+            updateAccountInfo() {
+                // call API
+                this.common.notification('success', this.$t('i18n.管理远程账号.更新远程账号信息成功'));
+                this.accountInfoDialogVisible = false;
+            },
             // create & update account info end
+
             // delete account start
             confirmDeleteAccount(idList) {
                 if (idList && idList[0]) {

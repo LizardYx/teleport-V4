@@ -33,8 +33,10 @@
             desc: {
                 type: String
             },
-            callback: Function,
-            required: true
+            callback: {
+                type: Function,
+                required: true
+            }
         },
         data() {
             return{

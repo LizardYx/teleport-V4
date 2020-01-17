@@ -37,42 +37,44 @@
                 </el-col>
             </el-row>
             <div class="mar-btm">
-                <el-table :data="tableData" border @selection-change="updateSelected" @sort-change="updateFilter">
-                    <el-table-column align="center" type="selection"></el-table-column>
-                    <el-table-column header-align="center" sortable="custom" :label="$t('i18n.主机管理页面.名称')">
+                <el-table :data="tableData" border @selection-change="updateSelected" @sort-change="updateFilter"
+                          @filter-change="filterChange">
+                    <el-table-column min-width="5%" align="center" type="selection"></el-table-column>
+                    <el-table-column min-width="15%" header-align="center" sortable="custom" :label="$t('i18n.主机管理页面.名称')">
                         <template slot-scope="scope">
                             <edit-input :id="scope['row'].id" :name="scope['row'].name" :desc="scope['row'].desc"
                                         :callback="updateMainframeName">
                             </edit-input>
                         </template>
                     </el-table-column>
-                    <el-table-column header-align="center" prop="ip" :label="$t('i18n.主机管理页面.IP地址')">
+                    <el-table-column min-width="15%" header-align="center" prop="ip" :label="$t('i18n.主机管理页面.IP地址')">
                     </el-table-column>
-                    <el-table-column header-align="center" sortable="custom" :label="$t('i18n.主机管理页面.操作系统')">
+                    <el-table-column min-width="13%" header-align="center" sortable="custom" :label="$t('i18n.主机管理页面.操作系统')">
                         <template slot-scope="scope">
                             <el-tooltip effect="dark" :content="getOperationSystemInfo(scope['row']['os_type']).name" placement="right">
                                 <icon-svg :icon-class="getOperationSystemInfo(scope['row']['os_type']).icon"></icon-svg>
                             </el-tooltip>
                         </template>
                     </el-table-column>
-                    <el-table-column header-align="center" prop="cid" sortable="custom"
+                    <el-table-column min-width="12%" header-align="center" prop="cid" sortable="custom"
                                      :label="$t('i18n.主机管理页面.资产编号')">
                     </el-table-column>
-                    <el-table-column header-align="center" :label="$t('i18n.主机管理页面.账号数')">
+                    <el-table-column min-width="10%" header-align="center" :label="$t('i18n.主机管理页面.账号数')">
                         <template slot-scope="scope">
                             <el-link type="primary" :underline="false" v-text="scope['row']['acc_count']"
                                      @click="MRemoteAccount(scope['row']['id'], scope['row'].name)">
                             </el-link>
                         </template>
                     </el-table-column>
-                    <el-table-column sortable="custom" :label="$t('i18n.主机管理页面.状态')" align="center">
+                    <el-table-column min-width="10%" sortable="custom" :label="getStatusTitle()" align="center"
+                                     column-key="status" :filters="statusFilterList" :filter-multiple="false">
                         <template slot-scope="scope">
                             <el-tag effect="dark" v-text="getHostsStatusInfo(scope['row'].state).name"  size="small"
                                     :type="getHostsStatusInfo(scope['row'].state).css">
                             </el-tag>
                         </template>
                     </el-table-column>
-                    <el-table-column header-align="center" :label="$t('i18n.主机管理页面.操作')">
+                    <el-table-column min-width="20%" align="center" :label="$t('i18n.主机管理页面.操作')">
                         <template slot-scope="scope">
                             <el-link type="primary" class="mar-rgt" :underline="false" v-text="$t('i18n.主机管理页面.禁用')"
                                      :disabled="!canDisabledHost(scope['row'].state)" @click="confirmDisabledHost([scope['row'].id])">
@@ -266,7 +268,7 @@
                     </el-row>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button type="primary" @click="submitAddHosts()" size="mini">{{$t('i18n.主机管理页面.确定')}}</el-button>
+                    <el-button type="primary" @click="submitHostsInfo()" size="mini">{{$t('i18n.主机管理页面.确定')}}</el-button>
                     <el-button @click="cancelAddHosts()" size="mini">{{$t('i18n.主机管理页面.取消')}}</el-button>
                 </div>
             </el-dialog>
@@ -318,11 +320,13 @@
                     sort: {
                         name: '',
                         order: '',
-                    }
+                    },
+                    status: ''
                 },
                 selectedIdList: [],
                 tableData: [],
                 hostsStatusList: this.common.statusList,
+                statusFilterList: this.common.statusFilterList,
                 osTypeList: this.common.osTypeList,
                 hostsInfoDialogVisible: false,
                 hostsInfoDialog: {},
@@ -340,6 +344,14 @@
                     order: column.order
                 };
             },
+            filterChange(filterObj) {
+                const newStatusFilter = filterObj.status[0];
+
+                if (this.filter.status !== newStatusFilter) {
+                    this.filter.status = newStatusFilter;
+                    this.getHostList();
+                }
+            },
             getHostList() {
                 let params = {
                     pageNo: this.filter.pageNation.pageNo,
@@ -353,6 +365,7 @@
                         order: this.filter.sort.order
                     };
                 }
+                !!this.filter.status ? params.stauts = this.filter.status : '';
                 asyncGet(api.getHostsList, params)
                     .then((response) => {
                         let res = response && response.rows ? response.rows : {};
@@ -379,6 +392,17 @@
             changeCurrentPage(newPageNo) {
                 this.filter.pageNation.pageNo = newPageNo;
                 this.getHostList();
+            },
+            getStatusTitle() {
+                let statusFilter = this.$t('i18n.主机管理页面.全部');
+
+                for (let statusFilterObj of this.statusFilterList) {
+                    if (statusFilterObj.value === this.filter.status) {
+                        statusFilter = statusFilterObj.text;
+                        break;
+                    }
+                }
+                return `${this.$t('i18n.主机管理页面.状态')}(${statusFilter})`;
             },
             getHostsStatusInfo(statusId) {
                 let statusInfo = {
@@ -421,6 +445,15 @@
             updateMainframeName(id, name) {
                 //call API update mainframe name
                 this.common.notification('success', this.$t('i18n.主机管理页面.更新主机名称成功'));
+            },
+            MRemoteAccount(id, name) {
+                this.$router.push({
+                    path: '/modules-main/asset/mainframe-account',
+                    query: {
+                        id: id,
+                        name: name
+                    }
+                })
             },
             // create & update host start
             initHostsInfoDialog(hostsInfo) {
@@ -502,17 +535,27 @@
                 this.$refs['hostsInfoDialog'].resetFields();
                 this.hostsInfoDialogVisible = false;
             },
-            submitAddHosts() {
+            submitHostsInfo() {
                 this.$refs['hostsInfoDialog'].validate((passValidate) => {
                     if (passValidate) {
-                        this.common.notification('success', this.$t('i18n.主机管理页面.添加主机成功'));
-                        this.hostsInfoDialogVisible = false;
+                        this.hostsInfoDialog.isCreate ? this.AddHosts() : this.updateHostsInfo();
                     }else {
                         return false;
                     }
                 })
             },
+            AddHosts() {
+                // call API
+                this.common.notification('success', this.$t('i18n.主机管理页面.添加主机成功'));
+                this.hostsInfoDialogVisible = false;
+            },
+            updateHostsInfo() {
+                // call API
+                this.common.notification('success', this.$t('i18n.主机管理页面.更新主机信息成功'));
+                this.hostsInfoDialogVisible = false;
+            },
             // create & update host end
+
             // import assets start
             initImportAssetsDialog() {
                 this.importADialogVisible = true;
@@ -539,6 +582,7 @@
                 this.$refs.upload.submit();
             },
             // import assets end
+
             // disabled host start
             canDisabledHost(status) {
                 return status && status === this.hostsStatusList[0].id;
@@ -561,6 +605,7 @@
                 this.common.notification('success', this.$t('i18n.主机管理页面.禁用远程主机成功'));
             },
             // disabled host end
+
             // enabled host start
             canEnabledHost(status) {
                 return status && status === this.hostsStatusList[1].id;
@@ -583,6 +628,7 @@
                 this.common.notification('success', this.$t('i18n.主机管理页面.解禁远程主机成功'));
             },
             // enabled host end
+
             // delete host start
             confirmDeleteHost(idList) {
                 if (idList && idList[0]) {
@@ -601,17 +647,8 @@
                 this.filter.pageNation.pageNo = 1;
                 this.getHostList();
                 this.common.notification('success', this.$t('i18n.主机管理页面.删除远程主机成功'));
-            },
-            // delete host end
-            MRemoteAccount(id, name) {
-                this.$router.push({
-                    path: '/modules-main/asset/mainframe-account',
-                    query: {
-                        id: id,
-                        name: name
-                    }
-                })
             }
+            // delete host end
         },
         created() {
             this.initPageInfo();

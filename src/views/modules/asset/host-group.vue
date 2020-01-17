@@ -6,21 +6,21 @@
         <div id="pageContent">
             <el-row :gutter="20" class="tool-bar">
                 <el-col :span="18">
-                    <el-button size="mini" type="primary">
+                    <el-button size="mini" type="primary" @click="initHostGroupDialog()">
                         <i class="el-icon-circle-plus-outline"></i>
                         {{$t('i18n.主机分组管理.创建主机分组')}}
                     </el-button>
-                    <el-button size="mini" type="primary" :disabled="!selectedIdList[0]">
+                    <el-button size="mini" type="primary" :disabled="!selectedIdList[0]" @click="confirmDisabledGroup(selectedIdList)">
                         {{$t('i18n.主机分组管理.禁用')}}
                     </el-button>
-                    <el-button size="mini" type="primary" :disabled="!selectedIdList[0]">
+                    <el-button size="mini" type="primary" :disabled="!selectedIdList[0]" @click="confirmEnabledGroup(selectedIdList)">
                         {{$t('i18n.主机分组管理.解禁')}}
                     </el-button>
-                    <el-button size="mini" type="primary" :disabled="!selectedIdList[0]">
+                    <el-button size="mini" type="primary" :disabled="!selectedIdList[0]" @click="confirmDeleteGroup(selectedIdList)">
                         <i class="el-icon-delete"></i>
                         {{$t('i18n.主机分组管理.删除')}}
                     </el-button>
-                    <el-button size="mini" type="primary">
+                    <el-button size="mini" type="primary" @click="getHostGroupList()">
                         <i class="el-icon-refresh"></i>
                         {{$t('i18n.主机分组管理.刷新列表')}}
                     </el-button>
@@ -33,17 +33,19 @@
                 </el-col>
             </el-row>
             <div class="mar-btm">
-                <el-table :data="hostGroupList" border @selection-change="updateSelected" @sort-change="updateFilter">
-                    <el-table-column align="center" type="selection"></el-table-column>
-                    <el-table-column header-align="center" sortable="custom" :label="$t('i18n.主机分组管理.名称')">
+                <el-table :data="hostGroupList" border @selection-change="updateSelected" @sort-change="updateFilter"
+                          @filter-change="filterChange">
+                    <el-table-column min-width="5%" align="center" type="selection"></el-table-column>
+                    <el-table-column min-width="20%" header-align="center" sortable="custom" :label="$t('i18n.主机分组管理.名称')">
                         <template slot-scope="scope">
                             <edit-input :id="scope['row'].id" :name="scope['row'].name" :desc="scope['row'].desc"
                                         :callback="updateMainframeName">
                             </edit-input>
                         </template>
                     </el-table-column>
-                    <el-table-column header-align="center" prop="host_count" :label="$t('i18n.主机分组管理.主机数')"></el-table-column>
-                    <el-table-column header-align="center" :label="$t('i18n.主机分组管理.主机名称')">
+                    <el-table-column min-width="10%" header-align="center" prop="host_count" :label="$t('i18n.主机分组管理.主机数')">
+                    </el-table-column>
+                    <el-table-column min-width="35%" header-align="center" :label="$t('i18n.主机分组管理.主机名称')">
                         <template slot-scope="scope">
                             <el-tag size="small" type="info" v-for="hostObj in scope['row'].hostList" :command="hostObj.id" class="host-info">
                                 <el-tooltip effect="dark" :content="getOperationSystemInfo(hostObj['os_type']).name" placement="left">
@@ -53,18 +55,21 @@
                             </el-tag>
                         </template>
                     </el-table-column>
-                    <el-table-column align="center" :label="$t('i18n.主机分组管理.状态')">
+                    <el-table-column min-width="10%" align="center" sortable="custom" :label="getStatusTitle()"
+                                     column-key="status" :filters="statusFilterList" :filter-multiple="false">
                         <template slot-scope="scope">
                             <el-tag effect="dark" v-text="getGroupStatusInfo(scope['row'].state).name"  size="small"
                                     :type="getGroupStatusInfo(scope['row'].state).css">
                             </el-tag>
                         </template>
                     </el-table-column>
-                    <el-table-column header-align="center" :label="$t('i18n.主机分组管理.操作')">
+                    <el-table-column min-width="20%" align="center" :label="$t('i18n.主机分组管理.操作')">
                         <template slot-scope="scope">
-                            <el-link type="primary" class="mar-rgt" :underline="false" v-text="$t('i18n.主机分组管理.禁用')">
+                            <el-link type="primary" class="mar-rgt" :underline="false" v-text="$t('i18n.主机分组管理.禁用')"
+                                     :disabled="!canDisabledGroup(scope['row'].state)" @click="confirmDisabledGroup([scope['row'].id])">
                             </el-link>
-                            <el-link type="primary" class="mar-rgt" :underline="false" v-text="$t('i18n.主机分组管理.解禁')">
+                            <el-link type="primary" class="mar-rgt" :underline="false" v-text="$t('i18n.主机分组管理.解禁')"
+                                     :disabled="!canEnabledHost(scope['row'].state)" @click="confirmEnabledGroup([scope['row'].id])">
                             </el-link>
                             <el-dropdown trigger="click">
                                 <span>
@@ -73,11 +78,13 @@
                                 </span>
                                 <el-dropdown-menu slot="dropdown" class="operation">
                                     <el-dropdown-item>
-                                        <el-link type="primary" :underline="false" v-text="$t('i18n.主机分组管理.编辑详情')">
+                                        <el-link type="primary" :underline="false" v-text="$t('i18n.主机分组管理.编辑详情')"
+                                                 @click="initHostGroupDialog(scope['row'])">
                                         </el-link>
                                     </el-dropdown-item>
                                     <el-dropdown-item>
-                                        <el-link type="primary" :underline="false" v-text="$t('i18n.主机分组管理.删除')">
+                                        <el-link type="primary" :underline="false" v-text="$t('i18n.主机分组管理.删除')"
+                                                 @click="confirmDeleteGroup([scope['row'].id])">
                                         </el-link>
                                     </el-dropdown-item>
                                 </el-dropdown-menu>
@@ -104,6 +111,32 @@
                     </el-col>
                 </el-row>
             </div>
+            <el-dialog :title="hostGroupDialog.title" :visible.sync="hostGroupDialogVisible" width="768px"
+                       :close-on-click-modal="false" :close-on-press-escape="false" v-if="hostGroupDialogVisible">
+                <el-form :model="hostGroupDialog" status-icon :rules="hostGroupDialog.rules" ref="hostGroupDialog"
+                         size="medium">
+                    <el-row>
+                        <el-col :span="10">
+                            <el-form-item prop="name" :label="$t('i18n.主机分组管理.名称')" label-width="120px">
+                                <el-input v-model="hostGroupDialog.name" :placeholder="$t('i18n.主机分组管理.请输入主机分组名称')" size="mini">
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="10">
+                            <el-form-item prop="desc" :label="$t('i18n.主机分组管理.简要描述')" label-width="120px">
+                                <el-input v-model="hostGroupDialog.desc" :placeholder="$t('i18n.主机分组管理.请输入主机分组描述')" size="mini">
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button type="primary" size="mini" @click="submitHostGroupInfo()">{{$t('i18n.主机分组管理.确定')}}</el-button>
+                    <el-button size="mini" @click="cancelHostGroupDialog()">{{$t('i18n.主机分组管理.取消')}}</el-button>
+                </div>
+            </el-dialog>
         </div>
         <fix-tool-bar ref="toolbar"></fix-tool-bar>
     </div>
@@ -126,12 +159,16 @@
                     sort: {
                         name: '',
                         order: '',
-                    }
+                    },
+                    status: ''
                 },
                 selectedIdList: [],
                 hostGroupList: [],
                 hostsStatusList: this.common.statusList,
+                statusFilterList: this.common.statusFilterList,
                 osTypeList: this.common.osTypeList,
+                hostGroupDialogVisible: false,
+                hostGroupDialog: {}
             }
         },
         methods: {
@@ -143,6 +180,14 @@
                     name: column.prop,
                     order: column.order
                 };
+            },
+            filterChange(filterObj) {
+                const newStatusFilter = filterObj.status[0];
+
+                if (this.filter.status !== newStatusFilter) {
+                    this.filter.status = newStatusFilter;
+                    this.getHostGroupList();
+                }
             },
             getHostGroupList() {
                 let params = {
@@ -157,6 +202,7 @@
                         order: this.filter.sort.order
                     };
                 }
+                !!this.filter.status ? params.stauts = this.filter.status : '';
                 asyncGet(api.getHostGroupList, params)
                     .then((response) => {
                         let res = response && response.rows ? response.rows : {};
@@ -183,6 +229,17 @@
             changeCurrentPage(newPageNo) {
                 this.filter.pageNation.pageNo = newPageNo;
                 this.getHostList();
+            },
+            getStatusTitle() {
+                let statusFilter = this.$t('i18n.主机分组管理.全部');
+
+                for (let statusFilterObj of this.statusFilterList) {
+                    if (statusFilterObj.value === this.filter.status) {
+                        statusFilter = statusFilterObj.text;
+                        break;
+                    }
+                }
+                return `${this.$t('i18n.主机分组管理.状态')}(${statusFilter})`;
             },
             updateMainframeName(id, name) {
                 //call API update mainframe name
@@ -226,6 +283,115 @@
                 }
                 return OSInfo;
             },
+            // host group start
+            initHostGroupDialog(hostGroupInfo) {
+                this.hostGroupDialogVisible = true;
+                this.hostGroupDialog = {
+                    isCreate: !hostGroupInfo,
+                    title: !!hostGroupInfo ? this.$t('i18n.主机分组管理.创建主机分组') : this.$t('i18n.主机分组管理.编辑主机分组详情'),
+                    name: !!hostGroupInfo ? hostGroupInfo.name : '',
+                    desc: !!hostGroupInfo ? hostGroupInfo.desc : '',
+                    rules: {
+                        name: [{
+                            required: true, message: this.$t('i18n.主机分组管理.请输入主机分组名称'), trigger: 'blur'
+                        }],
+                        desc: [{
+                            required: true, message: this.$t('i18n.主机分组管理.请输入主机分组描述'), trigger: 'blur'
+                        }],
+                    }
+                };
+            },
+            submitHostGroupInfo() {
+                this.$refs['hostGroupDialog'].validate((passValidate) => {
+                    if (passValidate) {
+                        this.hostGroupDialog.isCreate ? this.createHostGroup() : this.updateHostGroup();
+                    }else {
+                        return false;
+                    }
+                })
+            },
+            createHostGroup() {
+                // call API
+                this.common.notification('success', this.$t('i18n.主机分组管理.创建主机分组成功'));
+                this.hostGroupDialogVisible = false;
+            },
+            updateHostGroup() {
+                // call API
+                this.common.notification('success', this.$t('i18n.主机分组管理.更新主机分组成功'));
+                this.hostGroupDialogVisible = false;
+            },
+            cancelHostGroupDialog() {
+                this.$refs['hostGroupDialog'].resetFields();
+                this.hostGroupDialogVisible = false;
+            },
+            // host group end
+
+            // disabled host group start
+            canDisabledGroup(status) {
+                return status && status === this.hostsStatusList[0].id;
+            },
+            confirmDisabledGroup(idList) {
+                if (idList && idList[0]) {
+                    this.$confirm(this.$t('i18n.主机分组管理.确认禁用主机分组'), this.$t('i18n.主机分组管理.禁用'), {
+                        closeOnClickModal: false,
+                        confirmButtonText: this.$t('i18n.主机分组管理.确定'),
+                        cancelButtonText: this.$t('i18n.主机分组管理.取消'),
+                        type: 'warning'
+                    }).then(() =>{
+                        this.disabledGroup(idList);
+                    });
+                }
+            },
+            disabledGroup(idList) {
+                //call API
+                this.getHostGroupList();
+                this.common.notification('success', this.$t('i18n.主机分组管理.禁用主机分组成功'));
+            },
+            // disabled host group end
+
+            // enabled host group start
+            canEnabledHost(status) {
+                return status && status === this.hostsStatusList[1].id;
+            },
+            confirmEnabledGroup(idList) {
+                if (idList && idList[0]) {
+                    this.$confirm(this.$t('i18n.主机分组管理.确认解禁主机分组'), this.$t('i18n.主机分组管理.解禁'), {
+                        closeOnClickModal: false,
+                        confirmButtonText: this.$t('i18n.主机分组管理.确定'),
+                        cancelButtonText: this.$t('i18n.主机分组管理.取消'),
+                        type: 'warning'
+                    }).then(() =>{
+                        this.enabledGroup(idList);
+                    });
+                }
+            },
+            enabledGroup(idList) {
+                //call API
+                this.getHostGroupList();
+                this.common.notification('success', this.$t('i18n.主机分组管理.解禁主机分组成功'));
+            },
+            // enabled host group end
+
+            // delete host group start
+            confirmDeleteGroup(idList) {
+                if (idList && idList[0]) {
+                    this.$confirm(this.$t('i18n.主机分组管理.确认删除主机分组'), this.$t('i18n.主机分组管理.删除'), {
+                        closeOnClickModal: false,
+                        confirmButtonText: this.$t('i18n.主机分组管理.确定'),
+                        cancelButtonText: this.$t('i18n.主机分组管理.取消'),
+                        type: 'warning'
+                    }).then(() =>{
+                        this.deleteHostGroup(idList);
+                    });
+                }
+            },
+            deleteHostGroup(idList) {
+                //call API
+                this.filter.pageNation.pageNo = 1;
+                this.getHostGroupList();
+                this.common.notification('success', this.$t('i18n.主机分组管理.删除主机分组成功'));
+            }
+            // delete host group end
         },
         created() {
             this.initPageInfo();
