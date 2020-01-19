@@ -265,6 +265,7 @@
 
                         this.accountList = res && res.data ? res.data : [];
                         this.filter.pageNation.totalItem = res && res.count ? res.count : 0;
+                        this.selectedIdList = [];
                     }, (error) => {
                         this.common.notification('warning', error.msg);
                     })

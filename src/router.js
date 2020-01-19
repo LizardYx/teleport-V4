@@ -68,6 +68,13 @@ const router = new Router({
                     needLogin: true
                 },
                 component: lazyLoadView('modules/asset/host-group'),
+            },{
+                path: 'asset/host-group-details',
+                name: 'host-group-details',
+                meta: {
+                    needLogin: true
+                },
+                component: lazyLoadView('modules/asset/host-group-details'),
             }],
 
         },

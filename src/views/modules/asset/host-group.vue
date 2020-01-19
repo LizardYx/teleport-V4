@@ -47,7 +47,8 @@
                     </el-table-column>
                     <el-table-column min-width="35%" header-align="center" :label="$t('i18n.主机分组管理.主机名称')">
                         <template slot-scope="scope">
-                            <el-tag size="small" type="info" v-for="hostObj in scope['row'].hostList" :command="hostObj.id" class="host-info">
+                            <el-tag size="small" type="info" v-for="hostObj in scope['row'].hostList" :command="hostObj.id" class="host-info"
+                                    :key="hostObj.id">
                                 <el-tooltip effect="dark" :content="getOperationSystemInfo(hostObj['os_type']).name" placement="left">
                                     <icon-svg :icon-class="getOperationSystemInfo(hostObj['os_type']).icon"></icon-svg>
                                 </el-tooltip>
@@ -78,8 +79,13 @@
                                 </span>
                                 <el-dropdown-menu slot="dropdown" class="operation">
                                     <el-dropdown-item>
-                                        <el-link type="primary" :underline="false" v-text="$t('i18n.主机分组管理.编辑详情')"
+                                        <el-link type="primary" :underline="false" v-text="$t('i18n.主机分组管理.修改名称')"
                                                  @click="initHostGroupDialog(scope['row'])">
+                                        </el-link>
+                                    </el-dropdown-item>
+                                    <el-dropdown-item>
+                                        <el-link type="primary" :underline="false" v-text="$t('i18n.主机分组管理.编辑详情')"
+                                                 @click="hostGroupDetail(scope['row'].id, scope['row'].name)">
                                         </el-link>
                                     </el-dropdown-item>
                                     <el-dropdown-item>
@@ -209,6 +215,7 @@
 
                         this.hostGroupList = res && res.data ? res.data : [];
                         this.filter.pageNation.totalItem = res && res.count ? res.count : 0;
+                        this.selectedIdList = [];
                     }, (error) => {
                         this.common.notification('warning', error.msg);
                     })
@@ -282,6 +289,15 @@
                     }
                 }
                 return OSInfo;
+            },
+            hostGroupDetail(id, name) {
+                this.$router.push({
+                    path: '/modules-main/asset/host-group-details',
+                    query: {
+                        id: id,
+                        name: name
+                    }
+                })
             },
             // host group start
             initHostGroupDialog(hostGroupInfo) {
