@@ -12,4 +12,5 @@ export const api = {
     getHostsList: `${baseUrl}/asset/get-hosts`, //获取主机列表
     getHostAccountList: `${baseUrl}/asset/get-accounts`, //获取主机账号列表
     getHostGroupList: `${baseUrl}/asset/get-host-group`, //获取主机分组列表
+    getAccountGroupList: `${baseUrl}/asset/get-account-group`, //获取账号分组列表
 };

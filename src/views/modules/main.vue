@@ -22,7 +22,7 @@
                                     {{$t('i18n.导航页面.主机管理')}}
                                 </el-menu-item>
                                 <el-menu-item index="/modules-main/asset/host-group">{{$t('i18n.导航页面.主机分组管理')}}</el-menu-item>
-                                <el-menu-item index="2-3">{{$t('i18n.导航页面.账号分组管理')}}</el-menu-item>
+                                <el-menu-item index="/modules-main/asset/account-group">{{$t('i18n.导航页面.账号分组管理')}}</el-menu-item>
                             </el-menu-item-group>
                         </el-submenu>
                         <el-submenu index="3">

@@ -38,14 +38,14 @@
             <div class="mar-btm">
                 <el-table :data="hostsList" border @selection-change="updateSelected" @sort-change="updateFilter">
                     <el-table-column min-width="5%" align="center" type="selection"></el-table-column>
-                    <el-table-column min-width="20%" header-align="center" sortable="custom" :label="$t('i18n.组内服务器管理.主机名称')">
+                    <el-table-column min-width="20%" prop="name" header-align="center" sortable="custom" :label="$t('i18n.组内服务器管理.主机名称')">
                         <template slot-scope="scope">
                             <edit-input :id="scope['row'].id" :name="scope['row'].name" :desc="scope['row'].desc"
                                         :callback="updateMainframeName">
                             </edit-input>
                         </template>
                     </el-table-column>
-                    <el-table-column min-width="20%" header-align="center" sortable="custom" :label="$t('i18n.组内服务器管理.操作系统')">
+                    <el-table-column min-width="20%" prop="os" header-align="center" sortable="custom" :label="$t('i18n.组内服务器管理.操作系统')">
                         <template slot-scope="scope">
                             <el-tooltip effect="dark" :content="getOperationSystemInfo(scope['row']['os_type']).name" placement="right">
                                 <icon-svg :icon-class="getOperationSystemInfo(scope['row']['os_type']).icon"></icon-svg>
@@ -54,7 +54,7 @@
                     </el-table-column>
                     <el-table-column min-width="20%" header-align="center" prop="cid" sortable="custom" :label="$t('i18n.组内服务器管理.资产编号')">
                     </el-table-column>
-                    <el-table-column min-width="15%" align="center" sortable="custom" :label="$t('i18n.组内服务器管理.状态')">
+                    <el-table-column min-width="15%" prop="status" align="center" sortable="custom" :label="$t('i18n.组内服务器管理.状态')">
                         <template slot-scope="scope">
                             <el-tag effect="dark" v-text="getHostsStatusInfo(scope['row'].state).name"  size="small"
                                     :type="getHostsStatusInfo(scope['row'].state).css">
@@ -133,6 +133,7 @@
                     name: column.prop,
                     order: column.order
                 };
+                this.getHostListInGroup();
             },
             getHostListInGroup() {
                 let params = {

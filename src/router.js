@@ -75,6 +75,13 @@ const router = new Router({
                     needLogin: true
                 },
                 component: lazyLoadView('modules/asset/host-group-details'),
+            },{
+                path: 'asset/account-group',
+                name: 'account-group',
+                meta: {
+                    needLogin: true
+                },
+                component: lazyLoadView('modules/asset/account-group'),
             }],
 
         },

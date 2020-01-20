@@ -40,7 +40,7 @@
                 <el-table :data="tableData" border @selection-change="updateSelected" @sort-change="updateFilter"
                           @filter-change="filterChange">
                     <el-table-column min-width="5%" align="center" type="selection"></el-table-column>
-                    <el-table-column min-width="15%" header-align="center" sortable="custom" :label="$t('i18n.主机管理页面.名称')">
+                    <el-table-column min-width="15%" header-align="center" prop="name" sortable="custom" :label="$t('i18n.主机管理页面.名称')">
                         <template slot-scope="scope">
                             <edit-input :id="scope['row'].id" :name="scope['row'].name" :desc="scope['row'].desc"
                                         :callback="updateMainframeName">
@@ -49,7 +49,7 @@
                     </el-table-column>
                     <el-table-column min-width="15%" header-align="center" prop="ip" :label="$t('i18n.主机管理页面.IP地址')">
                     </el-table-column>
-                    <el-table-column min-width="13%" header-align="center" sortable="custom" :label="$t('i18n.主机管理页面.操作系统')">
+                    <el-table-column min-width="13%" header-align="center" prop="os" sortable="custom" :label="$t('i18n.主机管理页面.操作系统')">
                         <template slot-scope="scope">
                             <el-tooltip effect="dark" :content="getOperationSystemInfo(scope['row']['os_type']).name" placement="right">
                                 <icon-svg :icon-class="getOperationSystemInfo(scope['row']['os_type']).icon"></icon-svg>
@@ -66,7 +66,7 @@
                             </el-link>
                         </template>
                     </el-table-column>
-                    <el-table-column min-width="10%" sortable="custom" :label="getStatusTitle()" align="center"
+                    <el-table-column min-width="10%" prop="status" sortable="custom" :label="getStatusTitle()" align="center"
                                      column-key="status" :filters="statusFilterList" :filter-multiple="false">
                         <template slot-scope="scope">
                             <el-tag effect="dark" v-text="getHostsStatusInfo(scope['row'].state).name"  size="small"
@@ -338,11 +338,15 @@
             initPageInfo() {
                 this.getHostList();
             },
-            updateFilter(column) {
+            updateFilter(column, prop, order) {
+                console.log(column);
+                console.log(prop);
+                console.log(order);
                 this.filter.sort = {
                     name: column.prop,
                     order: column.order
                 };
+                this.getHostList();
             },
             filterChange(filterObj) {
                 const newStatusFilter = filterObj.status[0];
