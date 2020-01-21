@@ -81,7 +81,8 @@
                                         </el-link>
                                     </el-dropdown-item>
                                     <el-dropdown-item>
-                                        <el-link type="primary" :underline="false" v-text="$t('i18n.账号分组管理.编辑详情')">
+                                        <el-link type="primary" :underline="false" v-text="$t('i18n.账号分组管理.编辑详情')"
+                                                 @click="accountGroupDetail(scope['row'].id, scope['row'].name)">
                                         </el-link>
                                     </el-dropdown-item>
                                     <el-dropdown-item>
@@ -268,6 +269,15 @@
                     }
                 }
                 return statusInfo;
+            },
+            accountGroupDetail(id, name) {
+                this.$router.push({
+                    path: '/modules-main/asset/account-group-details',
+                    query: {
+                        id: id,
+                        name: name
+                    }
+                })
             },
             // account group info group start
             initAccountGroupDialog(accountGroup){

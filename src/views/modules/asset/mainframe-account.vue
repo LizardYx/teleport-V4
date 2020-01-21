@@ -259,7 +259,7 @@
                     pageSize: this.filter.pageNation.pageSize
                 };
 
-                asyncGet(api.getHostAccountList, params)
+                asyncGet(api.getAccountList, params)
                     .then((response) => {
                         let res = response && response.rows ? response.rows : {};
 

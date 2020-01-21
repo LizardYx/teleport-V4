@@ -151,6 +151,29 @@ let server = http.createServer(function (request, response) {
                 count: 3
             }
         }
+        if (request.url.indexOf(`${commonUrl}/asset/get-account-group-details`) >= 0) {
+            data.rows = {
+                data: [{
+                    id: 1,
+                    host_id: 1,
+                    username: 'root',
+                    protocol_type: 1,
+                    auth_type: 1,
+                    state: 1,
+                    username_prompt: '',
+                    password_prompt: '',
+                    hostInfo: {
+                        id: 1,
+                        name: '主机测试',
+                        ip: '10.0.0.11',
+                        router_ip: '',
+                        router_port: 0,
+                        state: 1
+                    }
+                }],
+                count: 3
+            }
+        }
         response.writeHead(statusCode, {'Content-Type': 'text/html'});
         //参数序列化
         response.end(JSON.stringify(data));
