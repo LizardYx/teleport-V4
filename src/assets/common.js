@@ -77,6 +77,13 @@ export const common = {
         id: 2,
         name: i18n.t('i18n.端口映射')
     }],
+    userTypeList: [{
+        id: 1,
+        name: i18n.t('i18n.本地用户')
+    },{
+        id: 2,
+        name: i18n.t('i18n.LDAP')
+    }],
     initPageNation () {
         return {
             pageNo: 1,

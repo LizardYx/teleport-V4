@@ -14,4 +14,6 @@ export const api = {
     getHostGroupList: `${baseUrl}/asset/get-host-group`, //获取主机分组列表
     getAccountGroupList: `${baseUrl}/asset/get-account-group`, //获取账号分组列表
     getAccountGroupDetails: `${baseUrl}/asset/get-account-group-details`, //获取账号分组详情
+    getUserList: `${baseUrl}/user/get-users`, //获取用户列表
+    getRoleList: `${baseUrl}/user/get-role-list`, //获取角色列表
 };

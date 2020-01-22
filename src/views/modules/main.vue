@@ -18,20 +18,18 @@
                                 <span slot="title" v-text="$t('i18n.导航页面.资产')"></span>
                             </template>
                             <el-menu-item-group>
-                                <el-menu-item index="/modules-main/asset/mainframe">
-                                    {{$t('i18n.导航页面.主机管理')}}
-                                </el-menu-item>
+                                <el-menu-item index="/modules-main/asset/mainframe">{{$t('i18n.导航页面.主机管理')}}</el-menu-item>
                                 <el-menu-item index="/modules-main/asset/host-group">{{$t('i18n.导航页面.主机分组管理')}}</el-menu-item>
                                 <el-menu-item index="/modules-main/asset/account-group">{{$t('i18n.导航页面.账号分组管理')}}</el-menu-item>
                             </el-menu-item-group>
                         </el-submenu>
-                        <el-submenu index="3">
+                        <el-submenu index="/modules-main/user">
                             <template slot="title">
                                 <i class="el-icon-location"></i>
                                 <span slot="title" v-text="$t('i18n.导航页面.用户')"></span>
                             </template>
                             <el-menu-item-group>
-                                <el-menu-item index="3-1">{{$t('i18n.导航页面.用户管理')}}</el-menu-item>
+                                <el-menu-item index="/modules-main/user/user-manage">{{$t('i18n.导航页面.用户管理')}}</el-menu-item>
                                 <el-menu-item index="3-2">{{$t('i18n.导航页面.用户分组管理')}}</el-menu-item>
                             </el-menu-item-group>
                         </el-submenu>

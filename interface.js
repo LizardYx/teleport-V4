@@ -174,6 +174,41 @@ let server = http.createServer(function (request, response) {
                 count: 3
             }
         }
+        if (request.url.indexOf(`${commonUrl}/user/get-users`) >= 0) {
+            data.rows = {
+                data: [{
+                    id: 1,
+                    type: 1,
+                    auth_type: 2,
+                    username: 'admin',
+                    surname: 'admin',
+                    role_id: 1,
+                    state: 1,
+                    email: '563011419@qq.com',
+                    last_login: 1579635150,
+                    role: '系统管理员',
+                    privilege: 4294967295
+                }],
+                count: 3
+            }
+        }
+        if (request.url.indexOf(`${commonUrl}/user/get-role-list`) >= 0) {
+            data.rows = {
+                data: [{
+                    id: 1,
+                    name: '系统管理员',
+                    privilege: 4294967295
+                },{
+                    id: 2,
+                    name: '运维人员',
+                    privilege: 513
+                },{
+                    id: 3,
+                    name: '审计员',
+                    privilege: 32769
+                }]
+            }
+        }
         response.writeHead(statusCode, {'Content-Type': 'text/html'});
         //参数序列化
         response.end(JSON.stringify(data));

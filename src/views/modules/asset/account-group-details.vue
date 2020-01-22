@@ -151,11 +151,10 @@
     import {asyncGet} from '@src/assets/axios'
     import {api} from "@src/assets/api";
     import FixToolBar from  "@src/components/fix-tool-bar"
-    import EditInput from "@src/components/edit-input";
 
     export default {
         name: "account-group-details",
-        components: {FixToolBar, EditInput},
+        components: {FixToolBar},
         data() {
             return{
                 filter: {

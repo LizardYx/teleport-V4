@@ -338,10 +338,7 @@
             initPageInfo() {
                 this.getHostList();
             },
-            updateFilter(column, prop, order) {
-                console.log(column);
-                console.log(prop);
-                console.log(order);
+            updateFilter(column) {
                 this.filter.sort = {
                     name: column.prop,
                     order: column.order
