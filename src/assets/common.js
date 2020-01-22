@@ -2,6 +2,7 @@
  * 公用方法封装
  */
 import i18n from './lang/i18n'
+import { Notification } from 'element-ui';
 
 export const common = {
     uploadUrl: '',
@@ -26,25 +27,28 @@ export const common = {
     protocolTypeList: [{
         id: 1,
         name: 'RDP',
-        icon: 'rdp'
+        icon: 'rdp',
+        port: 3389
     },{
         id: 2,
         name: 'SSH',
-        icon: 'ssh'
+        icon: 'ssh',
+        port: 22
     },{
         id: 3,
         name: 'TELNET',
-        icon: 'telnet'
+        icon: 'telnet',
+        port: 23
     }],
     authTypeList: [{
         id: 0,
         name: i18n.t('i18n.无需认证')
     },{
         id: 1,
-        name: i18n.t('i18n.用户名/密码 认证')
+        name: i18n.t('i18n.用户名/密码')
     },{
         id: 2,
-        name: i18n.t('i18n.SSH私钥 认证')
+        name: i18n.t('i18n.SSH私钥')
     }],
     statusList: [{
         id: 1,
@@ -59,12 +63,26 @@ export const common = {
         name: i18n.t('i18n.临时锁定'),
         css: 'warning'
     }],
+    statusFilterList: [{
+        text: i18n.t('i18n.正常'),
+        value: 1
+    },{
+        text: i18n.t('i18n.禁用'),
+        value: 2
+    }],
     connectedModalList: [{
         id: 1,
         name: i18n.t('i18n.直接连接')
     },{
         id: 2,
         name: i18n.t('i18n.端口映射')
+    }],
+    userTypeList: [{
+        id: 1,
+        name: i18n.t('i18n.本地用户')
+    },{
+        id: 2,
+        name: i18n.t('i18n.LDAP')
     }],
     initPageNation () {
         return {
@@ -73,5 +91,12 @@ export const common = {
             totalItem: 0,
             pageList: [10, 20, 50, 100]
         }
-    }
+    },
+    notification(status, msg, time) {
+        Notification({
+            type: status,
+            message: msg,
+            duration: time ? time : 5000
+        });
+    },
 };

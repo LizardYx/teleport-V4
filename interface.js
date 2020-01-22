@@ -26,7 +26,6 @@ let server = http.createServer(function (request, response) {
         if (request.url.indexOf(`${commonUrl}/asset/get-hosts`) >= 0) {
             data.rows = {
                 data: [{
-                    _id: 1,
                     acc_count: 0,
                     cid: '111',
                     desc: 'this is for test',
@@ -40,7 +39,6 @@ let server = http.createServer(function (request, response) {
                     state: 1,
                     type: 1,
                 },{
-                    _id: 2,
                     acc_count: 0,
                     cid: '1112',
                     desc: '1.备注    123123\n2备注说明\n\n4.备注',
@@ -60,34 +58,155 @@ let server = http.createServer(function (request, response) {
         if (request.url.indexOf(`${commonUrl}/asset/get-accounts`) >= 0) {
             data.rows = {
                 data: [{
-                    auth_type: 1,
-                    _id: 2,
-                    password_prompt: "",
-                    protocol_port: 3389,
+                    id: 2,
+                    state: 1,
                     protocol_type: 1,
-                    state: 1,
-                    username: "11111",
-                    username_prompt: ""
-                },{
+                    protocol_port: 3389,
                     auth_type: 1,
-                    _id: 4,
-                    password_prompt: "assword:123123123",
-                    protocol_port: 23,
-                    protocol_type: 3,
-                    state: 1,
-                    username: "123123123",
-                    username_prompt: "ogin:144124"
+                    username: "root",
+                    username_prompt: "",
+                    password_prompt: ""
                 },{
-                    auth_type: 2,
-                    _id: 3,
-                    password_prompt: "",
-                    protocol_port: 22,
-                    protocol_type: 2,
+                    id: 4,
                     state: 1,
-                    username: "333333",
-                    username_prompt: ""
+                    protocol_type: 2,
+                    protocol_port: 22,
+                    auth_type: 2,
+                    username: "root",
+                    username_prompt: "",
+                    password_prompt: ""
+                },{
+                    id: 3,
+                    state: 1,
+                    protocol_type: 3,
+                    protocol_port: 23,
+                    auth_type: 1,
+                    username: "root",
+                    username_prompt: "ogin:username",
+                    password_prompt: "assword:notice"
                 }],
                 count: 3
+            }
+        }
+        if (request.url.indexOf(`${commonUrl}/asset/get-host-group`) >= 0) {
+            data.rows = {
+                data: [{
+                    id: 1,
+                    state: 1,
+                    name: '分组名称',
+                    desc: '描述信息',
+                    host_count: 1,
+                    hostList: [{
+                        id: 1,
+                        os_type: 1,
+                        name: '测试服务器',
+                        ip: '10.0.0.1',
+                        router_ip: "",
+                        router_port: 0,
+                        cid: '111',
+                    },{
+                        id: 2,
+                        os_type: 2,
+                        name: '服务器2',
+                        ip: '10.0.0.5',
+                        router_ip: "",
+                        router_port: 0,
+                        cid: '111',
+                    },{
+                        id: 3,
+                        os_type: 2,
+                        name: '测试服务器3',
+                        ip: '10.0.0.14',
+                        router_ip: "",
+                        router_port: 0,
+                        cid: '111',
+                    }]
+                }],
+                count: 3
+            }
+        }
+        if (request.url.indexOf(`${commonUrl}/asset/get-account-group`) >= 0) {
+            data.rows = {
+                data: [{
+                    id: 1,
+                    state: 1,
+                    name: '分组名称',
+                    desc: '描述信息',
+                    member_count: 1,
+                    memberList: [{
+                        id: 1,
+                        host_id: 1,
+                        username: 'root',
+                        protocol_type: 1,
+                        hostInfo: {
+                            id: 1,
+                            name: '主机测试',
+                            ip: '10.0.0.11',
+                            router_ip: '',
+                            router_port: '',
+                            state: 1
+                        }
+                    }]
+                }],
+                count: 3
+            }
+        }
+        if (request.url.indexOf(`${commonUrl}/asset/get-account-group-details`) >= 0) {
+            data.rows = {
+                data: [{
+                    id: 1,
+                    host_id: 1,
+                    username: 'root',
+                    protocol_type: 1,
+                    auth_type: 1,
+                    state: 1,
+                    username_prompt: '',
+                    password_prompt: '',
+                    hostInfo: {
+                        id: 1,
+                        name: '主机测试',
+                        ip: '10.0.0.11',
+                        router_ip: '',
+                        router_port: 0,
+                        state: 1
+                    }
+                }],
+                count: 3
+            }
+        }
+        if (request.url.indexOf(`${commonUrl}/user/get-users`) >= 0) {
+            data.rows = {
+                data: [{
+                    id: 1,
+                    type: 1,
+                    auth_type: 2,
+                    username: 'admin',
+                    surname: 'admin',
+                    role_id: 1,
+                    state: 1,
+                    email: '563011419@qq.com',
+                    last_login: 1579635150,
+                    role: '系统管理员',
+                    privilege: 4294967295
+                }],
+                count: 3
+            }
+        }
+        if (request.url.indexOf(`${commonUrl}/user/get-role-list`) >= 0) {
+            data.rows = {
+                data: [{
+                    id: 1,
+                    name: '系统管理员',
+                    privilege: 4294967295
+                },{
+                    id: 2,
+                    name: '运维人员',
+                    privilege: 513
+                },{
+                    id: 3,
+                    name: '审计员',
+                    privilege: 32769
+                }]
             }
         }
         response.writeHead(statusCode, {'Content-Type': 'text/html'});

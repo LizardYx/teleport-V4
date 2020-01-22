@@ -5,7 +5,7 @@
                 <img src="../assets/img/logo.png" alt="Teleport">
             </router-link>
             <i v-if="isLogin" class="collapse-icon" v-bind:class="{'el-icon-s-unfold': isCollapse, 'el-icon-s-fold': !isCollapse}"
-               @click="updateCollapse">
+               @click="updateCollapse()">
             </i>
         </div>
         <div class="header-right">
@@ -33,7 +33,7 @@
                         <i class="el-icon-user-solid"></i>
                         {{$t('i18n.个人信息')}}
                     </el-dropdown-item>
-                    <el-button id="logOut" class="float-right mar-rgt" size="mini" type="primary" @click="logOut">
+                    <el-button id="logOut" class="float-right mar-rgt" size="mini" type="primary" @click="logOut()">
                         {{$t('i18n.登出')}}
                     </el-button>
                 </el-dropdown-menu>

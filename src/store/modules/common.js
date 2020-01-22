@@ -1,5 +1,3 @@
-import fa from "element-ui/src/locale/lang/fa";
-
 const common = {
     namespaced: true,
     state: {

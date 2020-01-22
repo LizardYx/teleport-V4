@@ -38,6 +38,6 @@ module.exports = {
         }
     },
     devServer: {
-        proxy: "http://127.0.0.1:801"
+        proxy: process.env.NODE_ENV === 'production' ? "http://127.0.0.1:801" : 'http://127.0.0.1:801'
     }
 };

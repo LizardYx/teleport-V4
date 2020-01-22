@@ -1,6 +1,8 @@
 <template>
     <div id="header">
-        <img class="logo" src="../assets/img/logo.png" alt="Teleport">
+        <router-link :to="{path: '/'}">
+            <img class="logo" src="../assets/img/logo.png" alt="Teleport">
+        </router-link>
         <div class="header-right pad-rgt">
             <div class="right">
                 <el-dropdown class="lang" trigger="click" @command="updateLang">

@@ -55,13 +55,49 @@ const router = new Router({
                 },
                 component: lazyLoadView('modules/asset/mainframe'),
             },{
-                path: 'asset/manage-remote-account',
-                name: 'manage-remote-account',
+                path: 'asset/mainframe-account',
+                name: 'mainframe-account',
                 meta: {
                     needLogin: true
                 },
-                component: lazyLoadView('modules/asset/manage-remote-account'),
+                component: lazyLoadView('modules/asset/mainframe-account'),
+            },{
+                path: 'asset/host-group',
+                name: 'host-group',
+                meta: {
+                    needLogin: true
+                },
+                component: lazyLoadView('modules/asset/host-group'),
+            },{
+                path: 'asset/host-group-details',
+                name: 'host-group-details',
+                meta: {
+                    needLogin: true
+                },
+                component: lazyLoadView('modules/asset/host-group-details'),
+            },{
+                path: 'asset/account-group',
+                name: 'account-group',
+                meta: {
+                    needLogin: true
+                },
+                component: lazyLoadView('modules/asset/account-group'),
+            },{
+                path: 'asset/account-group-details',
+                name: 'account-group-details',
+                meta: {
+                    needLogin: true
+                },
+                component: lazyLoadView('modules/asset/account-group-details'),
+            },{
+                path: 'user/user-manage',
+                name: 'user-manage',
+                meta: {
+                    needLogin: true
+                },
+                component: lazyLoadView('modules/user/user-manage'),
             }],
+
         },
     ],
 });

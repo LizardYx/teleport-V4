@@ -135,7 +135,7 @@
             </div>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="bindOathDialog.visible = false" v-text="$t('i18n.绑定身份验证器页面.取消')"></el-button>
-                <el-button type="primary" @click="confirmBindOath" v-text="$t('i18n.绑定身份验证器页面.验证并完成绑定')"></el-button>
+                <el-button type="primary" @click="confirmBindOath()" v-text="$t('i18n.绑定身份验证器页面.验证并完成绑定')"></el-button>
             </div>
         </el-dialog>
     </div>
@@ -270,11 +270,7 @@
                     .then(() => {
                         this.configBindOathDialog();
                     }, (error) => {
-                        this.$notify({
-                            type: 'warning',
-                            message: error.msg,
-                            duration: 5000
-                        });
+                        this.common.notification('warning', error.msg);
                     })
             },
             configBindOathDialog() {
@@ -290,33 +286,26 @@
                             verificationCode: ''
                         };
                     }, function (error) {
-                        this.$notify({
-                            type: 'warning',
-                            message: error.msg,
-                            duration: 5000
-                        });
+                        this.common.notification('warning', error.msg);
                     })
             },
             validateBindOath() {
                 let passValidate = this.bindOathDialog.verificationCode.length === 6;
 
                 if (!passValidate) {
-                    this.$notify({
-                        type: 'warning',
-                        message: this.$t('i18n.绑定身份验证器页面.请输入六位动态验证码'),
-                        duration: 5000
-                    });
+                    this.common.notification('warning', this.$t('i18n.绑定身份验证器页面.请输入六位动态验证码'));
                 }
                 return passValidate;
             },
             confirmBindOath() {
                 if (this.validateBindOath()) {
-                    this.$confirm(this.$t('i18n.绑定身份验证器页面.确认绑定该身份验证器？'))
-                        .then(() => {
-                            this.bindOathToUser();
-                            this.bindOathDialog.visible = false;
-                        })
-                        .catch(() => {});
+                    this.$confirm(this.$t('i18n.绑定身份验证器页面.确认绑定该身份验证器？'), {
+                        closeOnClickModal: false,
+                    }).then(() => {
+                        this.bindOathToUser();
+                        this.bindOathDialog.visible = false;
+                    })
+                    .catch(() => {});
                 }
             },
             bindOathToUser() {
@@ -328,19 +317,10 @@
 
                 asyncPost(api.bindOath, params)
                     .then(() => {
-                        this.$notify({
-                            type: 'success',
-                            // message: this.$t('i18n.绑定身份验证器页面.绑定身份验证器成功'),
-                            message: '绑定身份验证器成功',
-                            duration: 5000
-                        });
+                        this.common.notification('success', this.$t('i18n.绑定身份验证器页面.绑定身份验证器成功'));
                         this.$router.push({name: 'login'});
                     }, (error) => {
-                        this.$notify({
-                            type: 'warning',
-                            message: error.msg,
-                            duration: 5000
-                        });
+                        this.common.notification('warning', error.msg);
                     })
             }
         },
