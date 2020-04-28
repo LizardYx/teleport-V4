@@ -84,6 +84,19 @@ export const common = {
         id: 2,
         name: i18n.t('i18n.LDAP')
     }],
+    allAuthWay: [{
+        id: 1,
+        name: '使用系统默认设置',
+        tag: 0
+    },{
+        id: 2,
+        name: '用户名+密码+验证码',
+        tag: 0x0002
+    },{
+        id: 3,
+        name: '用户名+密码+身份认证器动态密码',
+        tag: 0x0008
+    }],
     initPageNation () {
         return {
             pageNo: 1,

@@ -275,8 +275,8 @@
             <el-dialog :title="$t('i18n.主机管理页面.导入资产（主机及账号）')" :visible.sync="importADialogVisible"
                        width="768px" :close-on-click-modal="false" :close-on-press-escape="false"
                        v-if="importADialogVisible">
-                <el-upload drag :action="importAssetsDialog.uploadUrl" accept=".csv" :limit="importAssetsDialog.limit"
-                           :on-exceed="uploadFileOutOfRange" :before-upload="beforeUploadFile">
+                <el-upload ref="upload" drag :action="importAssetsDialog.uploadUrl" accept=".csv" :limit="importAssetsDialog.limit"
+                           :on-exceed="uploadFileOutOfRange" :before-upload="beforeUploadFile" :auto-upload="false">
                     <i class="el-icon-upload"></i>
                     <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
                 </el-upload>
@@ -294,7 +294,7 @@
                     </div>
                 </div>
                 <div slot="footer" class="dialog-footer">
-                    <el-button type="primary" size="mini" @click="importAssets()">{{$t('i18n.主机管理页面.确定')}}</el-button>
+                    <el-button type="primary" size="mini" @click="importAssets">{{$t('i18n.主机管理页面.确定')}}</el-button>
                     <el-button size="mini" @click="importADialogVisible = false">{{$t('i18n.主机管理页面.取消')}}</el-button>
                 </div>
             </el-dialog>
@@ -574,7 +574,6 @@
                 const fileType = file.name.substring(file.name.lastIndexOf('.') + 1);
                 const isCSV = fileType === 'csv';
 
-                console.log(fileType);
                 if (!isCSV) {
                     this.common.notification('warning', this.$t('i18n.主机管理页面.资产文件必须为csv格式'));
                 }
@@ -582,6 +581,7 @@
             },
             importAssets() {
                 this.$refs.upload.submit();
+                this.importADialogVisible = false;
             },
             // import assets end
 

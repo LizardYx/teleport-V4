@@ -16,4 +16,5 @@ export const api = {
     getAccountGroupDetails: `${baseUrl}/asset/get-account-group-details`, //获取账号分组详情
     getUserList: `${baseUrl}/user/get-users`, //获取用户列表
     getRoleList: `${baseUrl}/user/get-role-list`, //获取角色列表
+    updateUserInfo: `${baseUrl}/user/update-user`, //创建新用户/更新用户信息
 };

@@ -67,7 +67,7 @@
                                      :disabled="!canDisabledGroup(scope['row'].state)" @click="confirmDisabledGroup([scope['row'].id])">
                             </el-link>
                             <el-link type="primary" class="mar-rgt" :underline="false" v-text="$t('i18n.账号分组管理.解禁')"
-                                     :disabled="!canEnabledHost(scope['row'].state)" @click="confirmEnabledGroup(scope['row'])">
+                                     :disabled="!canEnabledHost(scope['row'].state)" @click="confirmEnabledGroup([scope['row'].id])">
                             </el-link>
                             <el-dropdown trigger="click">
                                 <span>
