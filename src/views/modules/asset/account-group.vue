@@ -120,7 +120,7 @@
                          size="medium">
                     <el-row>
                         <el-col :span="10">
-                            <el-form-item prop="name" :label="$t('i18n.账号分组管理.名称')" label-width="120px">
+                            <el-form-item prop="name" label="名称:" label-width="120px">
                                 <el-input v-model="accountGroupDialog.name" :placeholder="$t('i18n.账号分组管理.请输入账号分组名称')" size="mini">
                                 </el-input>
                             </el-form-item>
@@ -128,7 +128,7 @@
                     </el-row>
                     <el-row>
                         <el-col :span="20">
-                            <el-form-item :label="$t('i18n.账号分组管理.简要描述')" label-width="120px">
+                            <el-form-item label="简要描述:" label-width="120px">
                                 <el-input type="textarea" :rows="3" v-model="accountGroupDialog.desc" size="mini"
                                           :placeholder="$t('i18n.账号分组管理.请输入账号分组描述')">
                                 </el-input>
@@ -137,8 +137,14 @@
                     </el-row>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button type="primary" size="mini" @click="submitAccountGroupInfo()">{{$t('i18n.账号分组管理.确定')}}</el-button>
-                    <el-button size="mini" @click="cancelAccountGroupDialog()">{{$t('i18n.账号分组管理.取消')}}</el-button>
+                    <el-button type="primary" size="mini" @click="submitAccountGroupInfo()">
+                        <icon-svg icon-class="submit"></icon-svg>
+                        {{$t('i18n.账号分组管理.确定')}}
+                    </el-button>
+                    <el-button size="mini" @click="cancelAccountGroupDialog()">
+                        <icon-svg icon-class="cancel"></icon-svg>
+                        {{$t('i18n.账号分组管理.取消')}}
+                    </el-button>
                 </div>
             </el-dialog>
         </div>

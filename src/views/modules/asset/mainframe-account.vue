@@ -114,7 +114,7 @@
                        :close-on-click-modal="false" :close-on-press-escape="false" v-if="accountInfoDialogVisible">
                 <el-form :model="accountInfoDialog" status-icon :rules="accountInfoDialog.rules" ref="accountInfoDialog"
                          size="medium">
-                    <el-form-item prop="CProtocol.name" :label="$t('i18n.管理远程账号.连接协议')" label-width="120px">
+                    <el-form-item prop="CProtocol.name" label="连接协议:" label-width="120px">
                         <el-dropdown trigger="click" @command="updateCProtocol" size="mini" placement="bottom-start">
                             <el-button size="mini">
                                 <icon-svg v-if="accountInfoDialog.CProtocol && accountInfoDialog.CProtocol.icon"
@@ -135,14 +135,14 @@
                     </el-form-item>
                     <el-row>
                         <el-col :span="10">
-                            <el-form-item prop="remotePort" :label="$t('i18n.管理远程账号.端口')" label-width="120px">
+                            <el-form-item prop="remotePort" label="端口:" label-width="120px">
                                 <el-input v-model="accountInfoDialog.remotePort" :placeholder="$t('i18n.管理远程账号.请输入远程主机端口')"
                                           size="mini">
                                 </el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
-                    <el-form-item prop="authMethod.name" :label="$t('i18n.管理远程账号.认证方式')" label-width="120px">
+                    <el-form-item prop="authMethod.name" label="认证方式:" label-width="120px">
                         <el-dropdown trigger="click" @command="updateAuthMethod" size="mini" placement="bottom-start">
                             <el-button size="mini">
                                 {{accountInfoDialog.authMethod && accountInfoDialog.authMethod.name ?
@@ -163,7 +163,7 @@
                     <el-row v-if="accountInfoDialog.CProtocol.id === accountInfoDialog.protocolTypeList[2].id &&
                     accountInfoDialog.authMethod.id === accountInfoDialog.authTypeList[1].id">
                         <el-col :span="10">
-                            <el-form-item prop="remoteUserNameNotice" :label="$t('i18n.管理远程账号.用户名提示')" label-width="120px">
+                            <el-form-item prop="remoteUserNameNotice" label="用户名提示:" label-width="120px">
                                 <el-input v-model="accountInfoDialog.remoteUserNameNotice" :placeholder="$t('i18n.管理远程账号.遇到此提示则自动发送用户名')"
                                           size="mini">
                                 </el-input>
@@ -173,7 +173,7 @@
                     <el-row v-if="accountInfoDialog.CProtocol.id === accountInfoDialog.protocolTypeList[2].id &&
                     accountInfoDialog.authMethod.id === accountInfoDialog.authTypeList[1].id">
                         <el-col :span="10">
-                            <el-form-item prop="remotePasswordNotice" :label="$t('i18n.管理远程账号.密码提示')" label-width="120px">
+                            <el-form-item prop="remotePasswordNotice" label="密码提示:" label-width="120px">
                                 <el-input v-model="accountInfoDialog.remotePasswordNotice" :placeholder="$t('i18n.管理远程账号.遇到此提示则自动发送密码')"
                                           size="mini">
                                 </el-input>
@@ -182,7 +182,7 @@
                     </el-row>
                     <el-row>
                         <el-col :span="10">
-                            <el-form-item prop="remoteUserName" :label="$t('i18n.管理远程账号.远程账号')" label-width="120px">
+                            <el-form-item prop="remoteUserName" label="远程账号:" label-width="120px">
                                 <el-input v-model="accountInfoDialog.remoteUserName" :placeholder="$t('i18n.管理远程账号.请输入登陆远程主机的账号')"
                                           size="mini">
                                 </el-input>
@@ -191,7 +191,7 @@
                     </el-row>
                     <el-row v-if="accountInfoDialog.authMethod.id === accountInfoDialog.authTypeList[1].id">
                         <el-col :span="10">
-                            <el-form-item prop="remotePassword" :label="$t('i18n.管理远程账号.密码')" label-width="120px">
+                            <el-form-item prop="remotePassword" label="密码:" label-width="120px">
                                 <el-input v-model="accountInfoDialog.remotePassword" :placeholder="$t('i18n.管理远程账号.请输入登陆远程主机的密码')"
                                           show-password size="mini">
                                 </el-input>
@@ -200,7 +200,7 @@
                     </el-row>
                     <el-row v-if="accountInfoDialog.authMethod.id === accountInfoDialog.authTypeList[2].id">
                         <el-col :span="20">
-                            <el-form-item prop="privateKey" :label="$t('i18n.管理远程账号.SSH私钥')" label-width="120px">
+                            <el-form-item prop="privateKey" label="SSH私钥:" label-width="120px">
                                 <el-input type="textarea" :rows="3" v-model="accountInfoDialog.privateKey" show-password size="mini"
                                           :placeholder="$t('i18n.管理远程账号.请输入登陆远程主机的私钥')">
                                 </el-input>
@@ -213,8 +213,14 @@
                         <icon-svg icon-class="shandian"></icon-svg>
                         {{$t('i18n.管理远程账号.测试连接')}}
                     </el-button>
-                    <el-button type="primary" size="mini" @click="submitAccountInfo()">{{$t('i18n.管理远程账号.确定')}}</el-button>
-                    <el-button size="mini" @click="cancelAccountInfoDialog()">{{$t('i18n.管理远程账号.取消')}}</el-button>
+                    <el-button type="primary" size="mini" @click="submitAccountInfo()">
+                        <icon-svg icon-class="submit"></icon-svg>
+                        {{$t('i18n.管理远程账号.确定')}}
+                    </el-button>
+                    <el-button size="mini" @click="cancelAccountInfoDialog()">
+                        <icon-svg icon-class="cancel"></icon-svg>
+                        {{$t('i18n.管理远程账号.取消')}}
+                    </el-button>
                 </div>
             </el-dialog>
         </div>
@@ -489,7 +495,6 @@
                     this.accountInfoDialog.remoteUserName = '';
                     this.accountInfoDialog.remotePassword = '';
                     this.accountInfoDialog.privateKey = '';
-                    this.$refs['accountInfoDialog'].resetFields();
                 }
             },
             updateAuthMethod(authTypeObj) {
@@ -503,7 +508,6 @@
                     this.accountInfoDialog.remoteUserName = '';
                     this.accountInfoDialog.remotePassword = '';
                     this.accountInfoDialog.privateKey = '';
-                    this.$refs['accountInfoDialog'].resetFields();
                 }
             },
             cancelAccountInfoDialog() {

@@ -131,8 +131,14 @@
                     </el-table-column>
                 </el-table>
                 <div slot="footer" class="dialog-footer">
-                    <el-button type="primary" size="mini" @click="accountJoinGroup()">{{$t('i18n.组内服务器管理.确定')}}</el-button>
-                    <el-button size="mini" @click="cancelHostJoinGroup()">{{$t('i18n.组内服务器管理.取消')}}</el-button>
+                    <el-button type="primary" size="mini" @click="accountJoinGroup()">
+                        <icon-svg icon-class="submit"></icon-svg>
+                        {{$t('i18n.组内服务器管理.确定')}}
+                    </el-button>
+                    <el-button size="mini" @click="cancelHostJoinGroup()">
+                        <icon-svg icon-class="cancel"></icon-svg>
+                        {{$t('i18n.组内服务器管理.取消')}}
+                    </el-button>
                 </div>
             </el-dialog>
         </div>

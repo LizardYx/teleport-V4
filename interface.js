@@ -209,6 +209,14 @@ let server = http.createServer(function (request, response) {
                 }]
             }
         }
+        if (request.url.indexOf(`${commonUrl}/system/do-ldap-get-users`) >= 0) {
+            data.rows = {
+                data: [{
+                    id: 1,
+                }],
+                count: 3
+            }
+        }
         response.writeHead(statusCode, {'Content-Type': 'text/html'});
         //参数序列化
         response.end(JSON.stringify(data));

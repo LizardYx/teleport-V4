@@ -151,7 +151,7 @@
                        :close-on-click-modal="false" :close-on-press-escape="false" v-if="hostsInfoDialogVisible">
                 <el-form :model="hostsInfoDialog" status-icon :rules="hostsInfoDialog.rules" ref="hostsInfoDialog"
                          size="medium">
-                    <el-form-item prop="systemInfo.name" :label="$t('i18n.主机管理页面.远程主机系统')" label-width="120px">
+                    <el-form-item prop="systemInfo.name" label="远程主机系统:" label-width="120px">
                         <el-dropdown trigger="click" @command="updateSystem" size="mini" placement="bottom-start">
                             <el-button size="mini">
                                 <icon-svg v-if="hostsInfoDialog.systemInfo && hostsInfoDialog.systemInfo.icon"
@@ -172,14 +172,14 @@
                     </el-form-item>
                     <el-row>
                         <el-col :span="10">
-                            <el-form-item prop="RemoteHostAddress" :label="$t('i18n.主机管理页面.远程主机地址')" label-width="120px">
+                            <el-form-item prop="RemoteHostAddress" label="远程主机地址:" label-width="120px">
                                 <el-input v-model="hostsInfoDialog.RemoteHostAddress" :placeholder="$t('i18n.主机管理页面.请输入远程主机IP地址')"
                                           size="mini">
                                 </el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
-                    <el-form-item prop="connectedModal.name" :label="$t('i18n.主机管理页面.连接模式')" label-width="120px">
+                    <el-form-item prop="connectedModal.name" label="连接模式:" label-width="120px">
                         <el-dropdown trigger="click" @command="updateConnectedModal" size="mini" placement="bottom-start">
                             <el-button size="mini" class="mar-rgt">
                                 {{hostsInfoDialog.connectedModal && hostsInfoDialog.connectedModal.name ?
@@ -224,7 +224,7 @@
                     </el-form-item>
                     <el-row v-if="hostsInfoDialog.connectedModal.id === hostsInfoDialog.connectedModalList[1].id">
                         <el-col :span="10">
-                            <el-form-item prop="RoutingHost.Address" :label="$t('i18n.主机管理页面.路由主机地址')"
+                            <el-form-item prop="RoutingHost.Address" label="路由主机地址:"
                                           label-width="120px">
                                 <el-input v-model="hostsInfoDialog.RoutingHost.Address" size="mini"
                                           :placeholder="$t('i18n.主机管理页面.请输入路由主机IP地址')">
@@ -232,7 +232,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item prop="RoutingHost.port" :label="$t('i18n.主机管理页面.映射端口')"
+                            <el-form-item prop="RoutingHost.port" label="映射端口:"
                                           label-width="100px">
                                 <el-input v-model="hostsInfoDialog.RoutingHost.port" size="mini"
                                           :placeholder="$t('i18n.主机管理页面.请输入映射端口')">
@@ -242,7 +242,7 @@
                     </el-row>
                     <el-row>
                         <el-col :span="13">
-                            <el-form-item :label="$t('i18n.主机管理页面.名称')" label-width="120px">
+                            <el-form-item label="名称:" label-width="120px">
                                 <el-input v-model="hostsInfoDialog.name" :placeholder="$t('i18n.主机管理页面.请输入名称')" size="mini">
                                 </el-input>
                             </el-form-item>
@@ -250,7 +250,7 @@
                     </el-row>
                     <el-row>
                         <el-col :span="13">
-                            <el-form-item :label="$t('i18n.主机管理页面.资产编号')" label-width="120px">
+                            <el-form-item label="资产编号:" label-width="120px">
                                 <el-input v-model="hostsInfoDialog.assetNumber" size="mini"
                                           :placeholder="$t('i18n.主机管理页面.请输入资产编号')">
                                 </el-input>
@@ -259,7 +259,7 @@
                     </el-row>
                     <el-row>
                         <el-col :span="20">
-                            <el-form-item :label="$t('i18n.主机管理页面.备注')" label-width="120px">
+                            <el-form-item label="备注:" label-width="120px">
                                 <el-input type="textarea" :rows="3" v-model="hostsInfoDialog.remark" size="mini"
                                           :placeholder="$t('i18n.主机管理页面.请输入备注')">
                                 </el-input>
@@ -268,8 +268,14 @@
                     </el-row>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button type="primary" @click="submitHostsInfo()" size="mini">{{$t('i18n.主机管理页面.确定')}}</el-button>
-                    <el-button @click="cancelAddHosts()" size="mini">{{$t('i18n.主机管理页面.取消')}}</el-button>
+                    <el-button type="primary" @click="submitHostsInfo()" size="mini">
+                        <icon-svg icon-class="submit"></icon-svg>
+                        {{$t('i18n.主机管理页面.确定')}}
+                    </el-button>
+                    <el-button @click="cancelAddHosts()" size="mini">
+                        <icon-svg icon-class="cancel"></icon-svg>
+                        {{$t('i18n.主机管理页面.取消')}}
+                    </el-button>
                 </div>
             </el-dialog>
             <el-dialog :title="$t('i18n.主机管理页面.导入资产（主机及账号）')" :visible.sync="importADialogVisible"

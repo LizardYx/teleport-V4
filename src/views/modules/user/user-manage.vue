@@ -21,12 +21,16 @@
                         </el-button>
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item>
-                                <icon-svg icon-class="ldapUser"></icon-svg>
-                                导入LDAP用户
+                                <div>
+                                    <icon-svg icon-class="ldapUser"></icon-svg>
+                                    导入LDAP用户
+                                </div>
                             </el-dropdown-item>
                             <el-dropdown-item>
-                                <icon-svg icon-class="setting"></icon-svg>
-                                LDAP设置
+                                <div @click="initLdapSettingDialog">
+                                    <icon-svg icon-class="setting"></icon-svg>
+                                    LDAP设置
+                                </div>
                             </el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
@@ -138,7 +142,7 @@
                        :close-on-click-modal="false" :close-on-press-escape="false" v-if="userInfoDialog.visible">
                 <el-form :model="userInfoDialog" status-icon :rules="userInfoDialog.rules" ref="userInfoDialog"
                          size="medium">
-                    <el-form-item prop="role.id" label="角色" label-width="80px">
+                    <el-form-item prop="role.id" label="角色:" label-width="100px">
                         <el-dropdown trigger="click" @command="updateRole" size="mini" placement="bottom-start">
                             <el-button size="mini">
                                 {{userInfoDialog.role.name}}
@@ -153,7 +157,7 @@
                     </el-form-item>
                     <el-row>
                         <el-col :span="12">
-                            <el-form-item prop="account" label="登录名" label-width="80px">
+                            <el-form-item prop="account" label="登录名:" label-width="100px">
                                 <el-input v-model="userInfoDialog.account" placeholder="请输入登录名" size="mini">
                                 </el-input>
                             </el-form-item>
@@ -161,7 +165,7 @@
                     </el-row>
                     <el-row>
                         <el-col :span="12">
-                            <el-form-item label="姓名" label-width="80px">
+                            <el-form-item label="姓名:" label-width="100px">
                                 <el-input v-model="userInfoDialog.name" placeholder="请输入姓名" size="mini">
                                 </el-input>
                             </el-form-item>
@@ -169,7 +173,7 @@
                     </el-row>
                     <el-row>
                         <el-col :span="12">
-                            <el-form-item prop="email" label="Email" label-width="80px">
+                            <el-form-item prop="email" label="Email:" label-width="100px">
                                 <el-input v-model="userInfoDialog.email" placeholder="请输入邮箱地址" size="mini">
                                 </el-input>
                             </el-form-item>
@@ -177,7 +181,7 @@
                     </el-row>
                     <el-row>
                         <el-col :span="12">
-                            <el-form-item label="电话号码" label-width="80px">
+                            <el-form-item label="电话号码:" label-width="100px">
                                 <el-input v-model="userInfoDialog.phone" placeholder="请输入电话号码" size="mini">
                                 </el-input>
                             </el-form-item>
@@ -185,7 +189,7 @@
                     </el-row>
                     <el-row>
                         <el-col :span="12">
-                            <el-form-item label="QQ" label-width="80px">
+                            <el-form-item label="QQ:" label-width="100px">
                                 <el-input v-model="userInfoDialog.QQ" placeholder="请输入QQ账号" size="mini">
                                 </el-input>
                             </el-form-item>
@@ -193,7 +197,7 @@
                     </el-row>
                     <el-row>
                         <el-col :span="12">
-                            <el-form-item label="微信" label-width="80px">
+                            <el-form-item label="微信:" label-width="100px">
                                 <el-input v-model="userInfoDialog.WeChat" placeholder="请输入微信账号" size="mini">
                                 </el-input>
                             </el-form-item>
@@ -201,14 +205,14 @@
                     </el-row>
                     <el-row>
                         <el-col :span="20">
-                            <el-form-item label="备注" label-width="80px">
+                            <el-form-item label="备注:" label-width="100px">
                                 <el-input type="textarea" :rows="3" v-model="userInfoDialog.remark" size="mini"
                                           placeholder="请填写备注">
                                 </el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
-                    <el-form-item prop="authWayTag" label="认证方式" label-width="80px">
+                    <el-form-item prop="authWayTag" label="认证方式:" label-width="100px">
                         <el-radio-group v-model="userInfoDialog.authWayTag">
                             <el-radio v-for="authWayObj in userInfoDialog.authWayList" :key="authWayObj.id"
                                       :label="authWayObj.tag">
@@ -218,11 +222,17 @@
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button type="primary" size="mini" @click="submitUserInfo">确定</el-button>
-                    <el-button size="mini" @click="cancelEditUserInfo">取消</el-button>
+                    <el-button type="primary" size="mini" @click="submitUserInfo">
+                        <icon-svg icon-class="submit"></icon-svg>
+                        确定
+                    </el-button>
+                    <el-button size="mini" @click="cancelEditUserInfo">
+                        <icon-svg icon-class="cancel"></icon-svg>
+                        取消
+                    </el-button>
                 </div>
             </el-dialog>
-            <el-dialog title="倒入用户" :visible.sync="importUserDialog.visible" width="768px" v-if="importUserDialog.visible"
+            <el-dialog title="导入用户" :visible.sync="importUserDialog.visible" width="768px" v-if="importUserDialog.visible"
                        :close-on-click-modal="false" :close-on-press-escape="false">
                 <el-upload ref="upload" drag :action="importUserDialog.uploadUrl" accept=".csv" :limit="importUserDialog.limit"
                            :on-exceed="uploadFileOutOfRange" :before-upload="beforeUploadFile" :auto-upload="false">
@@ -243,8 +253,146 @@
                     </div>
                 </div>
                 <div slot="footer" class="dialog-footer">
-                    <el-button type="primary" size="mini" @click="importUser">确定</el-button>
-                    <el-button size="mini" @click="importUserDialog.visible = false">取消</el-button>
+                    <el-button type="primary" size="mini" @click="importUser">
+                        <icon-svg icon-class="submit"></icon-svg>
+                        确定
+                    </el-button>
+                    <el-button size="mini" @click="importUserDialog.visible = false">
+                        <icon-svg icon-class="cancel"></icon-svg>
+                        取消
+                    </el-button>
+                </div>
+            </el-dialog>
+            <el-dialog title="LDAP设置" :visible.sync="ldapSettingDialog.visible" width="768px" v-if="ldapSettingDialog.visible"
+                       :close-on-click-modal="false" :close-on-press-escape="false" class="ldap-setting">
+                <div class="connect-info">
+                    <div class="tag">LDAP连接配置</div>
+                    <div class="content">
+                        <el-form :model="ldapSettingDialog" status-icon :rules="ldapSettingDialog.rules" ref="ldapSettingDialog" size="medium">
+                            <el-row>
+                                <el-col :span="14">
+                                    <el-form-item prop="host" label="LDAP主机:" label-width="120px">
+                                        <el-input v-model="ldapSettingDialog.host" placeholder="LDAP服务器IP地址或域名" size="mini">
+                                        </el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            <el-row>
+                                <el-col :span="14">
+                                    <el-form-item prop="port" label="端口:" label-width="120px">
+                                        <el-input v-model="ldapSettingDialog.port" placeholder="LDAP端口，默认为389" size="mini">
+                                        </el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            <el-row>
+                                <el-col :span="14">
+                                    <el-form-item prop="domain" label="域:" label-width="120px">
+                                        <el-input v-model="ldapSettingDialog.domain" placeholder="LDAP账号使用'用户名@域'来登录teleport" size="mini">
+                                        </el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            <el-row>
+                                <el-col :span="14">
+                                    <el-form-item prop="managerDN" label="管理员DN:" label-width="120px">
+                                        <el-input v-model="ldapSettingDialog.managerDN" placeholder="LDAP服务的管理员账号，用于列举用户、同步账号"
+                                                  size="mini">
+                                        </el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            <el-row>
+                                <el-col :span="14">
+                                    <el-form-item prop="password" label="密码:" label-width="120px">
+                                        <el-input v-model="ldapSettingDialog.password" show-password placeholder="LDAP服务的管理员密码" size="mini">
+                                        </el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                        </el-form>
+                    </div>
+                </div>
+                <div class="filter-info">
+                    <div class="tag">LDAP用户过滤配置</div>
+                    <div class="content">
+                        <el-form :model="ldapSettingDialog" status-icon :rules="ldapSettingDialog.rules" ref="ldapSettingDialog" size="medium">
+                            <el-row>
+                                <el-col :span="20">
+                                    <el-form-item prop="userDN" label="用户基准DN:" label-width="120px">
+                                        <el-input v-model="ldapSettingDialog.userDN" placeholder="限制用户DN的范围，例如：ou=dev,ou=company,ou=com"
+                                                  size="mini">
+                                        </el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            <el-row>
+                                <el-col :span="20">
+                                    <el-form-item prop="filter" label="过滤器:" label-width="120px">
+                                        <el-input v-model="ldapSettingDialog.filter" placeholder="列举用户时的过滤器，例如 (&(objectClass=person))"
+                                                  size="mini">
+                                        </el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                        </el-form>
+                    </div>
+                </div>
+                <div class="attribute-mapping">
+                    <div class="tag">
+                        属性映射
+                        <el-popover placement="right" trigger="hover">
+                            <div v-html="getAMappingDescription()"></div>
+                            <el-link slot="reference" :underline="false">
+                                <icon-svg icon-class="wenhao"></icon-svg>
+                            </el-link>
+                        </el-popover>
+                    </div>
+                    <el-form :model="ldapSettingDialog" status-icon :rules="ldapSettingDialog.rules" ref="ldapSettingDialog" size="medium">
+                        <el-row>
+                            <el-col :span="20">
+                                <el-form-item prop="loginAccountKey" label="登录账号字段:" label-width="120px">
+                                    <el-input v-model="ldapSettingDialog.loginAccountKey" placeholder="例如：sAMAccountName"
+                                              size="mini">
+                                    </el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="20">
+                                <el-form-item label="真实姓名字段:" label-width="120px">
+                                    <el-input v-model="ldapSettingDialog.realNameKey" placeholder="例如：uid" size="mini">
+                                    </el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="20">
+                                <el-form-item label="邮箱地址字段:" label-width="120px">
+                                    <el-input v-model="ldapSettingDialog.emailKey" placeholder="例如：mail" size="mini">
+                                    </el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                    </el-form>
+                </div>
+                <div slot="footer" class="dialog-footer">
+                    <el-button type="primary" size="mini">
+                        <icon-svg icon-class="shuxing"></icon-svg>
+                        列举属性
+                    </el-button>
+                    <el-button type="primary" size="mini">
+                        <icon-svg icon-class="shandian"></icon-svg>
+                        测试获取用户
+                    </el-button>
+                    <el-button type="primary" size="mini">
+                        <icon-svg icon-class="submit"></icon-svg>
+                        保存设置
+                    </el-button>
+                    <el-button size="mini" @click="cancelLDAPSetting">
+                        <icon-svg icon-class="cancel"></icon-svg>
+                        取消
+                    </el-button>
                 </div>
             </el-dialog>
         </div>
@@ -280,6 +428,9 @@
                     visible: false
                 },
                 importUserDialog: {
+                    visible: false
+                },
+                ldapSettingDialog: {
                     visible: false
                 },
                 statusList: this.common.statusList,
@@ -644,6 +795,60 @@
                 this.importUserDialog.visible = false;
             },
             // import user end
+
+            // ldap setting start
+            initLdapSettingDialog() {
+                //需要调用接口查询LDAP的配置，如果有配置，将数据填入下面的对象中
+                this.ldapSettingDialog = {
+                    visible: true,
+                    host: '',
+                    port: '',
+                    domain: '',
+                    managerDN: '',
+                    password: '',
+                    userDN: '',
+                    filter: '',
+                    loginAccountKey: '',
+                    realNameKey: '',
+                    emailKey: '',
+                    rules: {
+                        host: [
+                            {required: true, message: '请输入LDAP服务器IP地址或域名', trigger: 'blur'}
+                        ],
+                        port: [
+                            {required: true, message: '请输入LDAP端口', trigger: 'blur'}
+                        ],
+                        domain: [
+                            {required: true, message: '请输入LDAP账号使用的域', trigger: 'blur'}
+                        ],
+                        managerDN: [
+                            {required: true, message: '请输入LDAP服务的管理员账号', trigger: 'blur'}
+                        ],
+                        password: [
+                            {required: true, message: '请输入LDAP服务的管理员密码', trigger: 'blur'}
+                        ],
+                        userDN: [
+                            {required: true, message: '请输入限制用户DN的范围', trigger: 'blur'}
+                        ],
+                        filter: [
+                            {required: true, message: '请输入列举用户时的过滤器', trigger: 'blur'}
+                        ],
+                        loginAccountKey: [
+                            {required: true, message: '请输入登录账号字段。例如：sAMAccountName', trigger: 'blur'}
+                        ],
+                    }
+                };
+            },
+            getAMappingDescription() {
+                return `将LDAP的属性映射到 teleport 的用户属性，例如
+                        <span style="color: #E6A23C">LDAP中的用户属性 sAMAccountName 映射为teleport的登录账号。</span><br/>
+                        如果不清楚此LDAP服务的用户属性，可使用下方的“列举属性”按钮进行查询。`;
+            },
+            cancelLDAPSetting() {
+                this.$refs['ldapSettingDialog'].resetFields();
+                this.ldapSettingDialog.visible = false;
+            },
+            // ldap setting end
         },
         created() {
             this.initPageInfo();
@@ -657,11 +862,43 @@
     }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
     #users{
         .tool-bar{
             div.el-dropdown{
                 padding: 0 10px;
+            }
+        }
+        div.ldap-setting{
+            div.el-dialog__header{
+                box-shadow: 0 1px 5px 0 #DCDFE6;
+            }
+            div.el-dialog__body{
+                max-height: 600px;
+                overflow-y: auto;
+                >div{
+                    padding-bottom: 15px;
+                    padding-top: 30px;
+                    border-bottom: 1px solid #DCDFE6;
+                    &:first-child{
+                        padding-top: 0;
+                    }
+                    &:last-child{
+                        border-bottom: none;
+                    }
+                    >div.tag{
+                        border-left: 3px solid $color-main;
+                        padding-left: 15px;
+                        margin-bottom: 15px;
+                        font-weight: bold;
+                    }
+                    >div.content{
+                        margin-left: 18px;
+                    }
+                }
+            }
+            div.el-dialog__footer{
+                box-shadow: 0 -1px 5px 0 #DCDFE6;
             }
         }
     }

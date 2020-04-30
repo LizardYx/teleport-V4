@@ -123,7 +123,7 @@
                          size="medium">
                     <el-row>
                         <el-col :span="10">
-                            <el-form-item prop="name" :label="$t('i18n.主机分组管理.名称')" label-width="120px">
+                            <el-form-item prop="name" label="名称:" label-width="120px">
                                 <el-input v-model="hostGroupDialog.name" :placeholder="$t('i18n.主机分组管理.请输入主机分组名称')" size="mini">
                                 </el-input>
                             </el-form-item>
@@ -131,7 +131,7 @@
                     </el-row>
                     <el-row>
                         <el-col :span="20">
-                            <el-form-item :label="$t('i18n.主机分组管理.简要描述')" label-width="120px">
+                            <el-form-item label="简要描述:" label-width="120px">
                                 <el-input type="textarea" :rows="3" v-model="hostGroupDialog.desc" size="mini"
                                           :placeholder="$t('i18n.主机分组管理.请输入主机分组描述')">
                                 </el-input>
@@ -140,8 +140,14 @@
                     </el-row>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button type="primary" size="mini" @click="submitHostGroupInfo()">{{$t('i18n.主机分组管理.确定')}}</el-button>
-                    <el-button size="mini" @click="cancelHostGroupDialog()">{{$t('i18n.主机分组管理.取消')}}</el-button>
+                    <el-button type="primary" size="mini" @click="submitHostGroupInfo()">
+                        <icon-svg icon-class="submit"></icon-svg>
+                        {{$t('i18n.主机分组管理.确定')}}
+                    </el-button>
+                    <el-button size="mini" @click="cancelHostGroupDialog()">
+                        <icon-svg icon-class="cancel"></icon-svg>
+                        {{$t('i18n.主机分组管理.取消')}}
+                    </el-button>
                 </div>
             </el-dialog>
         </div>
