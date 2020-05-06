@@ -365,7 +365,8 @@
             // remove account start
             confirmRemoveAccount(idList) {
                 if (idList && idList[0]) {
-                    this.$confirm(this.$t('i18n.组内账号管理.确认移除组内账号'), this.$t('i18n.组内账号管理.删除'), {
+                    this.$confirm('确认<span class="text-bold">"移除"</span>选中成员账号', '移除', {
+                        dangerouslyUseHTMLString: true,
                         closeOnClickModal: false,
                         confirmButtonText: this.$t('i18n.组内账号管理.确定'),
                         cancelButtonText: this.$t('i18n.组内账号管理.取消'),

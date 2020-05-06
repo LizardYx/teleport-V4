@@ -597,7 +597,8 @@
             },
             confirmDisabledHost(idList) {
                 if (idList && idList[0]) {
-                    this.$confirm(this.$t('i18n.主机管理页面.确认禁用远程主机'), this.$t('i18n.主机管理页面.禁用'), {
+                    this.$confirm('确认<span class="text-bold">"禁用"</span>选中远程主机', this.$t('i18n.主机管理页面.禁用'), {
+                        dangerouslyUseHTMLString: true,
                         closeOnClickModal: false,
                         confirmButtonText: this.$t('i18n.主机管理页面.确定'),
                         cancelButtonText: this.$t('i18n.主机管理页面.取消'),
@@ -620,7 +621,8 @@
             },
             confirmEnabledHost(idList) {
                 if (idList && idList[0]) {
-                    this.$confirm(this.$t('i18n.主机管理页面.确认解禁远程主机'), this.$t('i18n.主机管理页面.禁用'), {
+                    this.$confirm('确认<span class="text-bold">"解禁"</span>选中远程主机', this.$t('i18n.主机管理页面.禁用'), {
+                        dangerouslyUseHTMLString: true,
                         closeOnClickModal: false,
                         confirmButtonText: this.$t('i18n.主机管理页面.确定'),
                         cancelButtonText: this.$t('i18n.主机管理页面.取消'),
@@ -640,7 +642,8 @@
             // delete host start
             confirmDeleteHost(idList) {
                 if (idList && idList[0]) {
-                    this.$confirm(this.$t('i18n.主机管理页面.确定删除远程主机'), this.$t('i18n.主机管理页面.删除'), {
+                    this.$confirm('确定<span class="text-bold">"删除"</span>远程主机', this.$t('i18n.主机管理页面.删除'), {
+                        dangerouslyUseHTMLString: true,
                         closeOnClickModal: false,
                         confirmButtonText: this.$t('i18n.主机管理页面.确定'),
                         cancelButtonText: this.$t('i18n.主机管理页面.取消'),

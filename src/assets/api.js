@@ -18,4 +18,5 @@ export const api = {
     getRoleList: `${baseUrl}/user/get-role-list`, //获取角色列表
     updateUserInfo: `${baseUrl}/user/update-user`, //创建新用户/更新用户信息
     getLdapUser: `${baseUrl}/system/do-ldap-get-users`, //获取ldap用户列表
+    updateUserRole: `${baseUrl}/user/set-role`, //更新用户角色
 };

@@ -349,8 +349,9 @@
             // remove host from group start
             confirmRemoveHost(idList) {
                 if (idList && idList[0]) {
-                    this.$confirm(this.$t('i18n.组内服务器管理.确定将选中主机从组中移除'),
+                    this.$confirm('确定<span class="text-bold">"从分组中移除"</span>选中主机',
                         this.$t('i18n.组内服务器管理.移除组成员'), {
+                        dangerouslyUseHTMLString: true,
                         closeOnClickModal: false,
                         confirmButtonText: this.$t('i18n.组内服务器管理.确定'),
                         cancelButtonText: this.$t('i18n.组内服务器管理.取消'),

@@ -356,7 +356,8 @@
             },
             confirmDisabledGroup(idList) {
                 if (idList && idList[0]) {
-                    this.$confirm(this.$t('i18n.主机分组管理.确认禁用主机分组'), this.$t('i18n.主机分组管理.禁用'), {
+                    this.$confirm('确认<span class="text-bold">"禁用"</span>选中主机分组', '禁用', {
+                        dangerouslyUseHTMLString: true,
                         closeOnClickModal: false,
                         confirmButtonText: this.$t('i18n.主机分组管理.确定'),
                         cancelButtonText: this.$t('i18n.主机分组管理.取消'),
@@ -379,7 +380,8 @@
             },
             confirmEnabledGroup(idList) {
                 if (idList && idList[0]) {
-                    this.$confirm(this.$t('i18n.主机分组管理.确认解禁主机分组'), this.$t('i18n.主机分组管理.解禁'), {
+                    this.$confirm('确认<span class="text-bold">"解禁"</span>选中主机分组', '解禁', {
+                        dangerouslyUseHTMLString: true,
                         closeOnClickModal: false,
                         confirmButtonText: this.$t('i18n.主机分组管理.确定'),
                         cancelButtonText: this.$t('i18n.主机分组管理.取消'),
@@ -399,7 +401,8 @@
             // delete host group start
             confirmDeleteGroup(idList) {
                 if (idList && idList[0]) {
-                    this.$confirm(this.$t('i18n.主机分组管理.确认删除主机分组'), this.$t('i18n.主机分组管理.删除'), {
+                    this.$confirm('确认<span class="text-bold">"删除"</span>选中主机分组', this.$t('i18n.主机分组管理.删除'), {
+                        dangerouslyUseHTMLString: true,
                         closeOnClickModal: false,
                         confirmButtonText: this.$t('i18n.主机分组管理.确定'),
                         cancelButtonText: this.$t('i18n.主机分组管理.取消'),

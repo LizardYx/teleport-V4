@@ -350,7 +350,8 @@
             },
             confirmDisabledAccount(idList) {
                 if (idList && idList[0]) {
-                    this.$confirm(this.$t('i18n.管理远程账号.确认禁用远程主机账号'), this.$t('i18n.管理远程账号.禁用'), {
+                    this.$confirm('确认<span class="text-bold">"禁用"</span>选中远程主机账号', this.$t('i18n.管理远程账号.禁用'), {
+                        dangerouslyUseHTMLString: true,
                         closeOnClickModal: false,
                         confirmButtonText: this.$t('i18n.管理远程账号.确定'),
                         cancelButtonText: this.$t('i18n.管理远程账号.取消'),
@@ -373,7 +374,8 @@
             },
             confirmEnabledAccount(idList) {
                 if (idList && idList[0]) {
-                    this.$confirm(this.$t('i18n.管理远程账号.确认解禁远程主机账号'), this.$t('i18n.管理远程账号.解禁'), {
+                    this.$confirm('确认<span class="text-bold">"解禁"</span>选中远程主机账号', this.$t('i18n.管理远程账号.解禁'), {
+                        dangerouslyUseHTMLString: true,
                         closeOnClickModal: false,
                         confirmButtonText: this.$t('i18n.管理远程账号.确定'),
                         cancelButtonText: this.$t('i18n.管理远程账号.取消'),
@@ -538,7 +540,8 @@
             // delete account start
             confirmDeleteAccount(idList) {
                 if (idList && idList[0]) {
-                    this.$confirm(this.$t('i18n.管理远程账号.确认删除远程主机账号'), this.$t('i18n.管理远程账号.删除'), {
+                    this.$confirm('确认<span class="text-bold">"删除"</span>选中远程主机账号选中远程主机账号', this.$t('i18n.管理远程账号.删除'), {
+                        dangerouslyUseHTMLString: true,
                         closeOnClickModal: false,
                         confirmButtonText: this.$t('i18n.管理远程账号.确定'),
                         cancelButtonText: this.$t('i18n.管理远程账号.取消'),

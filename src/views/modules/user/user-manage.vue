@@ -34,7 +34,7 @@
                             </el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
-                    <el-button size="mini" type="primary">
+                    <el-button size="mini" type="primary" :disabled="!selectedIdList[0]" @click="initUpdateRole(selectedIdList)">
                         {{$t('i18n.用户管理.设置角色')}}
                     </el-button>
                     <el-button size="mini" type="primary" :disabled="!selectedIdList[0]" @click="confirmDisabledUser(selectedIdList)">
@@ -104,6 +104,11 @@
                                 <el-dropdown-menu slot="dropdown" class="operation">
                                     <el-dropdown-item>
                                         <el-link type="primary" :underline="false">编辑用户信息</el-link>
+                                    </el-dropdown-item>
+                                    <el-dropdown-item>
+                                        <el-link type="primary" :underline="false" @click="initUpdateRole([scope['row']['id']])">
+                                            设置角色
+                                        </el-link>
                                     </el-dropdown-item>
                                     <el-dropdown-item>
                                         <el-link type="primary" :underline="false">重置密码</el-link>
@@ -395,6 +400,45 @@
                     </el-button>
                 </div>
             </el-dialog>
+            <el-dialog :title="userRoleDialog.title" :visible.sync="userRoleDialog.visible" width="768px"
+                       :close-on-click-modal="false" :close-on-press-escape="false" v-if="userRoleDialog.visible">
+                <el-form :model="userRoleDialog" status-icon :rules="userRoleDialog.rules" ref="userRoleDialog"
+                         size="medium">
+                    <el-row>
+                        <el-col :span="12">
+                            <el-form-item prop="account" label="已选用户:" label-width="100px">
+                                <el-tag v-for="userObj in userRoleDialog.userList" :key="userObj.id" @close="removeUser(userObj.id)"
+                                        :closable="userRoleDialog.userList.length > 1" class="mar-rgt mar-btm">
+                                    {{userObj.name}}
+                                </el-tag>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-form-item prop="selectedRole.id" label="角色:" label-width="100px">
+                        <el-dropdown trigger="click" @command="updateSelectedRole" size="mini" placement="bottom-start">
+                            <el-button size="mini">
+                                {{userRoleDialog.selectedRole.name}}
+                                <i class="el-icon-arrow-down el-icon--right"></i>
+                            </el-button>
+                            <el-dropdown-menu solt="dropdown">
+                                <el-dropdown-item v-for="roleObj in userRoleDialog.roleList" :command="roleObj"
+                                                  :key="roleObj.id" v-text="roleObj.name">
+                                </el-dropdown-item>
+                            </el-dropdown-menu>
+                        </el-dropdown>
+                    </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button type="primary" size="mini" @click="confirmUpdateUserRole">
+                        <icon-svg icon-class="submit"></icon-svg>
+                        确定
+                    </el-button>
+                    <el-button size="mini" @click="cancelUpdateRole">
+                        <icon-svg icon-class="cancel"></icon-svg>
+                        取消
+                    </el-button>
+                </div>
+            </el-dialog>
         </div>
         <fix-tool-bar ref="toolbar"></fix-tool-bar>
     </div>
@@ -431,6 +475,9 @@
                     visible: false
                 },
                 ldapSettingDialog: {
+                    visible: false
+                },
+                userRoleDialog: {
                     visible: false
                 },
                 statusList: this.common.statusList,
@@ -636,7 +683,8 @@
             // disabled user start
             confirmDisabledUser(idList) {
                 if (idList && idList[0]) {
-                    this.$confirm('确认禁用用户', '禁用', {
+                    this.$confirm('确认<span class="text-bold">"禁用"</span>选中用户', '禁用', {
+                        dangerouslyUseHTMLString: true,
                         closeOnClickModal: false,
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
@@ -656,7 +704,8 @@
             // confirm enabled user start
             confirmEnabledUser(idList) {
                 if (idList && idList[0]) {
-                    this.$confirm('确认解禁用户', '解禁', {
+                    this.$confirm('确认<span class="text-bold">"解禁"</span>用户', '解禁', {
+                        dangerouslyUseHTMLString: true,
                         closeOnClickModal: false,
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
@@ -849,6 +898,103 @@
                 this.ldapSettingDialog.visible = false;
             },
             // ldap setting end
+
+            // update role start
+            initUpdateRole(userIdList) {
+                if (userIdList && userIdList[0]) {
+                    this.userRoleDialog = {
+                        visible: true,
+                        userList: [],
+                        roleList: this.roleList,
+                        selectedRole: {
+                            id: '',
+                            name: '请选择角色',
+                            privilege: ''
+                        },
+                        rules: {
+                            'selectedRole.id': [{
+                                required: true, message: '请选择角色', trigger: 'change'
+                            }],
+                        }
+                    };
+                    // init user list
+                    userIdList.forEach((userId) => {
+                        for (const userObj of this.userList) {
+                            if (userObj.id === userId) {
+                                const newUserObj = {
+                                    id: userObj.id,
+                                    name: userObj.username
+                                };
+
+                                this.userRoleDialog.userList.push(newUserObj);
+                                break;
+                            }
+                        }
+                    });
+                }
+            },
+            removeUser(userId) {
+                for (let index = 0; index < this.userRoleDialog.userList.length; index++) {
+                    const userObj = this.userRoleDialog.userList[index];
+
+                    if (userObj.id === userId) {
+                        this.userRoleDialog.userList.splice(index, 1);
+                        break;
+                    }
+                }
+            },
+            updateSelectedRole(roleObj) {
+                if (!!roleObj && (roleObj.id !== this.userRoleDialog.selectedRole.id)) {
+                    this.userRoleDialog.selectedRole = {
+                        id: roleObj.id,
+                        name: roleObj.name,
+                        privilege: roleObj.privilege
+                    };
+                    this.$refs['userRoleDialog'].clearValidate('selectedRole.id');
+                }
+            },
+            cancelUpdateRole() {
+                this.$refs['userRoleDialog'].resetFields();
+                this.userRoleDialog.visible = false;
+            },
+            confirmUpdateUserRole() {
+                this.$refs['userRoleDialog'].validate((passValidate) => {
+                    if (passValidate) {
+                        this.$confirm(`确认将选中用户角色设置为 <span class="text-bold">"${this.userRoleDialog.selectedRole.name}"</span>`,
+                            '设置角色', {
+                            dangerouslyUseHTMLString: true,
+                            closeOnClickModal: false,
+                            confirmButtonText: '确定',
+                            cancelButtonText: '取消',
+                            type: 'warning'
+                        }).then(() =>{
+                            this.updateUserRole();
+                        });
+                    }else {
+                        return false;
+                    }
+                })
+            },
+            updateUserRole() {
+                let params = {
+                    users: [],
+                    role_id: this.userRoleDialog.selectedRole.id
+                };
+
+                this.userRoleDialog.userList.forEach((userObj) => {
+                    params.users.push(userObj.id);
+                });
+                asyncPost(api.updateUserRole, params)
+                    .then(() => {
+                        this.$refs['userRoleDialog'].resetFields();
+                        this.userRoleDialog.visible = false;
+                        this.getUserList();
+                        this.common.notification('success', '设置用户角色成功');
+                    }, (error) => {
+                        this.common.notification('warning', error.msg);
+                    });
+            },
+            // update role end
         },
         created() {
             this.initPageInfo();
