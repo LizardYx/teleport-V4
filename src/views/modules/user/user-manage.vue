@@ -43,7 +43,7 @@
                     <el-button size="mini" type="primary" :disabled="!selectedIdList[0]" @click="confirmEnabledUser(selectedIdList)">
                         {{$t('i18n.用户管理.解禁')}}
                     </el-button>
-                    <el-button size="mini" type="primary" :disabled="!selectedIdList[0]">
+                    <el-button size="mini" type="primary" :disabled="!selectedIdList[0]" @click="initDeleteUser(selectedIdList)">
                         <i class="el-icon-delete"></i>
                         {{$t('i18n.用户管理.删除')}}
                     </el-button>
@@ -62,7 +62,7 @@
             <div class="mar-btm">
                 <el-table :data="userList" border @selection-change="updateSelected" @sort-change="updateFilter"
                           @filter-change="filterChange">
-                    <el-table-column min-width="5%" align="center" type="selection"></el-table-column>
+                    <el-table-column min-width="5%" align="center" type="selection" :selectable="canSelectUser"></el-table-column>
                     <el-table-column min-width="15%" header-align="center" prop="user" sortable="custom" :label="$t('i18n.用户管理.名称')">
                         <template slot-scope="scope">
                             <el-link type="primary" :underline="false">{{scope['row'].username}}</el-link>
@@ -89,7 +89,7 @@
                         </template>
                     </el-table-column>
                     <el-table-column min-width="20%" align="center" :label="$t('i18n.用户管理.操作')">
-                        <template slot-scope="scope">
+                        <template slot-scope="scope" v-if="scope.$index !== 0">
                             <el-link type="primary" class="mar-rgt" :underline="false" v-text="$t('i18n.用户管理.禁用')"
                                      :disabled="scope['row'].state === statusList[1].id" @click="confirmDisabledUser([scope['row'].id])">
                             </el-link>
@@ -103,7 +103,9 @@
                                 </span>
                                 <el-dropdown-menu slot="dropdown" class="operation">
                                     <el-dropdown-item>
-                                        <el-link type="primary" :underline="false">编辑用户信息</el-link>
+                                        <el-link type="primary" :underline="false" @click="initUserInfoDialog(scope['row'])">
+                                            编辑用户信息
+                                        </el-link>
                                     </el-dropdown-item>
                                     <el-dropdown-item>
                                         <el-link type="primary" :underline="false" @click="initUpdateRole([scope['row']['id']])">
@@ -117,7 +119,9 @@
                                         <el-link type="primary" :underline="false">重置身份验证器</el-link>
                                     </el-dropdown-item>
                                     <el-dropdown-item>
-                                        <el-link type="primary" :underline="false">删除</el-link>
+                                        <el-link type="primary" :underline="false" @click="initDeleteUser([scope['row'].id])">
+                                            删除
+                                        </el-link>
                                     </el-dropdown-item>
                                 </el-dropdown-menu>
                             </el-dropdown>
@@ -245,7 +249,7 @@
                     <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
                 </el-upload>
                 <div class="notice mar-top">
-                    <label class="title box-block">温馨提示</label>
+                    <label class="title box-block">温馨提示：</label>
                     <div class="content">
                         <span>
                             导入用户需要上传csv格式的文件，您可以下载
@@ -408,7 +412,7 @@
                         <el-col :span="12">
                             <el-form-item prop="account" label="已选用户:" label-width="100px">
                                 <el-tag v-for="userObj in userRoleDialog.userList" :key="userObj.id" @close="removeUser(userObj.id)"
-                                        :closable="userRoleDialog.userList.length > 1" class="mar-rgt mar-btm">
+                                        :closable="userRoleDialog.userList.length > 1" size="small" class="mar-rgt mar-btm">
                                     {{userObj.name}}
                                 </el-tag>
                             </el-form-item>
@@ -437,6 +441,24 @@
                         <icon-svg icon-class="cancel"></icon-svg>
                         取消
                     </el-button>
+                </div>
+            </el-dialog>
+            <el-dialog :visible.sync="deleteUserDialog.visible" v-if="deleteUserDialog.visible" class="delete-dialog"
+                       width="768px" :close-on-click-modal="false" :close-on-press-escape="false">
+                <div slot="title" class="delete-title">
+                    <icon-svg icon-class="warning"></icon-svg>操作确认
+                </div>
+                <div class="warning">
+                    <div class="text-bold">注意：删除操作不可恢复！！</div>
+                    <div>删除用户账号将同时将其从所在用户组中移除，并且删除所有分配给此用户的授权！</div>
+                </div>
+                <div class="mar-top">
+                    您确定要"删除"选中的 <span class="text-bold">{{deleteUserDialog.idList.length}}个</span> 用户？<br/>
+                    如果您希望临时禁止某个用户登录本系统，可将其状态设置为“禁用”。
+                </div>
+                <div slot="footer" class="dialog-footer">
+                    <el-button type="primary" size="mini" @click="deleteUser">确定</el-button>
+                    <el-button size="mini" @click="deleteUserDialog.visible = false">取消</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -478,6 +500,9 @@
                     visible: false
                 },
                 userRoleDialog: {
+                    visible: false
+                },
+                deleteUserDialog: {
                     visible: false
                 },
                 statusList: this.common.statusList,
@@ -670,6 +695,9 @@
                     }
                 }
                 return statusInfo;
+            },
+            canSelectUser(row, index) {
+                return index !== 0;
             },
             pageSizeChange(newPageSize) {
                 this.filter.pageNation.pageSize = newPageSize;
@@ -995,6 +1023,22 @@
                     });
             },
             // update role end
+
+            // delete user start
+            initDeleteUser(idList) {
+                this.deleteUserDialog = {
+                    visible: true,
+                    idList: idList
+                };
+            },
+            deleteUser(idList) {
+                // Call API
+                this.deleteUserDialog.visible = false;
+                this.filter.pageNation.pageNo = 1;
+                this.getUserList();
+                this.common.notification('success', '删除用户成功');
+            },
+            // delete user end
         },
         created() {
             this.initPageInfo();

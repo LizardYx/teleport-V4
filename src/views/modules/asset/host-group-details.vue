@@ -20,7 +20,7 @@
                         <i class="el-icon-circle-plus-outline"></i>
                         {{$t('i18n.组内服务器管理.添加组成员')}}
                     </el-button>
-                    <el-button size="mini" type="primary" :disabled="!selectedIdList[0]" @click="confirmRemoveHost(selectedIdList)">
+                    <el-button size="mini" type="primary" :disabled="!selectedIdList[0]" @click="initRemoveHFromGroup(selectedIdList)">
                         {{$t('i18n.组内服务器管理.移除组成员')}}
                     </el-button>
                     <el-button size="mini" type="primary" @click="getHostListInGroup()">
@@ -64,7 +64,7 @@
                     <el-table-column min-width="20%" align="center" :label="$t('i18n.组内服务器管理.操作')">
                         <template slot-scope="scope">
                             <el-link type="primary" class="mar-rgt" :underline="false" v-text="$t('i18n.组内服务器管理.移除组成员')"
-                                     @click="confirmRemoveHost([scope['row'].id])">
+                                     @click="initRemoveHFromGroup([scope['row'].id])">
                             </el-link>
                         </template>
                     </el-table-column>
@@ -141,6 +141,22 @@
                     </el-button>
                 </div>
             </el-dialog>
+            <el-dialog :visible.sync="removeHFromGroupDialog.visible" v-if="removeHFromGroupDialog.visible" class="delete-dialog"
+                       width="768px" :close-on-click-modal="false" :close-on-press-escape="false">
+                <div slot="title" class="delete-title">
+                    <icon-svg icon-class="warning"></icon-svg>操作确认
+                </div>
+                <div class="warning">
+                    <div>移除组内成员不会删除主机！</div>
+                </div>
+                <div class="mar-top">
+                    您确定要"移除"选中的 <span class="text-bold">{{removeHFromGroupDialog.idList.length}}个</span> 主机？<br/>
+                </div>
+                <div slot="footer" class="dialog-footer">
+                    <el-button type="primary" size="mini" @click="removeHost">确定</el-button>
+                    <el-button size="mini" @click="removeHFromGroupDialog.visible = false">取消</el-button>
+                </div>
+            </el-dialog>
         </div>
         <fix-tool-bar ref="toolbar"></fix-tool-bar>
     </div>
@@ -174,7 +190,10 @@
                 hostsStatusList: this.common.statusList,
                 osTypeList: this.common.osTypeList,
                 joinGroupVisible: false,
-                joinGroupDialog: {}
+                joinGroupDialog: {},
+                removeHFromGroupDialog: {
+                    visible: false
+                }
             }
         },
         methods: {
@@ -347,22 +366,15 @@
             // host join group end
 
             // remove host from group start
-            confirmRemoveHost(idList) {
-                if (idList && idList[0]) {
-                    this.$confirm('确定<span class="text-bold">"从分组中移除"</span>选中主机',
-                        this.$t('i18n.组内服务器管理.移除组成员'), {
-                        dangerouslyUseHTMLString: true,
-                        closeOnClickModal: false,
-                        confirmButtonText: this.$t('i18n.组内服务器管理.确定'),
-                        cancelButtonText: this.$t('i18n.组内服务器管理.取消'),
-                        type: 'warning'
-                    }).then(() =>{
-                        this.removeHost(idList);
-                    });
-                }
+            initRemoveHFromGroup(idList) {
+                this.removeHFromGroupDialog = {
+                    visible: true,
+                    idList: idList
+                };
             },
             removeHost(idList) {
                 //call API
+                this.removeHFromGroupDialog.visible = false;
                 this.filter.pageNation.pageNo = 1;
                 this.getHostListInGroup();
                 this.common.notification('success', this.$t('i18n.组内服务器管理.选中主机已成功从组中移除'));

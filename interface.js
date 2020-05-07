@@ -179,7 +179,7 @@ let server = http.createServer(function (request, response) {
                 data: [{
                     id: 1,
                     type: 1,
-                    auth_type: 2,
+                    auth_type: 0x0002,
                     username: 'admin',
                     surname: 'admin',
                     role_id: 1,
@@ -191,7 +191,7 @@ let server = http.createServer(function (request, response) {
                 },{
                     id: 2,
                     type: 1,
-                    auth_type: 3,
+                    auth_type: 0x0008,
                     username: 'test',
                     surname: '张三',
                     role_id: 1,

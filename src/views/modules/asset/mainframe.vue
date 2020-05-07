@@ -20,7 +20,7 @@
                     <el-button size="mini" type="primary" :disabled="!selectedIdList[0]" @click="confirmEnabledHost(selectedIdList)">
                         {{$t('i18n.主机管理页面.解禁')}}
                     </el-button>
-                    <el-button size="mini" type="primary" :disabled="!selectedIdList[0]" @click="confirmDeleteHost(selectedIdList)">
+                    <el-button size="mini" type="primary" :disabled="!selectedIdList[0]" @click="initDeleteHost(selectedIdList)">
                         <i class="el-icon-delete"></i>
                         {{$t('i18n.主机管理页面.删除')}}
                     </el-button>
@@ -105,7 +105,7 @@
                                     </el-dropdown-item>
                                     <el-dropdown-item>
                                         <el-link type="primary" :underline="false" v-text="$t('i18n.主机管理页面.删除')"
-                                                 @click="confirmDeleteHost([scope['row'].id])">
+                                                 @click="initDeleteHost([scope['row'].id])">
                                         </el-link>
                                     </el-dropdown-item>
                                 </el-dropdown-menu>
@@ -304,6 +304,24 @@
                     <el-button size="mini" @click="importADialogVisible = false">{{$t('i18n.主机管理页面.取消')}}</el-button>
                 </div>
             </el-dialog>
+            <el-dialog :visible.sync="deleteAccountDialog.visible" v-if="deleteAccountDialog.visible" class="delete-dialog"
+                       width="768px" :close-on-click-modal="false" :close-on-press-escape="false">
+                <div slot="title" class="delete-title">
+                    <icon-svg icon-class="warning"></icon-svg>操作确认
+                </div>
+                <div class="warning">
+                    <div class="text-bold">注意：删除操作不可恢复！！</div>
+                    <div>删除主机将同时删除与之相关的账号，并将主机和账号从所在分组中移除，同时删除所有相关授权！</div>
+                </div>
+                <div class="mar-top">
+                    您确定要"删除"选中的 <span class="text-bold">{{deleteAccountDialog.idList.length}}个</span> 主机？<br/>
+                    如果您希望临时禁止登录指定主机，可将其状态设置为“禁用”。
+                </div>
+                <div slot="footer" class="dialog-footer">
+                    <el-button type="primary" size="mini" @click="deleteHost">确定</el-button>
+                    <el-button size="mini" @click="deleteAccountDialog.visible = false">取消</el-button>
+                </div>
+            </el-dialog>
         </div>
         <fix-tool-bar ref="toolbar"></fix-tool-bar>
     </div>
@@ -337,7 +355,10 @@
                 hostsInfoDialogVisible: false,
                 hostsInfoDialog: {},
                 importADialogVisible: false,
-                importAssetsDialog: {}
+                importAssetsDialog: {},
+                deleteAccountDialog: {
+                    visible: false
+                }
             }
         },
         methods: {
@@ -597,7 +618,8 @@
             },
             confirmDisabledHost(idList) {
                 if (idList && idList[0]) {
-                    this.$confirm('确认<span class="text-bold">"禁用"</span>选中远程主机', this.$t('i18n.主机管理页面.禁用'), {
+                    this.$confirm(`确认"禁用"选中的 <span class="text-bold">${idList.length}台</span> 远程主机`,
+                        this.$t('i18n.主机管理页面.禁用'), {
                         dangerouslyUseHTMLString: true,
                         closeOnClickModal: false,
                         confirmButtonText: this.$t('i18n.主机管理页面.确定'),
@@ -621,7 +643,8 @@
             },
             confirmEnabledHost(idList) {
                 if (idList && idList[0]) {
-                    this.$confirm('确认<span class="text-bold">"解禁"</span>选中远程主机', this.$t('i18n.主机管理页面.禁用'), {
+                    this.$confirm(`确认"解禁"选中的 <span class="text-bold">${idList.length}台</span> 远程主机`,
+                        this.$t('i18n.主机管理页面.禁用'), {
                         dangerouslyUseHTMLString: true,
                         closeOnClickModal: false,
                         confirmButtonText: this.$t('i18n.主机管理页面.确定'),
@@ -640,25 +663,19 @@
             // enabled host end
 
             // delete host start
-            confirmDeleteHost(idList) {
-                if (idList && idList[0]) {
-                    this.$confirm('确定<span class="text-bold">"删除"</span>远程主机', this.$t('i18n.主机管理页面.删除'), {
-                        dangerouslyUseHTMLString: true,
-                        closeOnClickModal: false,
-                        confirmButtonText: this.$t('i18n.主机管理页面.确定'),
-                        cancelButtonText: this.$t('i18n.主机管理页面.取消'),
-                        type: 'warning'
-                    }).then(() =>{
-                        this.deleteHost(idList);
-                    });
-                }
+            initDeleteHost(idList) {
+                this.deleteAccountDialog = {
+                    visible: true,
+                    idList: idList
+                };
             },
-            deleteHost(idList) {
+            deleteHost() {
                 //call API
+                this.deleteAccountDialog.visible = false;
                 this.filter.pageNation.pageNo = 1;
                 this.getHostList();
                 this.common.notification('success', this.$t('i18n.主机管理页面.删除远程主机成功'));
-            }
+            },
             // delete host end
         },
         created() {

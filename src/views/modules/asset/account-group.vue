@@ -16,7 +16,7 @@
                     <el-button size="mini" type="primary" :disabled="!selectedIdList[0]" @click="confirmEnabledGroup(selectedIdList)">
                         {{$t('i18n.账号分组管理.解禁')}}
                     </el-button>
-                    <el-button size="mini" type="primary" :disabled="!selectedIdList[0]" @click="confirmDeleteGroup(selectedIdList)">
+                    <el-button size="mini" type="primary" :disabled="!selectedIdList[0]" @click="initDeleteGroup(selectedIdList)">
                         <i class="el-icon-delete"></i>
                         {{$t('i18n.账号分组管理.删除')}}
                     </el-button>
@@ -87,7 +87,7 @@
                                     </el-dropdown-item>
                                     <el-dropdown-item>
                                         <el-link type="primary" :underline="false" v-text="$t('i18n.账号分组管理.删除')"
-                                                 @click="confirmDeleteGroup([scope['row'].id])">
+                                                 @click="initDeleteGroup([scope['row'].id])">
                                         </el-link>
                                     </el-dropdown-item>
                                 </el-dropdown-menu>
@@ -147,6 +147,26 @@
                     </el-button>
                 </div>
             </el-dialog>
+            <el-dialog :visible.sync="deleteGroupDialog.visible" v-if="deleteGroupDialog.visible" class="delete-dialog"
+                       width="768px" :close-on-click-modal="false" :close-on-press-escape="false">
+                <div slot="title" class="delete-title">
+                    <icon-svg icon-class="warning"></icon-svg>操作确认
+                </div>
+                <div class="warning">
+                    <div class="text-bold">注意：删除操作不可恢复！！</div>
+                    <ul>
+                        <li>删除分组将同时删除所有分配给此分组成员的授权！</li>
+                        <li>删除分组不会删除组内的成员账号！</li>
+                    </ul>
+                </div>
+                <div class="mar-top">
+                    您确定要"删除"选中的 <span class="text-bold">{{deleteGroupDialog.idList.length}}个</span> 账号分组？<br/>
+                </div>
+                <div slot="footer" class="dialog-footer">
+                    <el-button type="primary" size="mini" @click="deleteAccountGroup">确定</el-button>
+                    <el-button size="mini" @click="deleteGroupDialog.visible = false">取消</el-button>
+                </div>
+            </el-dialog>
         </div>
         <fix-tool-bar ref="toolbar"></fix-tool-bar>
     </div>
@@ -178,7 +198,10 @@
                 statusFilterList: this.common.statusFilterList,
                 osTypeList: this.common.osTypeList,
                 accountGroupDialogVisible: false,
-                accountGroupDialog: {}
+                accountGroupDialog: {},
+                deleteGroupDialog: {
+                    visible: false
+                }
             }
         },
         methods: {
@@ -334,7 +357,8 @@
             },
             confirmDisabledGroup(idList) {
                 if (idList && idList[0]) {
-                    this.$confirm('确认<span class="text-bold">"禁用"</span>账号分组', '禁用', {
+                    this.$confirm(`确认"禁用"选中的 <span class="text-bold">${idList.length}个</span> 账号分组`,
+                        '禁用', {
                         dangerouslyUseHTMLString: true,
                         closeOnClickModal: false,
                         confirmButtonText: this.$t('i18n.账号分组管理.确定'),
@@ -358,7 +382,8 @@
             },
             confirmEnabledGroup(idList) {
                 if (idList && idList[0]) {
-                    this.$confirm('确认<span class="text-bold">"解禁"</span>账号分组', '解禁', {
+                    this.$confirm(`确认"解禁"选中的 <span class="text-bold">${idList.length}个</span> 账号分组`,
+                        '解禁', {
                         dangerouslyUseHTMLString: true,
                         closeOnClickModal: false,
                         confirmButtonText: this.$t('i18n.账号分组管理.确定'),
@@ -377,20 +402,15 @@
             // enabled account group end
 
             // delete account group start
-            confirmDeleteGroup(idList) {
-                if (idList && idList[0]) {
-                    this.$confirm(this.$t('i18n.账号分组管理.确认删除主机分组'), this.$t('i18n.账号分组管理.删除'), {
-                        closeOnClickModal: false,
-                        confirmButtonText: this.$t('i18n.账号分组管理.确定'),
-                        cancelButtonText: this.$t('i18n.账号分组管理.取消'),
-                        type: 'warning'
-                    }).then(() =>{
-                        this.deleteAccountGroup(idList);
-                    });
-                }
+            initDeleteGroup(idList) {
+                this.deleteGroupDialog = {
+                    visible: true,
+                    idList: idList
+                };
             },
             deleteAccountGroup(idList) {
                 //call API
+                this.deleteGroupDialog.visible = false;
                 this.filter.pageNation.pageNo = 1;
                 this.getAccountGroupList();
                 this.common.notification('success', this.$t('i18n.账号分组管理.删除主机分组成功'));
