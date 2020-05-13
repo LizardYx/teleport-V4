@@ -112,4 +112,35 @@ export const common = {
             duration: time ? time : 5000
         });
     },
+    getRandomPassword(len) {
+        const _chars = ['ABCDEFGHJKMNPQRSTWXYZ', 'abcdefhijkmnprstwxyz', '2345678']; // 默认去掉了容易混淆的字符oO,Ll,9gq,Vv,Uu,I1
+        let _chars_len = [];
+        let ret = '';
+        let have_CHAR = false;
+        let have_char = false;
+        let have_num = false;
+        len = len || 8;
+
+        for (let i = 0; i < _chars.length; ++i) {
+            _chars_len[i] = _chars[i].length;
+        }
+        for (; ;) {
+            ret = '';
+            for (let i = 0; i < len; i++) {
+                let idx = Math.floor(Math.random() * _chars.length);
+
+                if (idx === 0)
+                    have_CHAR = true;
+                else if (idx === 1)
+                    have_char = true;
+                else
+                    have_num = true;
+                ret += _chars[idx].charAt(Math.floor(Math.random() * _chars_len[idx]));
+            }
+
+            if (have_CHAR && have_char && have_num)
+                break;
+        }
+        return ret;
+    }
 };

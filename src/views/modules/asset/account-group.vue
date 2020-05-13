@@ -363,6 +363,7 @@
                         closeOnClickModal: false,
                         confirmButtonText: this.$t('i18n.账号分组管理.确定'),
                         cancelButtonText: this.$t('i18n.账号分组管理.取消'),
+                        cancelButtonClass: 'btn-cancel',
                         type: 'warning'
                     }).then(() =>{
                         this.disabledGroup(idList);
@@ -388,6 +389,7 @@
                         closeOnClickModal: false,
                         confirmButtonText: this.$t('i18n.账号分组管理.确定'),
                         cancelButtonText: this.$t('i18n.账号分组管理.取消'),
+                        cancelButtonClass: 'btn-cancel',
                         type: 'warning'
                     }).then(() =>{
                         this.enabledGroup(idList);

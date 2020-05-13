@@ -63,10 +63,7 @@
                 <el-table :data="userList" border @selection-change="updateSelected" @sort-change="updateFilter"
                           @filter-change="filterChange">
                     <el-table-column min-width="5%" align="center" type="selection" :selectable="canSelectUser"></el-table-column>
-                    <el-table-column min-width="15%" header-align="center" prop="user" sortable="custom" :label="$t('i18n.用户管理.名称')">
-                        <template slot-scope="scope">
-                            <el-link type="primary" :underline="false">{{scope['row'].username}}</el-link>
-                        </template>
+                    <el-table-column min-width="15%" header-align="center" prop="username" sortable="custom" :label="$t('i18n.用户管理.名称')">
                     </el-table-column>
                     <el-table-column min-width="15%" header-align="center" prop="type" sortable="custom" :label="getUserTypeTile()"
                                      column-key="type" :filters="getUserTypeFilterList()" :filter-multiple="false">
@@ -113,10 +110,14 @@
                                         </el-link>
                                     </el-dropdown-item>
                                     <el-dropdown-item>
-                                        <el-link type="primary" :underline="false">重置密码</el-link>
+                                        <el-link type="primary" :underline="false" @click="initResetPassword(scope['row'])">
+                                            重置密码
+                                        </el-link>
                                     </el-dropdown-item>
                                     <el-dropdown-item>
-                                        <el-link type="primary" :underline="false">重置身份验证器</el-link>
+                                        <el-link type="primary" :underline="false" @click="confirmResetOath(scope['row'].id)">
+                                            重置身份验证器
+                                        </el-link>
                                     </el-dropdown-item>
                                     <el-dropdown-item>
                                         <el-link type="primary" :underline="false" @click="initDeleteUser([scope['row'].id])">
@@ -461,6 +462,45 @@
                     <el-button size="mini" @click="deleteUserDialog.visible = false">取消</el-button>
                 </div>
             </el-dialog>
+            <el-dialog :visible.sync="resetPasswordDialog.visible" v-if="resetPasswordDialog.visible" class="delete-dialog"
+                       width="768px" :close-on-click-modal="false" :close-on-press-escape="false">
+                <div slot="title" class="delete-title">
+                    重置密码:{{resetPasswordDialog.userName}}
+                </div>
+                <div>
+                    <el-collapse v-model="resetPasswordDialog.activeItem">
+                        <el-collapse-item title="邮件重置" name="email-reset">
+                            <div>
+                                向用户的邮箱 <span class="text-bold">{{resetPasswordDialog.email}}</span> 发送密码重置邮件，
+                                然后用户可通过邮件中的密码重置链接自行设置新密码。
+                                <el-button type="primary" size="mini" @click="sendResetPasswordEmail">
+                                    <icon-svg icon-class="email"></icon-svg>
+                                    发送密码重置邮件
+                                </el-button>
+                            </div>
+                        </el-collapse-item>
+                        <el-collapse-item title="手动重置" name="manual-reset">
+                            <div>
+                                为用户设置新密码，并立即生效，需要通过其它方式告知用户新密码。
+                            </div>
+                            <div style="width: 50%;margin-bottom: 7px">
+                                <el-input size="mini" placeholder="输入用户的新密码" v-model="resetPasswordDialog.newPassword">
+                                    <template slot="append">
+                                        <el-button style="box-shadow: none" @click="getRandomPassword">生成随机密码</el-button>
+                                    </template>
+                                </el-input>
+                            </div>
+                            <el-button type="primary" size="mini" @click="resetPassword">
+                                <icon-svg icon-class="zhongzhimima"></icon-svg>
+                                重置密码
+                            </el-button>
+                        </el-collapse-item>
+                    </el-collapse>
+                </div>
+                <div slot="footer" class="dialog-footer">
+                    <el-button size="mini" @click="resetPasswordDialog.visible = false">取消</el-button>
+                </div>
+            </el-dialog>
         </div>
         <fix-tool-bar ref="toolbar"></fix-tool-bar>
     </div>
@@ -500,6 +540,9 @@
                     visible: false
                 },
                 userRoleDialog: {
+                    visible: false
+                },
+                resetPasswordDialog: {
                     visible: false
                 },
                 deleteUserDialog: {
@@ -711,11 +754,12 @@
             // disabled user start
             confirmDisabledUser(idList) {
                 if (idList && idList[0]) {
-                    this.$confirm('确认<span class="text-bold">"禁用"</span>选中用户', '禁用', {
+                    this.$confirm(`确认"禁用"选中的 <span class="text-bold">${idList.length}个</span> 用户`, '禁用', {
                         dangerouslyUseHTMLString: true,
                         closeOnClickModal: false,
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
+                        cancelButtonClass: 'btn-cancel',
                         type: 'warning'
                     }).then(() =>{
                         this.disableUser(idList);
@@ -732,11 +776,12 @@
             // confirm enabled user start
             confirmEnabledUser(idList) {
                 if (idList && idList[0]) {
-                    this.$confirm('确认<span class="text-bold">"解禁"</span>用户', '解禁', {
+                    this.$confirm(`确认"解禁"选中的 <span class="text-bold">${idList.length}个</span> 用户`, '解禁', {
                         dangerouslyUseHTMLString: true,
                         closeOnClickModal: false,
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
+                        cancelButtonClass: 'btn-cancel',
                         type: 'warning'
                     }).then(() =>{
                         this.enableUser(idList);
@@ -988,12 +1033,13 @@
             confirmUpdateUserRole() {
                 this.$refs['userRoleDialog'].validate((passValidate) => {
                     if (passValidate) {
-                        this.$confirm(`确认将选中用户角色设置为 <span class="text-bold">"${this.userRoleDialog.selectedRole.name}"</span>`,
+                        this.$confirm(`确认将 <span class="text-bold">${this.userRoleDialog.userList.length}个</span> 选中用户的角色设置为"${this.userRoleDialog.selectedRole.name}"`,
                             '设置角色', {
                             dangerouslyUseHTMLString: true,
                             closeOnClickModal: false,
                             confirmButtonText: '确定',
                             cancelButtonText: '取消',
+                            cancelButtonClass: 'btn-cancel',
                             type: 'warning'
                         }).then(() =>{
                             this.updateUserRole();
@@ -1023,6 +1069,52 @@
                     });
             },
             // update role end
+
+            // reset oath start
+            confirmResetOath(userId) {
+                this.$confirm('确认将选中用户的"身份验证器"重置', '重置身份验证器', {
+                    dangerouslyUseHTMLString: true,
+                    closeOnClickModal: false,
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    cancelButtonClass: 'btn-cancel',
+                    type: 'warning'
+                }).then(() =>{
+                    this.resetOath(userId);
+                });
+            },
+            resetOath(userId) {
+                //Call API
+                this.getUserList();
+                this.common.notification('success', '重置身份验证器成功');
+            },
+            // reset oath end
+
+            // reset password start
+            initResetPassword(userInfo) {
+                if (!!userInfo) {
+                    this.resetPasswordDialog = {
+                        visible: true,
+                        userId: userInfo.id,
+                        userName: userInfo.username,
+                        email: userInfo.email,
+                        activeItem: ['email-reset', 'manual-reset'],
+                        newPassword: '',
+                    };
+                }
+            },
+            sendResetPasswordEmail() {
+                //Call API
+                this.common.notification('success', '发送密码重置邮件成功');
+            },
+            getRandomPassword() {
+                this.resetPasswordDialog.newPassword = this.common.getRandomPassword(8);
+            },
+            resetPassword() {
+                //Call API
+                this.common.notification('success', '重置密码成功');
+            },
+            // reset password end
 
             // delete user start
             initDeleteUser(idList) {

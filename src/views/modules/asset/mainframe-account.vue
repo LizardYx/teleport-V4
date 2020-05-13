@@ -376,6 +376,7 @@
                         closeOnClickModal: false,
                         confirmButtonText: this.$t('i18n.管理远程账号.确定'),
                         cancelButtonText: this.$t('i18n.管理远程账号.取消'),
+                        cancelButtonClass: 'btn-cancel',
                         type: 'warning'
                     }).then(() =>{
                         this.disabledAccount(idList);
@@ -401,6 +402,7 @@
                         closeOnClickModal: false,
                         confirmButtonText: this.$t('i18n.管理远程账号.确定'),
                         cancelButtonText: this.$t('i18n.管理远程账号.取消'),
+                        cancelButtonClass: 'btn-cancel',
                         type: 'warning'
                     }).then(() =>{
                         this.enabledAccount(idList);
