@@ -16,7 +16,7 @@
                     <el-button size="mini" type="primary" :disabled="!selectedIdList[0]" @click="confirmEnabledGroup(selectedIdList)">
                         {{$t('i18n.主机分组管理.解禁')}}
                     </el-button>
-                    <el-button size="mini" type="primary" :disabled="!selectedIdList[0]" @click="confirmDeleteGroup(selectedIdList)">
+                    <el-button size="mini" type="primary" :disabled="!selectedIdList[0]" @click="initDeleteHostGroup(selectedIdList)">
                         <i class="el-icon-delete"></i>
                         {{$t('i18n.主机分组管理.删除')}}
                     </el-button>
@@ -90,7 +90,7 @@
                                     </el-dropdown-item>
                                     <el-dropdown-item>
                                         <el-link type="primary" :underline="false" v-text="$t('i18n.主机分组管理.删除')"
-                                                 @click="confirmDeleteGroup([scope['row'].id])">
+                                                 @click="initDeleteHostGroup([scope['row'].id])">
                                         </el-link>
                                     </el-dropdown-item>
                                 </el-dropdown-menu>
@@ -123,7 +123,7 @@
                          size="medium">
                     <el-row>
                         <el-col :span="10">
-                            <el-form-item prop="name" :label="$t('i18n.主机分组管理.名称')" label-width="120px">
+                            <el-form-item prop="name" label="名称:" label-width="120px">
                                 <el-input v-model="hostGroupDialog.name" :placeholder="$t('i18n.主机分组管理.请输入主机分组名称')" size="mini">
                                 </el-input>
                             </el-form-item>
@@ -131,7 +131,7 @@
                     </el-row>
                     <el-row>
                         <el-col :span="20">
-                            <el-form-item :label="$t('i18n.主机分组管理.简要描述')" label-width="120px">
+                            <el-form-item label="简要描述:" label-width="120px">
                                 <el-input type="textarea" :rows="3" v-model="hostGroupDialog.desc" size="mini"
                                           :placeholder="$t('i18n.主机分组管理.请输入主机分组描述')">
                                 </el-input>
@@ -140,8 +140,34 @@
                     </el-row>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button type="primary" size="mini" @click="submitHostGroupInfo()">{{$t('i18n.主机分组管理.确定')}}</el-button>
-                    <el-button size="mini" @click="cancelHostGroupDialog()">{{$t('i18n.主机分组管理.取消')}}</el-button>
+                    <el-button type="primary" size="mini" @click="submitHostGroupInfo()">
+                        <icon-svg icon-class="submit"></icon-svg>
+                        {{$t('i18n.主机分组管理.确定')}}
+                    </el-button>
+                    <el-button size="mini" @click="cancelHostGroupDialog()">
+                        <icon-svg icon-class="cancel"></icon-svg>
+                        {{$t('i18n.主机分组管理.取消')}}
+                    </el-button>
+                </div>
+            </el-dialog>
+            <el-dialog :visible.sync="deleteHostGroupDialog.visible" v-if="deleteHostGroupDialog.visible" class="delete-dialog"
+                       width="768px" :close-on-click-modal="false" :close-on-press-escape="false">
+                <div slot="title" class="delete-title">
+                    <icon-svg icon-class="warning"></icon-svg>操作确认
+                </div>
+                <div class="warning">
+                    <div class="text-bold">注意：删除操作不可恢复！！</div>
+                    <ul>
+                        <li>删除分组将同时删除所有分配给此分组成员的授权！</li>
+                        <li>删除分组不会删除组内的成员主机！</li>
+                    </ul>
+                </div>
+                <div class="mar-top">
+                    您确定要"删除"选中的 <span class="text-bold">{{deleteHostGroupDialog.idList.length}}个</span> 主机分组？<br/>
+                </div>
+                <div slot="footer" class="dialog-footer">
+                    <el-button type="primary" size="mini" @click="deleteHostGroup">确定</el-button>
+                    <el-button size="mini" @click="deleteHostGroupDialog.visible = false">取消</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -175,7 +201,10 @@
                 statusFilterList: this.common.statusFilterList,
                 osTypeList: this.common.osTypeList,
                 hostGroupDialogVisible: false,
-                hostGroupDialog: {}
+                hostGroupDialog: {},
+                deleteHostGroupDialog: {
+                    visible: false
+                }
             }
         },
         methods: {
@@ -350,10 +379,13 @@
             },
             confirmDisabledGroup(idList) {
                 if (idList && idList[0]) {
-                    this.$confirm(this.$t('i18n.主机分组管理.确认禁用主机分组'), this.$t('i18n.主机分组管理.禁用'), {
+                    this.$confirm(`确认"禁用"选中的 <span class="text-bold">${idList.length}个</span> 主机分组`,
+                        '禁用', {
+                        dangerouslyUseHTMLString: true,
                         closeOnClickModal: false,
                         confirmButtonText: this.$t('i18n.主机分组管理.确定'),
                         cancelButtonText: this.$t('i18n.主机分组管理.取消'),
+                        cancelButtonClass: 'btn-cancel',
                         type: 'warning'
                     }).then(() =>{
                         this.disabledGroup(idList);
@@ -373,10 +405,13 @@
             },
             confirmEnabledGroup(idList) {
                 if (idList && idList[0]) {
-                    this.$confirm(this.$t('i18n.主机分组管理.确认解禁主机分组'), this.$t('i18n.主机分组管理.解禁'), {
+                    this.$confirm(`确认"解禁"选中的 <span class="text-bold">${idList.length}个</span> 主机分组`,
+                        '解禁', {
+                        dangerouslyUseHTMLString: true,
                         closeOnClickModal: false,
                         confirmButtonText: this.$t('i18n.主机分组管理.确定'),
                         cancelButtonText: this.$t('i18n.主机分组管理.取消'),
+                        cancelButtonClass: 'btn-cancel',
                         type: 'warning'
                     }).then(() =>{
                         this.enabledGroup(idList);
@@ -391,20 +426,15 @@
             // enabled host group end
 
             // delete host group start
-            confirmDeleteGroup(idList) {
-                if (idList && idList[0]) {
-                    this.$confirm(this.$t('i18n.主机分组管理.确认删除主机分组'), this.$t('i18n.主机分组管理.删除'), {
-                        closeOnClickModal: false,
-                        confirmButtonText: this.$t('i18n.主机分组管理.确定'),
-                        cancelButtonText: this.$t('i18n.主机分组管理.取消'),
-                        type: 'warning'
-                    }).then(() =>{
-                        this.deleteHostGroup(idList);
-                    });
-                }
+            initDeleteHostGroup(idList) {
+                this.deleteHostGroupDialog = {
+                    visible: true,
+                    idList: idList
+                };
             },
             deleteHostGroup(idList) {
                 //call API
+                this.deleteHostGroupDialog.visible = false;
                 this.filter.pageNation.pageNo = 1;
                 this.getHostGroupList();
                 this.common.notification('success', this.$t('i18n.主机分组管理.删除主机分组成功'));

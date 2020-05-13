@@ -178,6 +178,20 @@
                                 }
                             }
                         }
+                        div.delete-dialog{
+                            div.delete-title{
+                                font-size: 18px;
+                                svg{
+                                    font-size: 20px;
+                                    margin-right: 5px;
+                                }
+                            }
+                            div.warning{
+                                padding: 6px;
+                                background-color: #f2dede;
+                                color: #a94442;
+                            }
+                        }
                         .notice{
                             .title{
                                 font-weight: 600;

@@ -16,4 +16,7 @@ export const api = {
     getAccountGroupDetails: `${baseUrl}/asset/get-account-group-details`, //获取账号分组详情
     getUserList: `${baseUrl}/user/get-users`, //获取用户列表
     getRoleList: `${baseUrl}/user/get-role-list`, //获取角色列表
+    updateUserInfo: `${baseUrl}/user/update-user`, //创建新用户/更新用户信息
+    getLdapUser: `${baseUrl}/system/do-ldap-get-users`, //获取ldap用户列表
+    updateUserRole: `${baseUrl}/user/set-role`, //更新用户角色
 };

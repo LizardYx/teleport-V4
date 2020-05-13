@@ -106,8 +106,14 @@
                 </el-row>
             </div>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="bindWayDialog.visible = false" v-text="$t('i18n.绑定身份验证器页面.取消')"></el-button>
-                <el-button type="primary" @click="bindWayDialog.visible = false" v-text="$t('i18n.绑定身份验证器页面.确定')"></el-button>
+                <el-button size="mini" type="primary" @click="bindWayDialog.visible = false">
+                    <icon-svg icon-class="cancel"></icon-svg>
+                    确定
+                </el-button>
+                <el-button size="mini" @click="bindWayDialog.visible = false">
+                    <icon-svg icon-class="submit"></icon-svg>
+                    取消
+                </el-button>
             </div>
         </el-dialog>
         <el-dialog id="bindOathDialog" :title="$t('i18n.绑定身份验证器页面.绑定身份验证器')" :visible.sync="bindOathDialog.visible"
@@ -134,8 +140,14 @@
                 </div>
             </div>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="bindOathDialog.visible = false" v-text="$t('i18n.绑定身份验证器页面.取消')"></el-button>
-                <el-button type="primary" @click="confirmBindOath()" v-text="$t('i18n.绑定身份验证器页面.验证并完成绑定')"></el-button>
+                <el-button size="mini" type="primary" @click="confirmBindOath()">
+                    <icon-svg icon-class="cancel"></icon-svg>
+                    验证并完成绑定
+                </el-button>
+                <el-button size="mini" @click="bindOathDialog.visible = false">
+                    <icon-svg icon-class="submit"></icon-svg>
+                    取消
+                </el-button>
             </div>
         </el-dialog>
     </div>

@@ -20,7 +20,7 @@
                         <i class="el-icon-circle-plus-outline"></i>
                         {{$t('i18n.组内账号管理.添加组成员账号')}}
                     </el-button>
-                    <el-button size="mini" type="primary" :disabled="!selectedIdList[0]" @click="confirmRemoveAccount(selectedIdList)">
+                    <el-button size="mini" type="primary" :disabled="!selectedIdList[0]" @click="initRemoveAFromGroup(selectedIdList)">
                         {{$t('i18n.组内账号管理.移除组成员账号')}}
                     </el-button>
                     <el-button size="mini" type="primary" @click="getAccountList()">
@@ -67,7 +67,7 @@
                     <el-table-column min-width="20%" align="center" :label="$t('i18n.组内账号管理.操作')">
                         <template slot-scope="scope">
                             <el-link type="primary" class="mar-rgt" :underline="false" v-text="$t('i18n.组内账号管理.移除组成员账号')"
-                                     @click="confirmRemoveAccount([scope['row']])">
+                                     @click="initRemoveAFromGroup([scope['row']])">
                             </el-link>
                         </template>
                     </el-table-column>
@@ -138,8 +138,30 @@
                     </el-table-column>
                 </el-table>
                 <div slot="footer" class="dialog-footer">
-                    <el-button type="primary" size="mini" @click="accountJoinGroup()">{{$t('i18n.组内账号管理.确定')}}</el-button>
-                    <el-button size="mini" @click="cancelAccountJoinGroup()">{{$t('i18n.组内账号管理.取消')}}</el-button>
+                    <el-button type="primary" size="mini" @click="accountJoinGroup()">
+                        <icon-svg icon-class="submit"></icon-svg>
+                        {{$t('i18n.组内账号管理.确定')}}
+                    </el-button>
+                    <el-button size="mini" @click="cancelAccountJoinGroup()">
+                        <icon-svg icon-class="cancel"></icon-svg>
+                        {{$t('i18n.组内账号管理.取消')}}
+                    </el-button>
+                </div>
+            </el-dialog>
+            <el-dialog :visible.sync="removeAFromGroupDialog.visible" v-if="removeAFromGroupDialog.visible" class="delete-dialog"
+                       width="768px" :close-on-click-modal="false" :close-on-press-escape="false">
+                <div slot="title" class="delete-title">
+                    <icon-svg icon-class="warning"></icon-svg>操作确认
+                </div>
+                <div class="warning">
+                    <div>移除用户组内成员不会删除用户账号！</div>
+                </div>
+                <div class="mar-top">
+                    您确定要"移除"选中的 <span class="text-bold">{{removeAFromGroupDialog.idList.length}}个</span> 成员账号？<br/>
+                </div>
+                <div slot="footer" class="dialog-footer">
+                    <el-button type="primary" size="mini" @click="removeAccount">确定</el-button>
+                    <el-button size="mini" @click="removeAFromGroupDialog.visible = false">取消</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -175,7 +197,10 @@
                 protocolTypeList: this.common.protocolTypeList,
                 authTypeList: this.common.authTypeList,
                 joinGroupVisible: false,
-                joinGroupDialog: {}
+                joinGroupDialog: {},
+                removeAFromGroupDialog: {
+                    visible: false
+                }
             }
         },
         methods: {
@@ -357,20 +382,15 @@
             // account join group end
 
             // remove account start
-            confirmRemoveAccount(idList) {
-                if (idList && idList[0]) {
-                    this.$confirm(this.$t('i18n.组内账号管理.确认移除组内账号'), this.$t('i18n.组内账号管理.删除'), {
-                        closeOnClickModal: false,
-                        confirmButtonText: this.$t('i18n.组内账号管理.确定'),
-                        cancelButtonText: this.$t('i18n.组内账号管理.取消'),
-                        type: 'warning'
-                    }).then(() =>{
-                        this.removeAccount(idList);
-                    });
-                }
+            initRemoveAFromGroup(idList) {
+                this.removeAFromGroupDialog = {
+                    visible: true,
+                    idList: idList
+                };
             },
-            removeAccount(idList) {
+            removeAccount() {
                 //call API
+                this.removeAFromGroupDialog.visible = false;
                 this.filter.pageNation.pageNo = 1;
                 this.getAccountList();
                 this.common.notification('success', this.$t('i18n.组内账号管理.移除组内账号成功'));

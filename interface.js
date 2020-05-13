@@ -179,7 +179,7 @@ let server = http.createServer(function (request, response) {
                 data: [{
                     id: 1,
                     type: 1,
-                    auth_type: 2,
+                    auth_type: 0x0002,
                     username: 'admin',
                     surname: 'admin',
                     role_id: 1,
@@ -188,6 +188,18 @@ let server = http.createServer(function (request, response) {
                     last_login: 1579635150,
                     role: '系统管理员',
                     privilege: 4294967295
+                },{
+                    id: 2,
+                    type: 1,
+                    auth_type: 0x0008,
+                    username: 'test',
+                    surname: '张三',
+                    role_id: 1,
+                    state: 1,
+                    email: '563011419@qq.com',
+                    last_login: 1579635150,
+                    role: '系统管理员',
+                    privilege: 4294967285
                 }],
                 count: 3
             }
@@ -207,6 +219,14 @@ let server = http.createServer(function (request, response) {
                     name: '审计员',
                     privilege: 32769
                 }]
+            }
+        }
+        if (request.url.indexOf(`${commonUrl}/system/do-ldap-get-users`) >= 0) {
+            data.rows = {
+                data: [{
+                    id: 1,
+                }],
+                count: 3
             }
         }
         response.writeHead(statusCode, {'Content-Type': 'text/html'});
@@ -259,6 +279,15 @@ let server = http.createServer(function (request, response) {
                         code: -1,
                         rows: {},
                         msg: '动态验证码错误，请重新输入'
+                    };
+                }
+            }
+            if (request.url === `${commonUrl}/user/set-role`) {
+                if (!params.users[0] || !params['role_id']) {
+                    data = {
+                        code: -1,
+                        rows: {},
+                        msg: '更新用户角色失败'
                     };
                 }
             }
