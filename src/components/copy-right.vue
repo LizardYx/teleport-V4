@@ -2,7 +2,7 @@
     <div id="copyRight">
         TELEPORT v4.0.1 | ©2020 - 2021
         <a href="http://www.tp4a.com" target="_blank">TP4A</a>
-        {{$t('i18n., 保留所有权')}}
+        保留所有权
     </div>
 </template>
 

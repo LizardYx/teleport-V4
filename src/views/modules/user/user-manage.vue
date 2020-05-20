@@ -800,7 +800,7 @@
                 this.userInfoDialog = {
                     visible: true,
                     isCreate: !userInfo,
-                    title: !!userInfo ? '编辑用户信息' : '创建新用户',
+                    title: !!userInfo ? `编辑用户信息: ${userInfo.surname}` : '创建新用户',
                     id: !!userInfo ? userInfo.id : -1,
                     role: {
                         id: '',
@@ -836,7 +836,11 @@
                     // init role
                     for (const roleObj of this.userInfoDialog.roleList) {
                         if (roleObj.id === userInfo['role_id']) {
-                            this.updateRole(roleObj);
+                            this.userInfoDialog.role = {
+                                id: roleObj.id,
+                                name: roleObj.name,
+                                privilege: roleObj.privilege
+                            };
                             break;
                         }
                     }
@@ -849,7 +853,7 @@
                         name: roleObj.name,
                         privilege: roleObj.privilege
                     };
-                    this.$refs['userInfoDialog'].clearValidate('role.id');
+                    this.$refs['userInfoDialog'].clearValidate(['role.id'])
                 }
             },
             cancelEditUserInfo() {
@@ -1033,7 +1037,8 @@
             confirmUpdateUserRole() {
                 this.$refs['userRoleDialog'].validate((passValidate) => {
                     if (passValidate) {
-                        this.$confirm(`确认将 <span class="text-bold">${this.userRoleDialog.userList.length}个</span> 选中用户的角色设置为"${this.userRoleDialog.selectedRole.name}"`,
+                        this.$confirm(`确认将 <span class="text-bold">${this.userRoleDialog.userList.length}个</span>
+                                        选中用户的角色设置为"${this.userRoleDialog.selectedRole.name}"`,
                             '设置角色', {
                             dangerouslyUseHTMLString: true,
                             closeOnClickModal: false,

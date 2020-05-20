@@ -229,6 +229,30 @@ let server = http.createServer(function (request, response) {
                 count: 3
             }
         }
+        if (request.url.indexOf(`${commonUrl}/user/get-groups-with-member`) >= 0) {
+            data.rows = {
+                data: [{
+                    id: 1,
+                    name: '技术部',
+                    desc: '技术部人员分组',
+                    member_count: 2,
+                    members: [{
+                        id: 1,
+                        username: 'admin',
+                        surname: 'admin',
+                        email: '563011491@qq.com'
+                    },{
+                        id: 2,
+                        username: '张三',
+                        surname: 'test',
+                        email: '563011491@qq.com'
+                    }],
+                    state: 1,
+                    _mid: [1, 5]
+                }],
+                count: 3
+            }
+        }
         response.writeHead(statusCode, {'Content-Type': 'text/html'});
         //参数序列化
         response.end(JSON.stringify(data));

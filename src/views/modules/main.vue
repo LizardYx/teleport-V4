@@ -30,7 +30,7 @@
                             </template>
                             <el-menu-item-group>
                                 <el-menu-item index="/modules-main/user/user-manage">{{$t('i18n.导航页面.用户管理')}}</el-menu-item>
-                                <el-menu-item index="3-2">{{$t('i18n.导航页面.用户分组管理')}}</el-menu-item>
+                                <el-menu-item index="/modules-main/user/user-group">{{$t('i18n.导航页面.用户分组管理')}}</el-menu-item>
                             </el-menu-item-group>
                         </el-submenu>
                         <el-submenu index="4">
