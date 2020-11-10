@@ -405,7 +405,7 @@
                     </el-button>
                 </div>
             </el-dialog>
-            <el-dialog :title="userRoleDialog.title" :visible.sync="userRoleDialog.visible" width="768px"
+            <el-dialog title="设置角色" :visible.sync="userRoleDialog.visible" width="768px"
                        :close-on-click-modal="false" :close-on-press-escape="false" v-if="userRoleDialog.visible">
                 <el-form :model="userRoleDialog" status-icon :rules="userRoleDialog.rules" ref="userRoleDialog"
                          size="medium">
@@ -967,8 +967,8 @@
             },
             getAMappingDescription() {
                 return `将LDAP的属性映射到 teleport 的用户属性，例如
-                        <span style="color: #E6A23C">LDAP中的用户属性 sAMAccountName 映射为teleport的登录账号。</span><br/>
-                        如果不清楚此LDAP服务的用户属性，可使用下方的“列举属性”按钮进行查询。`;
+                        <span style="color: #E6A23C">LDAP中的用户属性 sAMAccountName <br/>映射为teleport的登录账号。</span>
+                        如果不清楚此LDAP服务的用户属性，可使用下方的“列举属性”<br/>按钮进行查询。`;
             },
             cancelLDAPSetting() {
                 this.$refs['ldapSettingDialog'].resetFields();

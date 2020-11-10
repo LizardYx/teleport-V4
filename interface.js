@@ -306,15 +306,6 @@ let server = http.createServer(function (request, response) {
                     };
                 }
             }
-            if (request.url === `${commonUrl}/user/set-role`) {
-                if (!params.users[0] || !params['role_id']) {
-                    data = {
-                        code: -1,
-                        rows: {},
-                        msg: '更新用户角色失败'
-                    };
-                }
-            }
             response.writeHead(statusCode, {'Content-Type': 'text/html'});
             response.end(JSON.stringify(data));
         });

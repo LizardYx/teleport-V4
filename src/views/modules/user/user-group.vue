@@ -30,7 +30,7 @@
                         <template slot-scope="scope">
                             <el-popover placement="right" trigger="hover" :content="scope.row.desc">
                                 <span slot="reference">
-                                    <router-link :to="{path: 'user/user-group-details'}">
+                                    <router-link :to="{path: '/modules-main/user/user-group-details', query: {id: scope.row.id, name: scope.row.name}}">
                                         {{scope.row.name}}
                                     </router-link>
                                 </span>
