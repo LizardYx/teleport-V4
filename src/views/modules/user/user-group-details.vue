@@ -9,6 +9,7 @@
                 <el-breadcrumb-item :to="{ path: '/modules-main/user/user-group'}">
                     用户分组管理
                 </el-breadcrumb-item>
+                <el-breadcrumb-item>组内用户管理</el-breadcrumb-item>
                 <el-breadcrumb-item>{{groupInfo.name}}</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -35,33 +36,25 @@
                 <el-table :data="userList" border @selection-change="updateSelected" @sort-change="updateFilter"
                           @filter-change="filterChange">
                     <el-table-column min-width="5%" align="center" type="selection"></el-table-column>
-                    <el-table-column min-width="20%" header-align="center" prop="name" sortable="custom" label="用户组">
+                    <el-table-column min-width="20%" header-align="center" prop="surname" sortable="custom" label="用户">
+                    </el-table-column>
+                    <el-table-column min-width="35%" header-align="center" label="成员信息">
                         <template slot-scope="scope">
-                            <el-popover placement="right" trigger="hover" :content="scope.row.desc">
-                                <span slot="reference">
-                                    <router-link :to="{path: 'user/user-group-details'}">
-                                        {{scope.row.name}}
-                                    </router-link>
-                                </span>
-                            </el-popover>
+                            {{scope['row'].username}} {{scope['row'].email}}
                         </template>
                     </el-table-column>
-                    <el-table-column min-width="10%" header-align="center" prop="member_count" label="组成员数"></el-table-column>
-                    <el-table-column min-width="35%" header-align="center" label="组成员用户">
+                    <el-table-column min-width="20%" header-align="center" prop="role" sortable="custom" :label="getUserRoleTitle()"
+                                     column-key="role" :filters="getUserRoleFilterList()" :filter-multiple="false">
                         <template slot-scope="scope">
-                            <el-tag size="small" type="info" v-for="memberObj in scope['row'].members" :command="memberObj.id" class="host-info"
-                                    :key="memberObj.id" v-text="memberObj.surname">
+                            {{getUserRoleName(scope['row']['role_id'])}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column min-width="20%" align="center" prop="status" sortable="custom" :label="getUserStatusTitle()"
+                                     column-key="status" :filters="getStatusFilterList()" :filter-multiple="false">
+                        <template slot-scope="scope">
+                            <el-tag effect="dark" v-text="getUserStatusInfo(scope['row'].state).name"  size="small"
+                                    :type="getUserStatusInfo(scope['row'].state).css">
                             </el-tag>
-                        </template>
-                    </el-table-column>
-                    <el-table-column min-width="20%" align="center" label="操作">
-                        <template slot-scope="scope">
-                            <el-link type="primary" class="mar-rgt" :underline="false">
-                                编辑
-                            </el-link>
-                            <el-link type="primary" class="mar-rgt" :underline="false">
-                                删除
-                            </el-link>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -85,7 +78,7 @@
                 </el-row>
             </div>
         </div>
-<!--        <fix-tool-bar ref="toolbar"></fix-tool-bar>-->
+        <fix-tool-bar ref="toolbar"></fix-tool-bar>
     </div>
 </template>
 
@@ -115,6 +108,7 @@
                 selectedIdList: [],
                 userList: [],
                 roleList: [],
+                statusList: this.common.statusList,
             }
         },
         methods: {
@@ -140,7 +134,30 @@
                 }
             },
             getUserGroupDetails() {
+                let params = {
+                    pageNo: this.filter.pageNation.pageNo,
+                    pageSize: this.filter.pageNation.pageSize
+                };
 
+                !!this.filter.searchValue ? params.search = this.filter.searchValue : "";
+                if (!!this.filter.sort.order) {
+                    params.sort = {
+                        name: this.filter.sort.name,
+                        order: this.filter.sort.order
+                    };
+                }
+                !!this.filter.role ? params.role = this.filter.role : '';
+                !!this.filter.status ? params.stauts = this.filter.status : '';
+                asyncGet(api.getUserGroupDetails, params)
+                    .then((response) => {
+                        let res = response && response.rows ? response.rows : {};
+
+                        this.userList = res && res.data ? res.data : [];
+                        this.filter.pageNation.totalItem = res && res.count ? res.count : 0;
+                        this.selectedIdList = [];
+                    }, (error) => {
+                        this.common.notification('warning', error.msg);
+                    })
             },
             getRoleList() {
                 asyncGet(api.getRoleList)
@@ -159,6 +176,92 @@
                     selectedIdList.push(selectedItemObj.id);
                 });
                 this.selectedIdList = selectedIdList;
+            },
+            getUserRoleTitle() {
+                let userRoleTitle = "全部";
+
+                if (this.filter.role) {
+                    for (let roleObj of this.roleList) {
+                        if (roleObj.id === this.filter.role) {
+                            userRoleTitle = roleObj.name;
+                            break;
+                        }
+                    }
+                }
+                return `角色(${userRoleTitle})`;
+            },
+            getUserRoleFilterList() {
+                let roleFilterList = [];
+
+                this.roleList.forEach(function (roleObj) {
+                    const newRoleFilterObj = {
+                        text: roleObj.name,
+                        value: roleObj.id
+                    };
+
+                    roleFilterList.push(newRoleFilterObj);
+                });
+                return roleFilterList;
+            },
+            getUserRoleName(roleId) {
+                let roleName = '-';
+
+                if (roleId) {
+                    for (let roleObj of this.roleList) {
+                        if (roleObj.id === roleId) {
+                            roleName = roleObj.name;
+                            break;
+                        }
+                    }
+                }
+                return roleName;
+            },
+
+
+            getUserStatusTitle() {
+                let userStatusTitle = "全部";
+
+                if (this.filter.status) {
+                    for (let statusObj of this.statusList) {
+                        if (statusObj.id === this.filter.status) {
+                            userStatusTitle = statusObj.name;
+                            break;
+                        }
+                    }
+                }
+                return `状态(${userStatusTitle})`;
+            },
+            getStatusFilterList() {
+                let filterList = [];
+
+                this.statusList.forEach(function (statusObj) {
+                    const newFilterObj = {
+                        text: statusObj.name,
+                        value: statusObj.id
+                    };
+
+                    filterList.push(newFilterObj);
+                });
+                return filterList;
+            },
+            getUserStatusInfo(statusId) {
+                let statusInfo = {
+                    name: '',
+                    css: ''
+                };
+
+                if (statusId) {
+                    for (let statusObj of this.statusList) {
+                        if (statusObj.id === statusId) {
+                            statusInfo = {
+                                name: statusObj.name,
+                                css: statusObj.css
+                            };
+                            break;
+                        }
+                    }
+                }
+                return statusInfo;
             },
             pageSizeChange(newPageSize) {
                 this.filter.pageNation.pageSize = newPageSize;

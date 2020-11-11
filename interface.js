@@ -253,6 +253,34 @@ let server = http.createServer(function (request, response) {
                 count: 3
             }
         }
+        if (request.url.indexOf(`${commonUrl}/user/get-groups-details`) >= 0) {
+            data.rows = {
+                data: [{
+                    auth_type: 2,
+                    email: "563011491@qq.com",
+                    id: 1,
+                    privilege: 4294967295,
+                    role: "系统管理员",
+                    role_id: 1,
+                    state: 1,
+                    surname: "admin",
+                    type: 1,
+                    username: "admin"
+                },{
+                    auth_type: 0,
+                    email: "563011491@qq.com",
+                    id: 5,
+                    privilege: 513,
+                    role: "运维人员",
+                    role_id: 2,
+                    state: 2,
+                    surname: "张三",
+                    type: 1,
+                    username: "test"
+                }],
+                count: 3
+            }
+        }
         response.writeHead(statusCode, {'Content-Type': 'text/html'});
         //参数序列化
         response.end(JSON.stringify(data));

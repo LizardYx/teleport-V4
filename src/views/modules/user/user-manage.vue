@@ -6,7 +6,7 @@
         <div id="pageContent">
             <el-row :gutter="20" class="tool-bar">
                 <el-col :span="18">
-                    <el-button size="mini" type="primary" @click="initUserInfoDialog">
+                    <el-button size="mini" type="primary" @click="initUserInfoDialog()">
                         <i class="el-icon-circle-plus-outline"></i>
                         {{$t('i18n.用户管理.创建用户')}}
                     </el-button>
@@ -581,6 +581,9 @@
                 };
 
                 !!this.filter.searchValue ? params.search = this.filter.searchValue : '';
+                !!this.filter.type ? params.type = this.filter.type : '';
+                !!this.filter.role ? params.role = this.filter.role : '';
+                !!this.filter.status ? params.status = this.filter.status : '';
                 if (!!this.filter.sort.order) {
                     params.sort = {
                         name: this.filter.sort.name,

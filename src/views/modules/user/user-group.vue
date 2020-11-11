@@ -6,7 +6,7 @@
         <div id="pageContent">
             <el-row :gutter="20" class="tool-bar">
                 <el-col :span="18">
-                    <el-button size="mini" type="primary" @click="initUserGroupInfo">
+                    <el-button size="mini" type="primary" @click="initUserGroupInfo()">
                         <i class="el-icon-circle-plus-outline"></i>
                         创建用户分组
                     </el-button>
