@@ -19,4 +19,6 @@ export const api = {
     updateUserInfo: `${baseUrl}/user/update-user`, //创建新用户/更新用户信息
     getLdapUser: `${baseUrl}/system/do-ldap-get-users`, //获取ldap用户列表
     updateUserRole: `${baseUrl}/user/set-role`, //更新用户角色
+    getUserGroupList: `${baseUrl}/user/get-groups-with-member`, //获取用户分组列表
+    getUserGroupDetails: `${baseUrl}/user/get-groups-details`, //获取用户分组详情
 };

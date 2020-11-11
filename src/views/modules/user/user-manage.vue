@@ -6,7 +6,7 @@
         <div id="pageContent">
             <el-row :gutter="20" class="tool-bar">
                 <el-col :span="18">
-                    <el-button size="mini" type="primary" @click="initUserInfoDialog">
+                    <el-button size="mini" type="primary" @click="initUserInfoDialog()">
                         <i class="el-icon-circle-plus-outline"></i>
                         {{$t('i18n.用户管理.创建用户')}}
                     </el-button>
@@ -405,7 +405,7 @@
                     </el-button>
                 </div>
             </el-dialog>
-            <el-dialog :title="userRoleDialog.title" :visible.sync="userRoleDialog.visible" width="768px"
+            <el-dialog title="设置角色" :visible.sync="userRoleDialog.visible" width="768px"
                        :close-on-click-modal="false" :close-on-press-escape="false" v-if="userRoleDialog.visible">
                 <el-form :model="userRoleDialog" status-icon :rules="userRoleDialog.rules" ref="userRoleDialog"
                          size="medium">
@@ -581,6 +581,9 @@
                 };
 
                 !!this.filter.searchValue ? params.search = this.filter.searchValue : '';
+                !!this.filter.type ? params.type = this.filter.type : '';
+                !!this.filter.role ? params.role = this.filter.role : '';
+                !!this.filter.status ? params.status = this.filter.status : '';
                 if (!!this.filter.sort.order) {
                     params.sort = {
                         name: this.filter.sort.name,
@@ -800,7 +803,7 @@
                 this.userInfoDialog = {
                     visible: true,
                     isCreate: !userInfo,
-                    title: !!userInfo ? '编辑用户信息' : '创建新用户',
+                    title: !!userInfo ? `编辑用户信息: ${userInfo.surname}` : '创建新用户',
                     id: !!userInfo ? userInfo.id : -1,
                     role: {
                         id: '',
@@ -836,7 +839,11 @@
                     // init role
                     for (const roleObj of this.userInfoDialog.roleList) {
                         if (roleObj.id === userInfo['role_id']) {
-                            this.updateRole(roleObj);
+                            this.userInfoDialog.role = {
+                                id: roleObj.id,
+                                name: roleObj.name,
+                                privilege: roleObj.privilege
+                            };
                             break;
                         }
                     }
@@ -849,7 +856,7 @@
                         name: roleObj.name,
                         privilege: roleObj.privilege
                     };
-                    this.$refs['userInfoDialog'].clearValidate('role.id');
+                    this.$refs['userInfoDialog'].clearValidate(['role.id'])
                 }
             },
             cancelEditUserInfo() {
@@ -963,8 +970,8 @@
             },
             getAMappingDescription() {
                 return `将LDAP的属性映射到 teleport 的用户属性，例如
-                        <span style="color: #E6A23C">LDAP中的用户属性 sAMAccountName 映射为teleport的登录账号。</span><br/>
-                        如果不清楚此LDAP服务的用户属性，可使用下方的“列举属性”按钮进行查询。`;
+                        <span style="color: #E6A23C">LDAP中的用户属性 sAMAccountName <br/>映射为teleport的登录账号。</span>
+                        如果不清楚此LDAP服务的用户属性，可使用下方的“列举属性”<br/>按钮进行查询。`;
             },
             cancelLDAPSetting() {
                 this.$refs['ldapSettingDialog'].resetFields();
@@ -1033,7 +1040,8 @@
             confirmUpdateUserRole() {
                 this.$refs['userRoleDialog'].validate((passValidate) => {
                     if (passValidate) {
-                        this.$confirm(`确认将 <span class="text-bold">${this.userRoleDialog.userList.length}个</span> 选中用户的角色设置为"${this.userRoleDialog.selectedRole.name}"`,
+                        this.$confirm(`确认将 <span class="text-bold">${this.userRoleDialog.userList.length}个</span>
+                                        选中用户的角色设置为"${this.userRoleDialog.selectedRole.name}"`,
                             '设置角色', {
                             dangerouslyUseHTMLString: true,
                             closeOnClickModal: false,

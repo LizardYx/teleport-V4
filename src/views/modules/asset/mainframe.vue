@@ -489,7 +489,7 @@
                 this.hostsInfoDialogVisible = true;
                 this.hostsInfoDialog = {
                     isCreate: !hostsInfo,
-                    title: !hostsInfo ? this.$t('i18n.主机管理页面.添加主机') : this.$t('i18n.主机管理页面.编辑主机详情'),
+                    title: !hostsInfo ? this.$t('i18n.主机管理页面.添加主机') : `编辑主机详情: ${hostsInfo.name}`,
                     systemInfo: {
                         id: 0,
                         name: '',

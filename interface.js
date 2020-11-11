@@ -229,6 +229,58 @@ let server = http.createServer(function (request, response) {
                 count: 3
             }
         }
+        if (request.url.indexOf(`${commonUrl}/user/get-groups-with-member`) >= 0) {
+            data.rows = {
+                data: [{
+                    id: 1,
+                    name: '技术部',
+                    desc: '技术部人员分组',
+                    member_count: 2,
+                    members: [{
+                        id: 1,
+                        username: 'admin',
+                        surname: 'admin',
+                        email: '563011491@qq.com'
+                    },{
+                        id: 2,
+                        username: '张三',
+                        surname: 'test',
+                        email: '563011491@qq.com'
+                    }],
+                    state: 1,
+                    _mid: [1, 5]
+                }],
+                count: 3
+            }
+        }
+        if (request.url.indexOf(`${commonUrl}/user/get-groups-details`) >= 0) {
+            data.rows = {
+                data: [{
+                    auth_type: 2,
+                    email: "563011491@qq.com",
+                    id: 1,
+                    privilege: 4294967295,
+                    role: "系统管理员",
+                    role_id: 1,
+                    state: 1,
+                    surname: "admin",
+                    type: 1,
+                    username: "admin"
+                },{
+                    auth_type: 0,
+                    email: "563011491@qq.com",
+                    id: 5,
+                    privilege: 513,
+                    role: "运维人员",
+                    role_id: 2,
+                    state: 2,
+                    surname: "张三",
+                    type: 1,
+                    username: "test"
+                }],
+                count: 3
+            }
+        }
         response.writeHead(statusCode, {'Content-Type': 'text/html'});
         //参数序列化
         response.end(JSON.stringify(data));
@@ -279,15 +331,6 @@ let server = http.createServer(function (request, response) {
                         code: -1,
                         rows: {},
                         msg: '动态验证码错误，请重新输入'
-                    };
-                }
-            }
-            if (request.url === `${commonUrl}/user/set-role`) {
-                if (!params.users[0] || !params['role_id']) {
-                    data = {
-                        code: -1,
-                        rows: {},
-                        msg: '更新用户角色失败'
                     };
                 }
             }

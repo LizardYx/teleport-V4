@@ -335,16 +335,13 @@
                 this.hostGroupDialogVisible = true;
                 this.hostGroupDialog = {
                     isCreate: !hostGroupInfo,
-                    title: !!hostGroupInfo ? this.$t('i18n.主机分组管理.编辑主机分组详情') : this.$t('i18n.主机分组管理.创建主机分组'),
+                    title: !!hostGroupInfo ? `编辑主机分组详情: ${hostGroupInfo.name}` : this.$t('i18n.主机分组管理.创建主机分组'),
                     name: !!hostGroupInfo ? hostGroupInfo.name : '',
                     desc: !!hostGroupInfo ? hostGroupInfo.desc : '',
                     rules: {
                         name: [{
                             required: true, message: this.$t('i18n.主机分组管理.请输入主机分组名称'), trigger: 'blur'
-                        }],
-                        desc: [{
-                            required: true, message: this.$t('i18n.主机分组管理.请输入主机分组描述'), trigger: 'blur'
-                        }],
+                        }]
                     }
                 };
             },
@@ -432,7 +429,7 @@
                     idList: idList
                 };
             },
-            deleteHostGroup(idList) {
+            deleteHostGroup() {
                 //call API
                 this.deleteHostGroupDialog.visible = false;
                 this.filter.pageNation.pageNo = 1;

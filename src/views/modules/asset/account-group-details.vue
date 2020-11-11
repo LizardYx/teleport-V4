@@ -1,19 +1,19 @@
 <template>
     <div id="accountGroupDetail">
-        <div id="pageTitle">
-            <el-breadcrumb class="page-title mar-btm" separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item>{{groupInfo.name}}</el-breadcrumb-item>
-            </el-breadcrumb>
-            <el-breadcrumb separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item>{{$t('i18n.导航页面.资产')}}</el-breadcrumb-item>
-                <el-breadcrumb-item :to="{ path: '/modules-main/asset/account-group'}">
-                    {{$t('i18n.导航页面.账号分组管理')}}
-                </el-breadcrumb-item>
-                <el-breadcrumb-item>{{$t('i18n.组内账号管理.组内账号管理')}}</el-breadcrumb-item>
-                <el-breadcrumb-item>{{groupInfo.name}}</el-breadcrumb-item>
-            </el-breadcrumb>
-        </div>
-        <div id="pageContent">
+            <div id="pageTitle">
+                <el-breadcrumb class="page-title mar-btm" separator-class="el-icon-arrow-right">
+                    <el-breadcrumb-item>{{groupInfo.name}}</el-breadcrumb-item>
+                </el-breadcrumb>
+                <el-breadcrumb separator-class="el-icon-arrow-right">
+                    <el-breadcrumb-item>{{$t('i18n.导航页面.资产')}}</el-breadcrumb-item>
+                    <el-breadcrumb-item :to="{ path: '/modules-main/asset/account-group'}">
+                        {{$t('i18n.导航页面.账号分组管理')}}
+                    </el-breadcrumb-item>
+                    <el-breadcrumb-item>{{$t('i18n.组内账号管理.组内账号管理')}}</el-breadcrumb-item>
+                    <el-breadcrumb-item>{{groupInfo.name}}</el-breadcrumb-item>
+                </el-breadcrumb>
+            </div>
+            <div id="pageContent">
             <el-row :gutter="20" class="tool-bar">
                 <el-col :span="18">
                     <el-button size="mini" type="primary" @click="initAccountJoinGroup()">

@@ -421,7 +421,7 @@
                 this.accountInfoDialogVisible = true;
                 this.accountInfoDialog = {
                     isCreate: !accountInfo,
-                    title: !accountInfo ? this.$t('i18n.管理远程账号.添加账号') : this.$t('i18n.管理远程账号.编辑账号详情'),
+                    title: !accountInfo ? this.$t('i18n.管理远程账号.添加账号') : `编辑账号详情: ${accountInfo.username}`,
                     CProtocol: {
                         id: this.protocolTypeList[0].id,
                         name: this.protocolTypeList[0].name,

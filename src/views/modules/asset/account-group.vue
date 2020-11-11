@@ -313,7 +313,7 @@
                 this.accountGroupDialogVisible = true;
                 this.accountGroupDialog = {
                     isCreate: !accountGroup,
-                    title: !!accountGroup ? this.$t('i18n.账号分组管理.创建账号分组') : this.$t('i18n.账号分组管理.编辑账号分组信息'),
+                    title: !!accountGroup ? `编辑账号分组详情: ${accountGroup.name}` : this.$t('i18n.账号分组管理.创建账号分组'),
                     name: !!accountGroup ? accountGroup.name : '',
                     desc: !!accountGroup ? accountGroup.desc : '',
                     rules: {
