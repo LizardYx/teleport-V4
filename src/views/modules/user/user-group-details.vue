@@ -16,13 +16,17 @@
         <div id="pageContent">
             <el-row :gutter="20" class="tool-bar">
                 <el-col :span="18">
-                    <el-button size="mini" type="primary">
+                    <el-button size="mini" type="primary" @click="initUserJoinGroup()">
                         <i class="el-icon-circle-plus-outline"></i>
                         添加用户
                     </el-button>
                     <el-button size="mini" type="primary" :disabled="!selectedIdList[0]">
                         <i class="el-icon-delete"></i>
                         移除用户
+                    </el-button>
+                    <el-button size="mini" type="primary" @click="getUserGroupDetails()">
+                        <i class="el-icon-refresh"></i>
+                        刷新列表
                     </el-button>
                 </el-col>
                 <el-col :span="6">
@@ -40,16 +44,17 @@
                     </el-table-column>
                     <el-table-column min-width="35%" header-align="center" label="成员信息">
                         <template slot-scope="scope">
-                            {{scope['row'].username}} {{scope['row'].email}}
+                            用户昵称：{{scope['row'].username}}<br/>
+                            邮箱地址：{{scope['row'].email}}
                         </template>
                     </el-table-column>
-                    <el-table-column min-width="20%" header-align="center" prop="role" sortable="custom" :label="getUserRoleTitle()"
+                    <el-table-column min-width="20%" header-align="center" prop="role" sortable="custom" :label="getUserRoleTitle(filter.role)"
                                      column-key="role" :filters="getUserRoleFilterList()" :filter-multiple="false">
                         <template slot-scope="scope">
                             {{getUserRoleName(scope['row']['role_id'])}}
                         </template>
                     </el-table-column>
-                    <el-table-column min-width="20%" align="center" prop="status" sortable="custom" :label="getUserStatusTitle()"
+                    <el-table-column min-width="20%" align="center" prop="status" sortable="custom" :label="getUserStatusTitle(filter.status)"
                                      column-key="status" :filters="getStatusFilterList()" :filter-multiple="false">
                         <template slot-scope="scope">
                             <el-tag effect="dark" v-text="getUserStatusInfo(scope['row'].state).name"  size="small"
@@ -77,6 +82,59 @@
                     </el-col>
                 </el-row>
             </div>
+            <el-dialog title="添加组成员用户" :visible.sync="joinGroupVisible" width="1000px"
+                       :close-on-click-modal="false" :close-on-press-escape="false" v-if="joinGroupVisible">
+                <el-row :gutter="20" class="tool-bar">
+                    <el-col :span="18">
+                        <el-button size="mini" type="primary" @click="getCanJoinGroupUserList()">
+                            <i class="el-icon-refresh"></i>
+                            刷新列表
+                        </el-button>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-input :class="{'search': true, 'searching': !!joinGroupDialog.filter.searchValue}" prefix-icon="el-icon-search"
+                                  size="mini" placeholder="搜索：用户账号/姓名/邮箱/描述..."
+                                  v-model="joinGroupDialog.filter.searchValue" maxlength="50">
+                        </el-input>
+                    </el-col>
+                </el-row>
+                <el-table :data="joinGroupDialog.userList" border @selection-change="updateJoinGroupSelected"
+                          @sort-change="updateJoinGroupFilter">
+                    <el-table-column min-width="5%" align="center" type="selection"></el-table-column>
+                    <el-table-column min-width="30%" prop="surname" header-align="center" sortable="custom" label="用户">
+                    </el-table-column>
+                    <el-table-column min-width="25%" prop="surname" header-align="center" sortable="custom" label="成员信息">
+                        <template slot-scope="scope">
+                            用户昵称：{{scope['row'].username}}<br/>
+                            邮箱地址：{{scope['row'].email}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column min-width="25%" header-align="center" prop="role" sortable="custom" column-key="role" :filter-multiple="false"
+                                     :filters="getUserRoleFilterList()" :label="getUserRoleTitle(joinGroupDialog.filter.role)">
+                        <template slot-scope="scope">
+                            <span v-text="getUserRoleName(scope['row']['role_id'])"></span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column min-width="15%" align="center" prop="status" sortable="custom" :filters="getStatusFilterList()"
+                                     :filter-multiple="false" :label="getUserStatusTitle(joinGroupDialog.filter.status)" column-key="status">
+                        <template slot-scope="scope">
+                            <el-tag effect="dark" v-text="getUserStatusInfo(scope['row'].state).name"  size="small"
+                                    :type="getUserStatusInfo(scope['row'].state).css">
+                            </el-tag>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <div slot="footer" class="dialog-footer">
+                    <el-button type="primary" size="mini" @click="userJoinGroup()">
+                        <icon-svg icon-class="submit"></icon-svg>
+                        确定
+                    </el-button>
+                    <el-button size="mini" @click="cancelUserJoinGroup()">
+                        <icon-svg icon-class="cancel"></icon-svg>
+                        取消
+                    </el-button>
+                </div>
+            </el-dialog>
         </div>
         <fix-tool-bar ref="toolbar"></fix-tool-bar>
     </div>
@@ -109,6 +167,8 @@
                 userList: [],
                 roleList: [],
                 statusList: this.common.statusList,
+                joinGroupVisible: false,
+                joinGroupDialog: {},
             }
         },
         methods: {
@@ -177,12 +237,12 @@
                 });
                 this.selectedIdList = selectedIdList;
             },
-            getUserRoleTitle() {
+            getUserRoleTitle(filterRole) {
                 let userRoleTitle = "全部";
 
-                if (this.filter.role) {
+                if (filterRole) {
                     for (let roleObj of this.roleList) {
-                        if (roleObj.id === this.filter.role) {
+                        if (roleObj.id === filterRole) {
                             userRoleTitle = roleObj.name;
                             break;
                         }
@@ -216,14 +276,12 @@
                 }
                 return roleName;
             },
-
-
-            getUserStatusTitle() {
+            getUserStatusTitle(filterStatus) {
                 let userStatusTitle = "全部";
 
-                if (this.filter.status) {
+                if (filterStatus) {
                     for (let statusObj of this.statusList) {
-                        if (statusObj.id === this.filter.status) {
+                        if (statusObj.id === filterStatus) {
                             userStatusTitle = statusObj.name;
                             break;
                         }
@@ -272,6 +330,83 @@
                 this.filter.pageNation.pageNo = newPageNo;
                 this.getUserGroupDetails();
             },
+            // user join group start
+            initUserJoinGroup() {
+                this.joinGroupVisible = true;
+                this.joinGroupDialog = {
+                    filter: {
+                        pageNation: this.common.initPageNation(),
+                        searchValue: '',
+                        sort: {
+                            name: '',
+                            order: '',
+                        },
+                        role: '',
+                        status: '',
+                    },
+                    selectedIdList: [],
+                    userList: [],
+                };
+                this.getCanJoinGroupUserList();
+            },
+            getCanJoinGroupUserList() {
+                let filterObj = this.joinGroupDialog.filter;
+                let params = {
+                    groupId: this.groupInfo.id,
+                    pageNo: filterObj.pageNation.pageNo,
+                    pageSize: filterObj.pageNation.pageSize
+                };
+
+                !!filterObj.searchValue ? params.search = filterObj.searchValue : "";
+                if (!!filterObj.sort.order) {
+                    params.sort = {
+                        name: filterObj.sort.name,
+                        order: filterObj.sort.order
+                    };
+                }
+                !!this.filter.role ? params.role = this.filter.role : '';
+                !!this.filter.status ? params.stauts = this.filter.status : '';
+                asyncGet(api.getUserGroupDetails, params)
+                    .then((response) => {
+                        let res = response && response.rows ? response.rows : {};
+
+                        this.joinGroupDialog.userList = res && res.data ? res.data : [];
+                        this.joinGroupDialog.filter.pageNation.totalItem = res && res.count ? res.count : 0;
+                        this.joinGroupDialog.selectedIdList = [];
+                    }, (error) => {
+                        this.common.notification('warning', error.msg);
+                    })
+            },
+            updateJoinGroupSelected(selectedItemList) {
+                let selectedIdList = [];
+
+                selectedItemList.forEach(function (selectedItemObj) {
+                    selectedIdList.push(selectedItemObj.id);
+                });
+                this.joinGroupDialog.selectedIdList = selectedIdList;
+            },
+            updateJoinGroupFilter(column) {
+                this.joinGroupDialog.filter.sort = {
+                    name: column.prop,
+                    order: column.order
+                };
+                this.getCanJoinGroupUserList();
+            },
+            userJoinGroup() {
+                if (this.joinGroupDialog.selectedIdList.length > 0) {
+                    // call API
+                    this.common.notification('success', "添加组成员用户成功");
+                    this.joinGroupVisible = false;
+                    this.filter.pageNation.pageNo = 1;
+                    this.getUserGroupDetails();
+                }else {
+                    this.common.notification('warning', "请选择需要加入组的用户");
+                }
+            },
+            cancelUserJoinGroup() {
+                this.joinGroupVisible = false;
+            },
+            // user join group end
         },
         created() {
             this.initPageInfo();
