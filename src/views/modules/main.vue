@@ -33,13 +33,13 @@
                                 <el-menu-item index="/modules-main/user/user-group">{{$t('i18n.导航页面.用户分组管理')}}</el-menu-item>
                             </el-menu-item-group>
                         </el-submenu>
-                        <el-submenu index="4">
+                        <el-submenu index="/modules-main/ops">
                             <template slot="title">
                                 <i class="el-icon-location"></i>
                                 <span slot="title" v-text="$t('i18n.导航页面.运维')"></span>
                             </template>
                             <el-menu-item-group>
-                                <el-menu-item index="4-1">{{$t('i18n.导航页面.运维授权')}}</el-menu-item>
+                                <el-menu-item index="/modules-main/ops/authorization">{{$t('i18n.导航页面.运维授权')}}</el-menu-item>
                                 <el-menu-item index="4-2">{{$t('i18n.导航页面.主机运维')}}</el-menu-item>
                                 <el-menu-item index="4-3">{{$t('i18n.导航页面.在线会话')}}</el-menu-item>
                             </el-menu-item-group>

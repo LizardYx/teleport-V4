@@ -20,7 +20,7 @@
                         <i class="el-icon-circle-plus-outline"></i>
                         添加用户
                     </el-button>
-                    <el-button size="mini" type="primary" :disabled="!selectedIdList[0]">
+                    <el-button size="mini" type="primary" :disabled="!selectedIdList[0]" @click="initRemoveUserFromGroup(selectedIdList)">
                         <i class="el-icon-delete"></i>
                         移除用户
                     </el-button>
@@ -42,7 +42,7 @@
                     <el-table-column min-width="5%" align="center" type="selection"></el-table-column>
                     <el-table-column min-width="20%" header-align="center" prop="surname" sortable="custom" label="用户">
                     </el-table-column>
-                    <el-table-column min-width="35%" header-align="center" label="成员信息">
+                    <el-table-column min-width="25%" header-align="center" label="成员信息">
                         <template slot-scope="scope">
                             用户昵称：{{scope['row'].username}}<br/>
                             邮箱地址：{{scope['row'].email}}
@@ -60,6 +60,13 @@
                             <el-tag effect="dark" v-text="getUserStatusInfo(scope['row'].state).name"  size="small"
                                     :type="getUserStatusInfo(scope['row'].state).css">
                             </el-tag>
+                        </template>
+                    </el-table-column>
+                    <el-table-column min-width="10%" align="center" label="操作">
+                        <template slot-scope="scope">
+                            <el-link type="primary" class="mar-rgt" :underline="false" @click="initRemoveUserFromGroup([scope['row'].id])">
+                                移除组成员账号
+                            </el-link>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -135,6 +142,22 @@
                     </el-button>
                 </div>
             </el-dialog>
+            <el-dialog :visible.sync="removeUserDialog.visible" v-if="removeUserDialog.visible" class="delete-dialog"
+                       width="768px" :close-on-click-modal="false" :close-on-press-escape="false">
+                <div slot="title" class="delete-title">
+                    <icon-svg icon-class="warning"></icon-svg>操作确认
+                </div>
+                <div class="warning">
+                    <div>移除用户组内成员不会删除用户账号！</div>
+                </div>
+                <div class="mar-top">
+                    您确定要"移除"选中的 <span class="text-bold">{{removeUserDialog.userIdList.length}}个</span> 成员账号？<br/>
+                </div>
+                <div slot="footer" class="dialog-footer">
+                    <el-button type="primary" size="mini" @click="removeUser">确定</el-button>
+                    <el-button size="mini" @click="removeUserDialog.visible = false">取消</el-button>
+                </div>
+            </el-dialog>
         </div>
         <fix-tool-bar ref="toolbar"></fix-tool-bar>
     </div>
@@ -169,6 +192,10 @@
                 statusList: this.common.statusList,
                 joinGroupVisible: false,
                 joinGroupDialog: {},
+                removeUserDialog: {
+                    visible: false,
+                    userIdList: [],
+                }
             }
         },
         methods: {
@@ -407,6 +434,22 @@
                 this.joinGroupVisible = false;
             },
             // user join group end
+
+            // remove user from group start
+            initRemoveUserFromGroup(idList) {
+                this.removeUserDialog = {
+                    visible: true,
+                    userIdList: idList,
+                };
+            },
+            removeUser() {
+                // call API
+                this.removeUserDialog.visible = false;
+                this.filter.pageNation.pageNo = 1;
+                this.getUserGroupDetails();
+                this.common.notification('success', "移除组内账号成功");
+            },
+            // remove user from group end
         },
         created() {
             this.initPageInfo();

@@ -110,8 +110,14 @@ const router = new Router({
                     needLogin: true
                 },
                 component: lazyLoadView('modules/user/user-group-details'),
+            },{
+                path: 'ops/authorization',
+                name: 'authorization',
+                meta: {
+                    needLogin: true
+                },
+                component: lazyLoadView('modules/ops/authorization'),
             }],
-
         },
     ],
 });
