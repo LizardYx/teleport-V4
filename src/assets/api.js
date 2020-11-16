@@ -21,4 +21,5 @@ export const api = {
     updateUserRole: `${baseUrl}/user/set-role`, //更新用户角色
     getUserGroupList: `${baseUrl}/user/get-groups-with-member`, //获取用户分组列表
     getUserGroupDetails: `${baseUrl}/user/get-groups-details`, //获取用户分组详情
+    getPoliciesList: `${baseUrl}/ops/get-policies`, //获取运维授权策略列表
 };

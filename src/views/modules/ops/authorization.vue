@@ -28,7 +28,34 @@
                 <el-col :span="6"></el-col>
             </el-row>
             <div class="mar-btm">
-
+                <el-table :data="authList" border @selection-change="updateSelected">
+                    <el-table-column min-width="5%" align="center" type="selection"></el-table-column>
+                    <el-table-column min-width="55%" header-align="center" prop="name" label="授权策略">
+                        <template slot-scope="scope">
+                            <el-popover placement="right" trigger="hover" :content="scope.row.desc">
+                                <span slot="reference">
+                                    <router-link :to="{path: '/modules-main/user/user-group-details', query: {id: scope.row.id, name: scope.row.name}}">
+                                        {{scope.row.name}}
+                                    </router-link>
+                                </span>
+                            </el-popover>
+                        </template>
+                    </el-table-column>
+                    <el-table-column min-width="20%" align="center" prop="status" label="状态">
+                        <template slot-scope="scope">
+                            <el-tag effect="dark" v-text="getUserStatusInfo(scope['row'].state).name"  size="small"
+                                    :type="getUserStatusInfo(scope['row'].state).css">
+                            </el-tag>
+                        </template>
+                    </el-table-column>
+                    <el-table-column min-width="20%" align="center" label="操作">
+                        <template slot-scope="scope">
+                            <el-link type="primary" class="mar-rgt" :underline="false">
+                                编辑
+                            </el-link>
+                        </template>
+                    </el-table-column>
+                </el-table>
             </div>
             <div class="block clearfix">
                 <el-row>
@@ -57,10 +84,11 @@
     import {asyncGet, asyncPost} from '@src/assets/axios'
     import {api} from "@src/assets/api";
     import FixToolBar from  "@src/components/fix-tool-bar"
+    import Sortable from "sortablejs";
 
     export default {
         name: "authorization",
-        components: {FixToolBar},
+        components: {FixToolBar, sortablejs},
         data() {
             return{
                 filter: {
@@ -76,7 +104,21 @@
                 this.getAuthList();
             },
             getAuthList() {
+                let params = {
+                    pageNo: this.filter.pageNation.pageNo,
+                    pageSize: this.filter.pageNation.pageSize
+                };
 
+                asyncGet(api.getPoliciesList, params)
+                    .then((response) => {
+                        let res = response && response.rows ? response.rows : {};
+
+                        this.authList = res && res.data ? res.data : [];
+                        this.filter.pageNation.totalItem = res && res.count ? res.count : 0;
+                        this.selectedIdList = [];
+                    }, (error) => {
+                        this.common.notification('warning', error.msg);
+                    })
             },
             pageSizeChange(newPageSize) {
                 this.filter.pageNation.pageSize = newPageSize;
@@ -87,11 +129,43 @@
                 this.filter.pageNation.pageNo = newPageNo;
                 this.getAuthList();
             },
+            updateSelected(selectedItemList) {
+                let selectedIdList = [];
+
+                selectedItemList.forEach(function (selectedItemObj) {
+                    selectedIdList.push(selectedItemObj.id);
+                });
+                this.selectedIdList = selectedIdList;
+            },
+            getUserStatusInfo(statusId) {
+                let statusInfo = {
+                    name: '',
+                    css: ''
+                };
+
+                if (statusId) {
+                    for (let statusObj of this.statusList) {
+                        if (statusObj.id === statusId) {
+                            statusInfo = {
+                                name: statusObj.name,
+                                css: statusObj.css
+                            };
+                            break;
+                        }
+                    }
+                }
+                return statusInfo;
+            },
+            rowDrop() {
+                const tbody = document.querySelector(".el-table__body-wrapper tbody");
+                Sortable.create(tbody);
+            }
         },
         created() {
             this.initPageInfo();
         },
         mounted() {
+            this.rowDrop();
             this.$refs.toolbar.fixToolBarInit(100);
         },
         beforeDestroy() {

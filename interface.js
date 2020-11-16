@@ -281,6 +281,24 @@ let server = http.createServer(function (request, response) {
                 count: 3
             }
         }
+        if (request.url.indexOf(`${commonUrl}/ops/get-policies`) >= 0) {
+            data.rows = {
+                data: [{
+                    id: 1,
+                    name: "运维授权名称",
+                    rank: 1,
+                    state: 1,
+                    desc: "运维授权描述"
+                },{
+                    id: 2,
+                    name: "运维授权名称2",
+                    rank: 2,
+                    state: 1,
+                    desc: "运维授权描述2"
+                }],
+                count: 3
+            }
+        }
         response.writeHead(statusCode, {'Content-Type': 'text/html'});
         //参数序列化
         response.end(JSON.stringify(data));
