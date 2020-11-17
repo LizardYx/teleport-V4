@@ -88,7 +88,7 @@
 
     export default {
         name: "authorization",
-        components: {FixToolBar, sortablejs},
+        components: {FixToolBar, Sortable},
         data() {
             return{
                 filter: {
@@ -157,9 +157,35 @@
                 return statusInfo;
             },
             rowDrop() {
+                const that = this;
+
                 const tbody = document.querySelector(".el-table__body-wrapper tbody");
-                Sortable.create(tbody);
-            }
+                Sortable.create(tbody, {
+                    onUpdate(evt) {
+                        that.updateSort(evt.oldIndex, evt.newIndex)
+                    }
+                });
+            },
+            updateSort(oldIndex, newIndex) {
+                const fromItem = this.authList[oldIndex];
+                const targetItem = this.authList[newIndex];
+                const direct = oldIndex - newIndex > 0 ? 1 : -1;
+                let params = {
+                    pid: fromItem.id,
+                    new_rank: targetItem.rank,
+                    start_rank: direct === 1 ? targetItem.rank : fromItem.rank + 1,
+                    end_rank: direct === 1 ? fromItem.rank - 1 : targetItem.rank,
+                    direct: direct
+                };
+
+                asyncPost(api.updatePoliciesOrder, params)
+                    .then(() => {
+                        this.common.notification('success', "授权策略顺序调整成功");
+                        this.getAuthList();
+                    }, (error) => {
+                        this.common.notification('warning', error.msg);
+                    })
+            },
         },
         created() {
             this.initPageInfo();

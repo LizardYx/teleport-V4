@@ -22,4 +22,5 @@ export const api = {
     getUserGroupList: `${baseUrl}/user/get-groups-with-member`, //获取用户分组列表
     getUserGroupDetails: `${baseUrl}/user/get-groups-details`, //获取用户分组详情
     getPoliciesList: `${baseUrl}/ops/get-policies`, //获取运维授权策略列表
+    updatePoliciesOrder: `${baseUrl}/ops/rank-reorder`, //更新运维授权策略检查顺序
 };

@@ -295,6 +295,12 @@ let server = http.createServer(function (request, response) {
                     rank: 2,
                     state: 1,
                     desc: "运维授权描述2"
+                },{
+                    id: 3,
+                    name: "运维授权名称3",
+                    rank: 3,
+                    state: 1,
+                    desc: "运维授权描述3"
                 }],
                 count: 3
             }
@@ -349,6 +355,15 @@ let server = http.createServer(function (request, response) {
                         code: -1,
                         rows: {},
                         msg: '动态验证码错误，请重新输入'
+                    };
+                }
+            }
+            if (request.url === `${commonUrl}/ops/rank-reorder`) {
+                if (params.pid === "") {
+                    data = {
+                        code: -1,
+                        rows: {},
+                        msg: '授权策略调整顺序失败'
                     };
                 }
             }

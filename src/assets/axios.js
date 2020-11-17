@@ -145,3 +145,22 @@ export function asyncPost(url, params){
             })
     })
 }
+
+/**
+ * 封装Put请求
+ * @param url {String} [请求的url地址]
+ * @param params {Object} [请求时携带的参数]
+ * @returns {Promise}
+ * 描述：put方法必须对提交的参数进行序列化(QS.stringify())，否则后台拿不到数据
+ */
+export function asyncPut(url, params){
+    return new Promise((resolve, reject) => {
+        axios.put(url, QS.stringify(params))
+            .then(response => {
+                resolve(response.data);
+            })
+            .catch(error => {
+                reject(error.data);
+            })
+    })
+}
