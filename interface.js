@@ -293,7 +293,7 @@ let server = http.createServer(function (request, response) {
                     id: 2,
                     name: "运维授权名称2",
                     rank: 2,
-                    state: 1,
+                    state: 2,
                     desc: "运维授权描述2"
                 },{
                     id: 3,

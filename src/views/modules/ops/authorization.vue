@@ -6,19 +6,19 @@
         <div id="pageContent">
             <el-row :gutter="20" class="tool-bar">
                 <el-col :span="18">
-                    <el-button size="mini" type="primary">
+                    <el-button size="mini" type="primary" @click="initPoliciesInfo()">
                         <i class="el-icon-circle-plus-outline"></i>
                         新建授权策略
                     </el-button>
-                    <el-button size="mini" type="primary" :disabled="!selectedIdList[0]">
-                        禁用策略
+                    <el-button size="mini" type="primary" :disabled="!selectedIdList[0]" @click="confirmDisabledPolicies(selectedIdList)">
+                        禁用
                     </el-button>
-                    <el-button size="mini" type="primary" :disabled="!selectedIdList[0]">
-                        解禁策略
+                    <el-button size="mini" type="primary" :disabled="!selectedIdList[0]" @click="confirmEnabledPolicies(selectedIdList)">
+                        解禁
                     </el-button>
-                    <el-button size="mini" type="primary" :disabled="!selectedIdList[0]">
+                    <el-button size="mini" type="primary" :disabled="!selectedIdList[0]" @click="initDeleteOpsPolicies(selectedIdList)">
                         <i class="el-icon-delete"></i>
-                        移除策略
+                        删除
                     </el-button>
                     <el-button size="mini" type="primary" @click="getAuthList()">
                         <i class="el-icon-refresh"></i>
@@ -50,16 +50,54 @@
                     </el-table-column>
                     <el-table-column min-width="20%" align="center" label="操作">
                         <template slot-scope="scope">
-                            <el-link type="primary" class="mar-rgt" :underline="false">
-                                编辑
+                            <el-link type="primary" class="mar-rgt" :underline="false" :disabled="scope['row'].state === statusList[1].id"
+                                     @click="confirmDisabledPolicies([scope['row'].id])">
+                                禁用
                             </el-link>
+                            <el-link type="primary" class="mar-rgt" :underline="false" :disabled="scope['row'].state === statusList[0].id"
+                                     @click="confirmEnabledPolicies([scope['row'].id])">
+                                解禁
+                            </el-link>
+                            <el-dropdown size="small" trigger="click">
+                                <span>
+                                    更多操作
+                                    <i class="el-icon-arrow-down el-icon--right"></i>
+                                </span>
+                                <el-dropdown-menu slot="dropdown" class="operation">
+                                    <el-dropdown-item>
+                                        <el-link type="primary" :underline="false" @click="initPoliciesInfo(scope['row'])">
+                                            编辑运维策略
+                                        </el-link>
+                                    </el-dropdown-item>
+                                    <el-dropdown-item>
+                                        <el-link type="primary" :underline="false">
+                                            运维策略详情
+                                        </el-link>
+                                    </el-dropdown-item>
+                                    <el-dropdown-item>
+                                        <el-link type="primary" :underline="false" @click="initDeleteOpsPolicies([scope['row'].id])">
+                                            删除
+                                        </el-link>
+                                    </el-dropdown-item>
+                                </el-dropdown-menu>
+                            </el-dropdown>
                         </template>
                     </el-table-column>
                 </el-table>
             </div>
             <div class="block clearfix">
                 <el-row>
-                    <el-col :span="12" :offset="12">
+                    <el-col :span="12">
+                        <div class="notice">
+                            <label class="title box-block">温馨提示：</label>
+                            <div class="content">
+                                <div>
+                                    1.上下拖动表格的行，可以调节策略的检查顺序
+                                </div>
+                            </div>
+                        </div>
+                    </el-col>
+                    <el-col :span="12">
                         <div class="pagination">
                             <el-pagination
                                 @size-change="pageSizeChange"
@@ -75,6 +113,56 @@
                     </el-col>
                 </el-row>
             </div>
+            <el-dialog :title="opsPoliciesInfoDialog.title" :visible.sync="opsPoliciesInfoDialog.visible" width="768px"
+                       :close-on-click-modal="false" :close-on-press-escape="false" v-if="opsPoliciesInfoDialog.visible">
+                <el-form :model="opsPoliciesInfoDialog" status-icon :rules="opsPoliciesInfoDialog.rules" ref="opsPoliciesInfoDialog"
+                         size="medium">
+                    <el-row>
+                        <el-col :span="10">
+                            <el-form-item prop="name" label="名称:" label-width="120px">
+                                <el-input v-model="opsPoliciesInfoDialog.name" placeholder="请输入运维策略名称" size="mini">
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="20">
+                            <el-form-item label="简要描述:" label-width="120px">
+                                <el-input type="textarea" :rows="3" v-model="opsPoliciesInfoDialog.desc" size="mini"
+                                          placeholder="请输入运维策略描述">
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button type="primary" size="mini" @click="submitOpsPoliciesInfo()">
+                        <icon-svg icon-class="submit"></icon-svg>
+                        确定
+                    </el-button>
+                    <el-button size="mini" @click="cancelOpsPoliciesDialog()">
+                        <icon-svg icon-class="cancel"></icon-svg>
+                        取消
+                    </el-button>
+                </div>
+            </el-dialog>
+            <el-dialog :visible.sync="deleteOpsPoliciesDialog.visible" v-if="deleteOpsPoliciesDialog.visible" class="delete-dialog"
+                       width="768px" :close-on-click-modal="false" :close-on-press-escape="false">
+                <div slot="title" class="delete-title">
+                    <icon-svg icon-class="warning"></icon-svg>操作确认
+                </div>
+                <div class="warning">
+                    <div class="text-bold">注意：删除操作不可恢复！！</div>
+                </div>
+                <div class="mar-top">
+                    您确定要"删除"选中的 <span class="text-bold">{{deleteOpsPoliciesDialog.idList.length}}个</span> 运维策略？<br/>
+                    如果您希望临时禁止某个指定的运维策略，可将其状态设置为“禁用”。
+                </div>
+                <div slot="footer" class="dialog-footer">
+                    <el-button type="primary" size="mini" @click="deleteUser">确定</el-button>
+                    <el-button size="mini" @click="deleteOpsPoliciesDialog.visible = false">取消</el-button>
+                </div>
+            </el-dialog>
         </div>
         <fix-tool-bar ref="toolbar"></fix-tool-bar>
     </div>
@@ -97,6 +185,12 @@
                 selectedIdList: [],
                 authList: [],
                 statusList: this.common.statusList,
+                opsPoliciesInfoDialog: {
+                    visible: false
+                },
+                deleteOpsPoliciesDialog: {
+                    visible: false
+                },
             }
         },
         methods: {
@@ -161,6 +255,7 @@
 
                 const tbody = document.querySelector(".el-table__body-wrapper tbody");
                 Sortable.create(tbody, {
+                    animation: 200,  //定义排序动画时间
                     onUpdate(evt) {
                         that.updateSort(evt.oldIndex, evt.newIndex)
                     }
@@ -186,6 +281,99 @@
                         this.common.notification('warning', error.msg);
                     })
             },
+
+            // ops policies info start
+            initPoliciesInfo(policiesInfo) {
+                this.opsPoliciesInfoDialog = {
+                    visible: true,
+                    isCreate: !policiesInfo,
+                    title: !!policiesInfo ? `编辑运维策略信息${policiesInfo.name}` : "创建运维策略",
+                    name: !!policiesInfo ? policiesInfo.name : "",
+                    desc: !!policiesInfo ? policiesInfo.desc : "",
+                    rules: {
+                        name: [{
+                            required: true, message: '请输入运维策略名称', trigger: 'blur'
+                        }],
+                    }
+                }
+            },
+            submitOpsPoliciesInfo() {
+                this.$refs['opsPoliciesInfoDialog'].validate((passValidate) => {
+                    if (passValidate) {
+                        this.opsPoliciesInfoDialog.isCreate ? this.createOpsPolicies() : this.updateOpsPolicies();
+                    }else {
+                        return false;
+                    }
+                })
+            },
+            createOpsPolicies() {
+                // call API
+                this.common.notification('success', '创建运维策略成功');
+                this.opsPoliciesInfoDialog.visible = false;
+            },
+            updateOpsPolicies() {
+                // call API
+                this.common.notification('success', '更新运维策略成功');
+                this.opsPoliciesInfoDialog.visible = false;
+            },
+            cancelOpsPoliciesDialog() {
+                this.$refs['opsPoliciesInfoDialog'].resetFields();
+                this.opsPoliciesInfoDialog.visible = false;
+            },
+            // ops policies info end
+
+            // disabled ops policies start
+            confirmDisabledPolicies(idList) {
+                if (idList && idList[0]) {
+                    this.$confirm(`确认"禁用"选中的 <span class="text-bold">${idList.length}个</span> 运维策略`, '禁用', {
+                        dangerouslyUseHTMLString: true,
+                        closeOnClickModal: false,
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        cancelButtonClass: 'btn-cancel',
+                        type: 'warning'
+                    }).then(() =>{
+                        this.disableOpsPolicies(idList);
+                    });
+                }
+            },
+            disableOpsPolicies(idList) {
+                //call API
+                this.getAuthList();
+                this.common.notification('success', '禁用运维策略成功');
+            },
+            // disabled ops policies end
+
+            // enabled ops policies start
+            confirmEnabledPolicies(idList) {
+                if (idList && idList[0]) {
+                    this.$confirm(`确认"解禁"选中的 <span class="text-bold">${idList.length}个</span> 运维策略`, '解禁', {
+                        dangerouslyUseHTMLString: true,
+                        closeOnClickModal: false,
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        cancelButtonClass: 'btn-cancel',
+                        type: 'warning'
+                    }).then(() =>{
+                        this.enableOpsPolicies(idList);
+                    });
+                }
+            },
+            enableOpsPolicies(idList) {
+                //call API
+                this.getAuthList();
+                this.common.notification('success', '解禁运维策略成功');
+            },
+            // enabled ops policies end
+
+            // delete ops policies start
+            initDeleteOpsPolicies(idList) {
+                this.deleteOpsPoliciesDialog = {
+                    visible: true,
+                    idList: idList,
+                }
+            },
+            // delete ops policies end
         },
         created() {
             this.initPageInfo();
