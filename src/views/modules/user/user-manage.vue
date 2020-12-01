@@ -1131,7 +1131,7 @@
                     idList: idList
                 };
             },
-            deleteUser(idList) {
+            deleteUser() {
                 // Call API
                 this.deleteUserDialog.visible = false;
                 this.filter.pageNation.pageNo = 1;

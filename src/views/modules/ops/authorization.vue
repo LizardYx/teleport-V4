@@ -66,7 +66,12 @@
                                 <el-dropdown-menu slot="dropdown" class="operation">
                                     <el-dropdown-item>
                                         <el-link type="primary" :underline="false" @click="initPoliciesInfo(scope['row'])">
-                                            编辑运维策略
+                                            运维策略基本信息
+                                        </el-link>
+                                    </el-dropdown-item>
+                                    <el-dropdown-item>
+                                        <el-link type="primary" :underline="false" @click="initLinkControl(scope['row'].id, scope['row'].name)">
+                                            连接控制
                                         </el-link>
                                     </el-dropdown-item>
                                     <el-dropdown-item>
@@ -159,8 +164,49 @@
                     如果您希望临时禁止某个指定的运维策略，可将其状态设置为“禁用”。
                 </div>
                 <div slot="footer" class="dialog-footer">
-                    <el-button type="primary" size="mini" @click="deleteUser">确定</el-button>
+                    <el-button type="primary" size="mini" @click="deletePolicies">确定</el-button>
                     <el-button size="mini" @click="deleteOpsPoliciesDialog.visible = false">取消</el-button>
+                </div>
+            </el-dialog>
+            <el-dialog title="连接控制" :visible.sync="linkControlDialog.visible" width="768px" id="link-control"
+                       :close-on-click-modal="false" :close-on-press-escape="false" v-if="linkControlDialog.visible">
+                <el-form :model="linkControlDialog" status-icon ref="linkControlDialog" size="medium">
+                    <div class="checkbox-block">
+                        <div>
+                            <el-checkbox :indeterminate="linkControlDialog.rdp.isIndeterminate" v-model="linkControlDialog.rdp.checkAll"
+                                         @change="RDPSelectAll">
+                                RDP选项
+                            </el-checkbox>
+                            <el-checkbox-group v-model="linkControlDialog.rdp.checkedItems" @change="RDPItemChange">
+                                <el-checkbox v-for="itemInfo in linkControlDialog.rdp.items" :label="itemInfo.id" :key="itemInfo.id">
+                                    {{itemInfo.name}}
+                                </el-checkbox>
+                            </el-checkbox-group>
+                        </div>
+                    </div>
+                    <div class="checkbox-block">
+                        <div>
+                            <el-checkbox :indeterminate="linkControlDialog.ssh.isIndeterminate" v-model="linkControlDialog.ssh.checkAll"
+                                         @change="sshSelectAll">
+                                SSH选项
+                            </el-checkbox>
+                            <el-checkbox-group v-model="linkControlDialog.ssh.checkedItems" @change="sshItemChange">
+                                <el-checkbox v-for="itemInfo in linkControlDialog.ssh.items" :label="itemInfo.id" :key="itemInfo.id">
+                                    {{itemInfo.name}}
+                                </el-checkbox>
+                            </el-checkbox-group>
+                        </div>
+                    </div>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button type="primary" size="mini" @click="submitLinkControlInfo()">
+                        <icon-svg icon-class="submit"></icon-svg>
+                        确定
+                    </el-button>
+                    <el-button size="mini" @click="cancelLinkControlDialog()">
+                        <icon-svg icon-class="cancel"></icon-svg>
+                        取消
+                    </el-button>
                 </div>
             </el-dialog>
         </div>
@@ -191,6 +237,9 @@
                 deleteOpsPoliciesDialog: {
                     visible: false
                 },
+                linkControlDialog: {
+                    visible: false
+                }
             }
         },
         methods: {
@@ -287,7 +336,7 @@
                 this.opsPoliciesInfoDialog = {
                     visible: true,
                     isCreate: !policiesInfo,
-                    title: !!policiesInfo ? `编辑运维策略信息${policiesInfo.name}` : "创建运维策略",
+                    title: !!policiesInfo ? `运维策略基本信息：${policiesInfo.name}` : "创建运维策略",
                     name: !!policiesInfo ? policiesInfo.name : "",
                     desc: !!policiesInfo ? policiesInfo.desc : "",
                     rules: {
@@ -321,6 +370,104 @@
                 this.opsPoliciesInfoDialog.visible = false;
             },
             // ops policies info end
+
+            // link control start
+            initLinkControl(policiesId, policiesName) {
+                // call API 获取rpd和ssh的值
+                const rdp = 4103;
+                const ssh = 3;
+                this.linkControlDialog = {
+                    visible: true,
+                    policiesId: policiesId,
+                    policiesName: policiesName,
+                    rdp: {
+                        checkAll: false,
+                        isIndeterminate: false,
+                        checkedItems: [],
+                        items: [{
+                            id: 1,
+                            name: "允许剪切板",
+                        },{
+                            id: 2,
+                            name: "允许驱动器映射",
+                        },{
+                            id: 3,
+                            name: "允许管理员连接(Console模式)",
+                        }],
+                    },
+                    ssh: {
+                        checkAll: false,
+                        isIndeterminate: false,
+                        checkedItems: [],
+                        items: [{
+                            id: 1,
+                            name: "允许SSH",
+                        },{
+                            id: 2,
+                            name: "允许SFTP",
+                        }],
+                    }
+                };
+                // 初始化连接控制选项是否选中
+                if ((rdp & this.common.TP_FLAG_RDP_CLIPBOARD) !== 0) {
+                    this.linkControlDialog.rdp.checkedItems.push(1)
+                }
+                if ((rdp & this.common.TP_FLAG_RDP_DISK) !== 0) {
+                    this.linkControlDialog.rdp.checkedItems.push(2)
+                }
+                if ((rdp & this.common.TP_FLAG_RDP_CONSOLE) !== 0) {
+                    this.linkControlDialog.rdp.checkedItems.push(3)
+                }
+                if ((ssh & this.common.TP_FLAG_SSH_SHELL) !== 0) {
+                    this.linkControlDialog.ssh.checkedItems.push(1)
+                }
+                if ((ssh & this.common.TP_FLAG_SSH_SHELL) !== 0) {
+                    this.linkControlDialog.ssh.checkedItems.push(2)
+                }
+            },
+
+            RDPSelectAll(selectAll) {
+                let itemIdList = [];
+
+                for (let itemInfo of this.linkControlDialog.rdp.items) {
+                    itemIdList.push(itemInfo.id);
+                }
+                this.linkControlDialog.rdp.checkedItems = selectAll ? itemIdList : [];
+                this.linkControlDialog.rdp.isIndeterminate = false;
+            },
+            RDPItemChange(selectedItems) {
+                let checkedCount = selectedItems.length;
+                let itemLength = this.linkControlDialog.rdp.items.length;
+
+                this.linkControlDialog.rdp.checkAll = checkedCount === itemLength;
+                this.linkControlDialog.rdp.isIndeterminate = checkedCount > 0 && checkedCount < itemLength;
+            },
+            sshSelectAll(selectAll) {
+                let itemIdList = [];
+
+                for (let itemInfo of this.linkControlDialog.ssh.items) {
+                    itemIdList.push(itemInfo.id);
+                }
+                this.linkControlDialog.ssh.checkedItems = selectAll ? itemIdList : [];
+                this.linkControlDialog.ssh.isIndeterminate = false;
+            },
+            sshItemChange(selectedItems) {
+                let checkedCount = selectedItems.length;
+                let itemLength = this.linkControlDialog.ssh.items.length;
+
+                this.linkControlDialog.ssh.checkAll = checkedCount === itemLength;
+                this.linkControlDialog.ssh.isIndeterminate = checkedCount > 0 && checkedCount < itemLength;
+            },
+            submitLinkControlInfo() {
+                // Call API
+                this.common.notification('success', '更新连接控制设置成功');
+                this.linkControlDialog.visible = false;
+            },
+            cancelLinkControlDialog() {
+                this.$refs['linkControlDialog'].resetFields();
+                this.linkControlDialog.visible = false;
+            },
+            // link control end
 
             // disabled ops policies start
             confirmDisabledPolicies(idList) {
@@ -373,6 +520,13 @@
                     idList: idList,
                 }
             },
+            deletePolicies() {
+                // call API
+                this.deleteOpsPoliciesDialog.visible = false;
+                this.filter.pageNation.pageNo = 1;
+                this.getAuthList();
+                this.common.notification('success', '删除运维策略成功');
+            },
             // delete ops policies end
         },
         created() {
@@ -388,6 +542,18 @@
     }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+#userGroupDetails {
+    div#link-control{
+        div.checkbox-block{
+            margin-bottom: 20px;
+            :last-child{
+                margin-bottom: 0;
+                div.el-checkbox-group{
+                    margin: 10px 0 0 25px;
+                }
+            }
+        }
+    }
+}
 </style>

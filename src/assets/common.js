@@ -97,6 +97,20 @@ export const common = {
         name: '用户名+密码+身份认证器动态密码',
         tag: 0x0008
     }],
+    RDP: {
+        TP_FLAG_RDP_DESKTOP: 0x0001,    // 0x1=允许远程桌面
+        TP_FLAG_RDP_CLIPBOARD: 0x0002,  // 0x2=允许剪贴板
+        TP_FLAG_RDP_DISK: 0x0004,       // 0x4=允许磁盘映射
+        TP_FLAG_RDP_APP: 0x0008,        // 0x8=允许远程APP（尚未实现）
+        TP_FLAG_RDP_CONSOLE: 0x1000,    // 0x1000=允许连接到管理员会话（RDP的console选项）
+    },
+    SSH: {
+        TP_FLAG_SSH_SHELL: 0x0001, // 0x1=允许SHELL
+        TP_FLAG_SSH_SFTP: 0x0002, // 0x2=允许SFTP
+        TP_FLAG_SSH_X11: 0x0004, // 0x4=允许X11转发（尚未实现）
+        TP_FLAG_SSH_EXEC: 0x0008, // 0x8=允许exec执行远程命令（尚未实现）
+        TP_FLAG_SSH_TUNNEL: 0x0010, // 0x10=allow ssh tunnel. (not impl.)
+    },
     initPageNation () {
         return {
             pageNo: 1,
