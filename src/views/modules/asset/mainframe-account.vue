@@ -2,7 +2,10 @@
     <div id="manageRemoteAccount">
         <div id="pageTitle">
             <el-breadcrumb class="page-title mar-btm" separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item>{{hostInfo.name}}</el-breadcrumb-item>
+                <el-breadcrumb-item>
+                    <edit-input :id="hostInfo.id" :name="hostInfo.name" :callback="updateMainframeName">
+                    </edit-input>
+                </el-breadcrumb-item>
             </el-breadcrumb>
             <el-breadcrumb separator-class="el-icon-arrow-right">
                 <el-breadcrumb-item>{{$t('i18n.导航页面.资产')}}</el-breadcrumb-item>
@@ -249,10 +252,11 @@
     import {asyncGet} from '@src/assets/axios'
     import {api} from "@src/assets/api";
     import FixToolBar from  "@src/components/fix-tool-bar"
+    import EditInput from "@src/components/edit-input";
 
     export default {
         name: "manage-remote-account",
-        components: {FixToolBar},
+        components: {FixToolBar, EditInput},
         data() {
             return {
                 filter: {
@@ -260,8 +264,8 @@
                 },
                 selectedIdList: [],
                 hostInfo: {
-                    id: this.$route.query['id'],
-                    name: this.$route.query['name']
+                    id: parseInt(this.$route.query['id']),
+                    name: ""
                 },
                 accountList: [],
                 statusList: this.common.statusList,
@@ -277,6 +281,7 @@
         methods: {
             initPageInfo() {
                 this.getAccountList();
+                this.getMachineInfo()
             },
             getAccountList() {
                 let params = {
@@ -295,6 +300,10 @@
                     }, (error) => {
                         this.common.notification('warning', error.msg);
                     })
+            },
+            getMachineInfo() {
+                // 通过主机ID获取主机信息
+                this.hostInfo.name = "测试服务器";
             },
             pageSizeChange(newPageSize) {
                 this.filter.pageNation.pageSize = newPageSize;
@@ -363,6 +372,11 @@
                     }
                 }
                 return !!authName ? authName : '-';
+            },
+            updateMainframeName(id, name) {
+                // call API
+                this.common.notification('success', "更新主机名称成功");
+                this.getMachineInfo();
             },
             // disabled account start
             canDisabledAccount(state) {

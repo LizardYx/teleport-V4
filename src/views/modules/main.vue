@@ -165,6 +165,12 @@
                         .page-title{
                             font-size: 20px;
                         }
+                        div.edit-input{
+                            a.el-link{
+                                cursor: pointer;
+                                font-size: 20px;
+                            }
+                        }
                     }
                     #pageContent{
                         background-color: #fff;

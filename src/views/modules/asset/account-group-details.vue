@@ -2,7 +2,10 @@
     <div id="accountGroupDetail">
             <div id="pageTitle">
                 <el-breadcrumb class="page-title mar-btm" separator-class="el-icon-arrow-right">
-                    <el-breadcrumb-item>{{groupInfo.name}}</el-breadcrumb-item>
+                    <el-breadcrumb-item>
+                        <edit-input :id="groupInfo.id" :name="groupInfo.name" :callback="updateAccountGroupName">
+                        </edit-input>
+                    </el-breadcrumb-item>
                 </el-breadcrumb>
                 <el-breadcrumb separator-class="el-icon-arrow-right">
                     <el-breadcrumb-item>{{$t('i18n.导航页面.资产')}}</el-breadcrumb-item>
@@ -173,10 +176,11 @@
     import {asyncGet} from '@src/assets/axios'
     import {api} from "@src/assets/api";
     import FixToolBar from  "@src/components/fix-tool-bar"
+    import EditInput from "@src/components/edit-input";
 
     export default {
         name: "account-group-details",
-        components: {FixToolBar},
+        components: {FixToolBar, EditInput},
         data() {
             return{
                 filter: {
@@ -189,7 +193,7 @@
                 },
                 groupInfo: {
                     id: this.$route.query['id'],
-                    name: this.$route.query['name']
+                    name: ""
                 },
                 selectedIdList: [],
                 accountList: [],
@@ -206,6 +210,7 @@
         methods: {
             initPageInfo() {
                 this.getAccountList();
+                this.getAccountGroupInfo();
             },
             updateFilter(column) {
                 this.filter.sort = {
@@ -238,6 +243,10 @@
                     }, (error) => {
                         this.common.notification('warning', error.msg);
                     })
+            },
+            getAccountGroupInfo() {
+                // 通过组ID获取账号组基本信息
+                this.groupInfo.name = "分组名称";
             },
             pageSizeChange(newPageSize) {
                 this.filter.pageNation.pageSize = newPageSize;
@@ -306,6 +315,11 @@
                     }
                 }
                 return statusInfo;
+            },
+            updateAccountGroupName(id, name) {
+                // call API update account group name
+                this.common.notification('success', "更新账号分组名称成功");
+                this.getAccountGroupInfo();
             },
             // account join group start
             initAccountJoinGroup() {

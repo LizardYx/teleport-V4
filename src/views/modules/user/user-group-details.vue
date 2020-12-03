@@ -2,7 +2,10 @@
     <div id="userGroupDetails">
         <div id="pageTitle">
             <el-breadcrumb class="page-title mar-btm" separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item>{{groupInfo.name}}</el-breadcrumb-item>
+                <el-breadcrumb-item>
+                    <edit-input :id="groupInfo.id" :name="groupInfo.name" :callback="updateUserGroupName">
+                    </edit-input>
+                </el-breadcrumb-item>
             </el-breadcrumb>
             <el-breadcrumb separator-class="el-icon-arrow-right">
                 <el-breadcrumb-item>用户</el-breadcrumb-item>
@@ -167,10 +170,11 @@
     import {asyncGet, asyncPost} from '@src/assets/axios'
     import {api} from "@src/assets/api";
     import FixToolBar from  "@src/components/fix-tool-bar"
+    import EditInput from "@src/components/edit-input";
 
     export default {
         name: "user-group-details",
-        components: {FixToolBar},
+        components: {FixToolBar, EditInput},
         data() {
             return {
                 filter: {
@@ -184,7 +188,7 @@
                 },
                 groupInfo: {
                     id: this.$route.query['id'],
-                    name: this.$route.query['name']
+                    name: ""
                 },
                 selectedIdList: [],
                 userList: [],
@@ -202,6 +206,7 @@
             initPageInfo() {
                 this.getUserGroupDetails();
                 this.getRoleList();
+                this.getUserGroupInfo();
             },
             updateFilter(column) {
                 this.filter.sort = {
@@ -255,6 +260,10 @@
                     }, (error) => {
                         this.common.notification('warning', error.msg);
                     })
+            },
+            getUserGroupInfo() {
+                // 通过用户组ID获取用户组基本信息
+                this.groupInfo.name = "技术部";
             },
             updateSelected(selectedItemList) {
                 let selectedIdList = [];
@@ -357,6 +366,12 @@
                 this.filter.pageNation.pageNo = newPageNo;
                 this.getUserGroupDetails();
             },
+            updateUserGroupName() {
+                // call API update host group name
+                this.common.notification('success', "更新用户分组名称成功");
+                this.getUserGroupInfo();
+            },
+
             // user join group start
             initUserJoinGroup() {
                 this.joinGroupVisible = true;

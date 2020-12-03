@@ -39,11 +39,16 @@
                     <el-table-column min-width="20%" prop="name" header-align="center" sortable="custom" :label="$t('i18n.主机分组管理.名称')">
                         <template slot-scope="scope">
                             <edit-input :id="scope['row'].id" :name="scope['row'].name" :desc="scope['row'].desc"
-                                        :callback="updateMainframeName">
+                                        :callback="updateGroupName">
                             </edit-input>
                         </template>
                     </el-table-column>
-                    <el-table-column min-width="10%" header-align="center" prop="host_count" :label="$t('i18n.主机分组管理.主机数')">
+                    <el-table-column min-width="10%" header-align="center" :label="$t('i18n.主机分组管理.主机数')">
+                        <template slot-scope="scope">
+                            <el-link type="primary" :underline="false" v-text="scope['row']['host_count']"
+                                     @click="hostGroupDetail(scope['row']['id'])">
+                            </el-link>
+                        </template>
                     </el-table-column>
                     <el-table-column min-width="35%" header-align="center" :label="$t('i18n.主机分组管理.主机名称')">
                         <template slot-scope="scope">
@@ -85,7 +90,7 @@
                                     </el-dropdown-item>
                                     <el-dropdown-item>
                                         <el-link type="primary" :underline="false" v-text="$t('i18n.主机分组管理.编辑详情')"
-                                                 @click="hostGroupDetail(scope['row'].id, scope['row'].name)">
+                                                 @click="hostGroupDetail(scope['row'].id)">
                                         </el-link>
                                     </el-dropdown-item>
                                     <el-dropdown-item>
@@ -279,9 +284,9 @@
                 }
                 return `${this.$t('i18n.主机分组管理.状态')}(${statusFilter})`;
             },
-            updateMainframeName(id, name) {
-                //call API update mainframe name
-                this.common.notification('success', this.$t('i18n.主机分组管理.更新主机名称成功'));
+            updateGroupName(id, name) {
+                //call API update group name
+                this.common.notification('success', "更新主机分组名称成功");
             },
             getGroupStatusInfo(statusId) {
                 let statusInfo = {
@@ -321,12 +326,11 @@
                 }
                 return OSInfo;
             },
-            hostGroupDetail(id, name) {
+            hostGroupDetail(id) {
                 this.$router.push({
                     path: '/modules-main/asset/host-group-details',
                     query: {
-                        id: id,
-                        name: name
+                        id: id
                     }
                 })
             },

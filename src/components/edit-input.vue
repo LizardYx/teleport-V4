@@ -1,12 +1,18 @@
 <template>
     <div class="edit-input">
-        <el-popover v-if="!editInput" placement="right" trigger="hover">
+        <el-popover v-if="!editInput && !!desc" placement="right" trigger="hover">
             <div v-html="getDescInfo(desc)"></div>
             <el-link slot="reference" :underline="false" @click="editInput = true">
                 {{name}}
                 <i class="el-icon-edit el-icon--right"></i>
             </el-link>
         </el-popover>
+        <div v-else-if="!editInput && !desc">
+            <el-link slot="reference" :underline="false" @click="editInput = true">
+                {{name}}
+                <i class="el-icon-edit el-icon--right"></i>
+            </el-link>
+        </div>
         <div v-else>
             <el-input v-model="newName" @keyup.enter.native="updateName()" size="mini">
                 <el-button slot="append" icon="el-icon-close" size="mini" @click="cancelEditInput()"></el-button>

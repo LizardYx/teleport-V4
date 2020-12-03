@@ -2,7 +2,10 @@
     <div id="hostGroupDetails">
         <div id="pageTitle">
             <el-breadcrumb class="page-title mar-btm" separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item>{{groupInfo.name}}</el-breadcrumb-item>
+                <el-breadcrumb-item>
+                    <edit-input :id="groupInfo.id" :name="groupInfo.name" :callback="updateHostGroupName">
+                    </edit-input>
+                </el-breadcrumb-item>
             </el-breadcrumb>
             <el-breadcrumb separator-class="el-icon-arrow-right">
                 <el-breadcrumb-item>{{$t('i18n.导航页面.资产')}}</el-breadcrumb-item>
@@ -183,7 +186,7 @@
                 },
                 groupInfo: {
                     id: this.$route.query['id'],
-                    name: this.$route.query['name']
+                    name: ""
                 },
                 selectedIdList: [],
                 hostsList: [],
@@ -199,6 +202,7 @@
         methods: {
             initPageInfo() {
                 this.getHostListInGroup();
+                this.getGroupInfo();
             },
             updateFilter(column) {
                 this.filter.sort = {
@@ -231,6 +235,10 @@
                     }, (error) => {
                         this.common.notification('warning', error.msg);
                     })
+            },
+            getGroupInfo() {
+                // 通过组ID获取组基本信息
+                this.groupInfo.name = "分组名称";
             },
             pageSizeChange(newPageSize) {
                 this.filter.pageNation.pageSize = newPageSize;
@@ -286,6 +294,11 @@
                     }
                 }
                 return statusInfo;
+            },
+            updateHostGroupName(id, name) {
+                // call API update host group name
+                this.common.notification('success', "更新主机分组名称成功");
+                this.getGroupInfo();
             },
             updateMainframeName(id, name) {
                 //call API update mainframe name

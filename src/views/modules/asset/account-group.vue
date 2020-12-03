@@ -43,7 +43,12 @@
                             </edit-input>
                         </template>
                     </el-table-column>
-                    <el-table-column min-width="10%" header-align="center" prop="member_count" :label="$t('i18n.账号分组管理.成员数')">
+                    <el-table-column min-width="10%" header-align="center" :label="$t('i18n.账号分组管理.成员数')">
+                        <template slot-scope="scope">
+                            <el-link type="primary" :underline="false" v-text="scope['row']['member_count']"
+                                     @click="accountGroupDetail(scope['row']['id'])">
+                            </el-link>
+                        </template>
                     </el-table-column>
                     <el-table-column min-width="35%" header-align="center" :label="$t('i18n.账号分组管理.成员账号')">
                         <template slot-scope="scope">
@@ -82,7 +87,7 @@
                                     </el-dropdown-item>
                                     <el-dropdown-item>
                                         <el-link type="primary" :underline="false" v-text="$t('i18n.账号分组管理.编辑详情')"
-                                                 @click="accountGroupDetail(scope['row'].id, scope['row'].name)">
+                                                 @click="accountGroupDetail(scope['row'].id)">
                                         </el-link>
                                     </el-dropdown-item>
                                     <el-dropdown-item>
@@ -299,15 +304,15 @@
                 }
                 return statusInfo;
             },
-            accountGroupDetail(id, name) {
+            accountGroupDetail(id) {
                 this.$router.push({
                     path: '/modules-main/asset/account-group-details',
                     query: {
-                        id: id,
-                        name: name
+                        id: id
                     }
                 })
             },
+
             // account group info group start
             initAccountGroupDialog(accountGroup){
                 this.accountGroupDialogVisible = true;

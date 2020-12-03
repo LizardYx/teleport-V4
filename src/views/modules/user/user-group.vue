@@ -28,16 +28,18 @@
                     <el-table-column min-width="5%" align="center" type="selection"></el-table-column>
                     <el-table-column min-width="20%" header-align="center" prop="name" sortable="custom" label="用户组">
                         <template slot-scope="scope">
-                            <el-popover placement="right" trigger="hover" :content="scope.row.desc">
-                                <span slot="reference">
-                                    <router-link :to="{path: '/modules-main/user/user-group-details', query: {id: scope.row.id, name: scope.row.name}}">
-                                        {{scope.row.name}}
-                                    </router-link>
-                                </span>
-                            </el-popover>
+                            <edit-input :id="scope['row'].id" :name="scope['row'].name" :desc="scope['row'].desc"
+                                        :callback="updateUserGroupName">
+                            </edit-input>
                         </template>
                     </el-table-column>
-                    <el-table-column min-width="10%" header-align="center" prop="member_count" label="组成员数"></el-table-column>
+                    <el-table-column min-width="10%" header-align="center" label="组成员数">
+                        <template slot-scope="scope">
+                            <el-link type="primary" :underline="false" v-text="scope['row']['member_count']"
+                                     @click="userGroupDetail(scope['row']['id'])">
+                            </el-link>
+                        </template>
+                    </el-table-column>
                     <el-table-column min-width="35%" header-align="center" label="组成员用户">
                         <template slot-scope="scope">
                             <el-tag size="small" type="info" v-for="memberObj in scope['row'].members" :command="memberObj.id" class="host-info"
@@ -50,9 +52,24 @@
                             <el-link type="primary" class="mar-rgt" :underline="false" @click="initUserGroupInfo(scope['row'])">
                                 编辑
                             </el-link>
-                            <el-link type="primary" class="mar-rgt" :underline="false" @click="initDeleteGroup([scope['row'].id])">
-                                     删除
-                            </el-link>
+                            <el-dropdown trigger="click">
+                                <span>
+                                    更多操作
+                                    <i class="el-icon-arrow-down el-icon--right"></i>
+                                </span>
+                                <el-dropdown-menu slot="dropdown" class="operation">
+                                    <el-dropdown-item>
+                                        <el-link type="primary" :underline="false" @click="userGroupDetail(scope['row'].id)">
+                                            管理分组用户
+                                        </el-link>
+                                    </el-dropdown-item>
+                                    <el-dropdown-item>
+                                        <el-link type="primary" :underline="false" @click="initDeleteGroup([scope['row'].id])">
+                                            删除
+                                        </el-link>
+                                    </el-dropdown-item>
+                                </el-dropdown-menu>
+                            </el-dropdown>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -137,10 +154,11 @@
     import {asyncGet, asyncPost} from '@src/assets/axios'
     import {api} from "@src/assets/api";
     import FixToolBar from  "@src/components/fix-tool-bar"
+    import EditInput from "@src/components/edit-input";
 
     export default {
         name: "user-group",
-        components: {FixToolBar},
+        components: {FixToolBar, EditInput},
         data() {
             return{
                 filter: {
@@ -225,6 +243,18 @@
             changeCurrentPage(newPageNo) {
                 this.filter.pageNation.pageNo = newPageNo;
                 this.getUserGroupList();
+            },
+            userGroupDetail(id) {
+                this.$router.push({
+                    path: '/modules-main/user/user-group-details',
+                    query: {
+                        id: id
+                    }
+                })
+            },
+            updateUserGroupName(id, name) {
+                //call API update user group name
+                this.common.notification('success', "更新用户分组名称成功");
             },
 
             // user group info start

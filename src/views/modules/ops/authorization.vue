@@ -32,13 +32,9 @@
                     <el-table-column min-width="5%" align="center" type="selection"></el-table-column>
                     <el-table-column min-width="55%" header-align="center" prop="name" label="授权策略">
                         <template slot-scope="scope">
-                            <el-popover placement="right" trigger="hover" :content="scope.row.desc">
-                                <span slot="reference">
-                                    <router-link :to="{path: '/modules-main/user/user-group-details', query: {id: scope.row.id, name: scope.row.name}}">
-                                        {{scope.row.name}}
-                                    </router-link>
-                                </span>
-                            </el-popover>
+                            <edit-input :id="scope['row'].id" :name="scope['row'].name" :desc="scope['row'].desc"
+                                        :callback="updateOpsPoliciesName">
+                            </edit-input>
                         </template>
                     </el-table-column>
                     <el-table-column min-width="20%" align="center" prop="status" label="状态">
@@ -218,11 +214,12 @@
     import {asyncGet, asyncPost} from '@src/assets/axios'
     import {api} from "@src/assets/api";
     import FixToolBar from  "@src/components/fix-tool-bar"
+    import EditInput from "@src/components/edit-input";
     import Sortable from "sortablejs";
 
     export default {
         name: "authorization",
-        components: {FixToolBar, Sortable},
+        components: {FixToolBar, EditInput, Sortable},
         data() {
             return{
                 filter: {
@@ -329,6 +326,10 @@
                     }, (error) => {
                         this.common.notification('warning', error.msg);
                     })
+            },
+            updateOpsPoliciesName() {
+                //call API update ops policies name
+                this.common.notification('success', "更新运维策略名称成功");
             },
 
             // ops policies info start

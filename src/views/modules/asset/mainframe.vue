@@ -62,7 +62,7 @@
                     <el-table-column min-width="10%" header-align="center" :label="$t('i18n.主机管理页面.账号数')">
                         <template slot-scope="scope">
                             <el-link type="primary" :underline="false" v-text="scope['row']['acc_count']"
-                                     @click="MRemoteAccount(scope['row']['id'], scope['row'].name)">
+                                     @click="MRemoteAccount(scope['row']['id'])">
                             </el-link>
                         </template>
                     </el-table-column>
@@ -95,7 +95,7 @@
                                     </el-dropdown-item>
                                     <el-dropdown-item>
                                         <el-link type="primary" :underline="false" v-text="$t('i18n.主机管理页面.管理远程账号')"
-                                                 @click="MRemoteAccount(scope['row']['id'], scope['row'].name)">
+                                                 @click="MRemoteAccount(scope['row']['id'])">
                                         </el-link>
                                     </el-dropdown-item>
                                     <el-dropdown-item>
@@ -475,12 +475,11 @@
                 //call API update mainframe name
                 this.common.notification('success', this.$t('i18n.主机管理页面.更新主机名称成功'));
             },
-            MRemoteAccount(id, name) {
+            MRemoteAccount(id) {
                 this.$router.push({
                     path: '/modules-main/asset/mainframe-account',
                     query: {
-                        id: id,
-                        name: name
+                        id: id
                     }
                 })
             },
